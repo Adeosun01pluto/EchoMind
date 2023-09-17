@@ -9,6 +9,7 @@ import { ThreeDots } from 'react-loader-spinner';
 import { BASE_URL } from '../../../constants/constant';
 import { fetchPosts, fetchQuestions} from '../../../api/post/post';
 import { useNavigate } from 'react-router-dom';
+import SideBar from '../../common/SideBar';
 
 const Feeds = () => {
   const navigate = useNavigate()
@@ -67,8 +68,10 @@ const handleCreateQuestion = async (newQuestion) => {
   }
 
   return (
-    <div className="w-full grid grid-cols-12 gap-4 bg-slate-500 mx-auto p-2 md:p-4">
-      <div className='sm:col-span-4 md:col-span-3 bg-blue-500'></div>
+    <div className="w-full grid grid-cols-12 gap-4 bg-[#e0e0e0] mx-auto p-2 md:p-4">
+      <div className='sm:col-span-4 md:col-span-3'>
+        <SideBar />
+      </div>
       <div className='col-span-12 sm:col-span-8 md:col-span-6 lg:col-span-5 '>
 
         {/* CreatePostForm component for creating a new post */}

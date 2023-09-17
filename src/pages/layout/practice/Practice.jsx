@@ -1,14 +1,17 @@
-import { Link, } from "react-router-dom"
+import {  Outlet, } from "react-router-dom"
+import SideBar from "../../common/SideBar"
 
 function Practice() {
+
   return (
-    <div className="h-[60vh] w-[50%] bg-gray-100 mx-auto grid grid-cols-3 gap-3 pt-[30px]">
-      <Link to={`100`} className="p-3 rounded-md bg-gray-600 text-white">100</Link>
-      <Link to={`200`} className="p-3 rounded-md bg-gray-600 text-white">200</Link>
-      <Link to={`300`} className="p-3 rounded-md bg-gray-600 text-white">300</Link>
-      <Link to={`400`} className="p-3 rounded-md bg-gray-600 text-white">400</Link>
-      <Link to={`500`} className="p-3 rounded-md bg-gray-600 text-white">500</Link>
-      <Link to={`600`} className="p-3 rounded-md bg-gray-600 text-white">600</Link>
+    <div className="w-full grid grid-cols-12 gap-4 bg-[#e0e0e0] mx-auto min-h-screen p-2 md:p-4">
+
+      <div className='sm:col-span-4 md:col-span-3'>
+        <SideBar />
+      </div>
+      <div className="col-span-12 sm:col-span-9 bg-white md:col-span-6 lg:col-span-7">
+        <Outlet />
+      </div>
     </div>
   )
 }

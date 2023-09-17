@@ -29,7 +29,7 @@ function Courses() {
         },
     ]
   return (
-    <div className="h-[60vh] w-[50%] bg-gray-100 mx-auto grid grid-cols-3 gap-3 pt-[30px]">
+    <div className="h-[60vh] mx-auto grid grid-cols-3 gap-3 ">
         {courses.map((item, idx)=>(
             <Link key={idx} to={`/practice/${level}/${faculty}/${item.link}`} className="p-3 rounded-md bg-gray-600 text-white">{item.title}</Link>
         ))}

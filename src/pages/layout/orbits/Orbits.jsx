@@ -5,6 +5,7 @@ import axios from 'axios';
 import Orbit from "./Orbit";
 import { useNavigate } from "react-router-dom";
 import { ThreeDots } from "react-loader-spinner";
+import SideBar from "../../common/SideBar";
 
 function getRandomNumber() {
   return Math.floor(Math.random() * 36) + 1;
@@ -85,9 +86,12 @@ function Orbits() {
     </div>
   )
   return (
-    <div>
-      <div className="mx-auto md:w-[60%] bg-gray-300">
-        <div className=" p-2 ">
+    <div className="w-full grid grid-cols-12 gap-4 bg-[#e0e0e0] mx-auto p-2 md:p-4">
+      <div className='sm:col-span-4 md:col-span-3'>
+        <SideBar />
+      </div>
+      <div className="mx-auto col-span-12 sm:col-span-8 md:col-span-6 lg:col-span-5">
+        <div className="">
           {/* Top Spaces */}
           <div className='w-[100%] p-2 bg-white rounded-sm'>
               <p className='text-lg '>Welcome to Spaces!</p>
@@ -108,6 +112,9 @@ function Orbits() {
           </div>
         </div>
       </div>
+
+      <div className='md:col-span-3 lg:col-span-4 bg-black'></div>
+
       <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth={true}>
         <DialogTitle>
           <div>

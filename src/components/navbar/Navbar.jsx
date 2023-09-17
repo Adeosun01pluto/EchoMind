@@ -8,7 +8,7 @@ import { BiMessageEdit } from 'react-icons/bi'
 import { GiMoonOrbit } from 'react-icons/gi'
 import { FiSettings } from 'react-icons/fi'
 import "./Navbar.css"
-import { RiCalculatorFill, RiChat1Fill } from 'react-icons/ri';
+import { RiCalculatorFill, RiChat1Fill, RiTodoFill } from 'react-icons/ri';
 import { BASE_URL } from '../../constants/constant';
 import { useMutation, useQuery } from 'react-query';
 import axios from 'axios';
@@ -47,11 +47,9 @@ const Navbar = () => {
       label: 'Question',
     },
     {
-      to: '/notifications',
-      icon: <Badge badgeContent={0} color="error">
-          <GrNotification size={22} /> {/* Display the GrNotification icon */}
-        </Badge>,
-      label: 'Notifications',
+      to: '/practice',
+      icon:<RiTodoFill size={22} />,
+      label: 'Practice',
     },
   ];
   const [anchorEl, setAnchorEl] =useState(null);

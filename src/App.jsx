@@ -15,6 +15,7 @@ import Faculty from './pages/layout/practice/Faculty';
 import Courses from './pages/layout/practice/Courses';
 import P_Screen from './pages/layout/practice/P_Screen';
 import NotFound from './pages/layout/nofound/NotFound';
+import Level from './pages/layout/practice/Level';
 
 
 function App() {
@@ -32,10 +33,12 @@ function App() {
         <Route path="/orbits" element={<Orbits />} />
         <Route path="/orbit/:orbitId" element={<SingleOrbit />} />
         <Route path="/gp" element={<Gp />} />
-        <Route path="/practice" element={<Practice />}></Route>
-        <Route path='/practice/:level' element={<Faculty/>} />
-        <Route path='/practice/:level/:faculty' element={<Courses/>} />
-        <Route path='/practice/:level/:faculty/:course' element={<P_Screen/>} />
+        <Route path="/practice" element={<Practice />}>
+          <Route path="" element={<Level />} />
+          <Route path=":level" element={<Faculty />} />
+          <Route path=":level/:faculty" element={<Courses />} />
+          <Route path=":level/:faculty/:course" element={<P_Screen />} />
+        </Route>
         {/* <Route path="/messages" element={<Chat/>}></Route> */}
         {/* <Route path="/chat/:receiverId" element={<ChatArea/>}></Route> */}
         <Route path="/*" element={<NotFound />} />

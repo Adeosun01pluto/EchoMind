@@ -5,7 +5,7 @@ import P_Question from "./P_Question"
 function P_Screen() {
     const [tabValue, setTabValue] = useState(0)
   return (
-    <div className=' md:w-[70%] mx-auto bg-gray-100 py-2'>
+    <div className=' mx-auto'>
         <div className='bg-gray-300 h-64 w-full'></div>
         <div className="flex w-full justify-between border-b-[1px] overflow-y-scroll border-gray-300">
             <Tabs value={tabValue} className="overflow-y-scroll" onChange={(e, newValue) => setTabValue(newValue)}>
