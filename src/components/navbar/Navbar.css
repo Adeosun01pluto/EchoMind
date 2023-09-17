@@ -1,0 +1,16 @@
+@media screen and (max-width:768px) {
+    .navMenu{
+        display: none;
+    }
+    .mobileNavMenu{
+        display: flex;
+    }
+}
+@media screen and (min-width:768px) {
+    .navMenu{
+        display: flex;
+    }
+    .mobileNavMenu{ 
+        display: none;
+    }
+}
