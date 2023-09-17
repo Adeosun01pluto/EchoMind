@@ -1,9 +1,18 @@
 import {  Tab, Tabs } from "@mui/material"
 import { useState } from "react"
 import P_Question from "./P_Question"
+import { useLocation } from "react-router-dom";
 
 function P_Screen() {
     const [tabValue, setTabValue] = useState(0)
+    // Inside your component
+    const { search } = useLocation();
+    const params = new URLSearchParams(search);
+
+    const level = params.get("level");
+    const faculty = params.get("faculty");
+    const course = params.get("course");
+    console.log(level, faculty, course)
   return (
     <div className=' mx-auto'>
         <div className='bg-gray-300 h-64 w-full'></div>
