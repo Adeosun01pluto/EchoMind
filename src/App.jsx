@@ -16,17 +16,19 @@ import Courses from './pages/layout/practice/Courses';
 import P_Screen from './pages/layout/practice/P_Screen';
 import NotFound from './pages/layout/nofound/NotFound';
 import Level from './pages/layout/practice/Level';
+import { getUserId } from './api/api';
 
 
 function App() {
-
+  // const token = localStorage.getItem('token');
+  const userId = getUserId()
   return (
     <div className='w-full min-h-screen bg-[#e0e0e0] '>
       <Navbar/>
       <Routes>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Feeds/>} />
+        <Route path="/" element={userId ? <Feeds/> : <Login />} />
         <Route path="/profile/:userId" element={<Profile />} />
         <Route path="/questions" element={<Questions />} />
         <Route path="/followings" element={<Followings />} />

@@ -88,3 +88,19 @@ export const getFollowings = async ( userId) => {
       console.log(error)
     }
 };
+
+export const getFollowers = async ( userId) => {
+  try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${BASE_URL}/auth/read_followers/${userId}`,
+      {
+          headers: {
+            "Authorization" : token,
+          },
+        }
+      );
+      return response.data.followers;
+    } catch (error) {
+      console.log(error)
+    }
+};

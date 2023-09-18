@@ -11,12 +11,13 @@ import { fetchPostsById } from "../../api/post/post";
 import Feed from "../layout/feeds/Feed";
 import { fetchQuestionsById } from "../../api/question/question";
 import Question from "../layout/questions/Question";
-import { getFollowings } from "../../api/api";
+import { getFollowers, getFollowings } from "../../api/api";
 
 function Profile() {
     const [tabValue, setTabValue] = useState(0)
     const {userId} = useParams()
     const [image, setImage] = useState(null)
+    // const [userData, setUserData] = useState(null)
     const [isUploading, setIsUploading] = useState(false); // Added state for upload feedback
     const handleUpload  = async() =>{
         setIsUploading(true); // Show loading feedback
@@ -52,11 +53,11 @@ function Profile() {
           console.log(error.message);
         }
     };
-    const { data, isLoading} = useQuery('profile', fetchProfile);
-    const { data: posts, isLoading: postStatus, refetch} = useQuery('user_posts', ()=>fetchPostsById(userId));
-    const { data: questions, isLoading: questionStatus,refetch:refetchQuestion} = useQuery('user_questions', ()=>fetchQuestionsById(userId));
-    const { data: followings, isLoading: followingsStatus} = useQuery('followings', ()=>getFollowings(userId));
-    console.log(followings)
+    const { data, isLoading} = useQuery(['profile', userId], fetchProfile);
+    const { data: posts, isLoading: postStatus, refetch} = useQuery(['user_posts', userId], ()=>fetchPostsById(userId));
+    const { data: questions, isLoading: questionStatus,refetch:refetchQuestion} = useQuery(['user_questions',userId], ()=>fetchQuestionsById(userId));
+    const { data: followings, isLoading: followingsStatus} = useQuery(['followings', userId], ()=>getFollowings(userId));
+    const { data: followers, isLoading: followersStatus} = useQuery(['followers', userId], ()=>getFollowers(userId));
     if(isLoading){
         return <div className="w-full items-center justify-center flex">
                 <ThreeDots 
@@ -79,10 +80,10 @@ function Profile() {
     const openImageUpload = () => {
         document.getElementById('image-upload').click(); // Trigger click event of hidden input
     }; 
-    
+    console.log(data)
   return (
     <div>
-        <div className="grid bg-gray-50 grid-cols-12 p-2 md:gap-12 w-[80%] h-[100vh] mx-auto">
+        <div className="grid bg-gray-50 grid-cols-12 p-2 md:gap-12 w-[80%] min-h-[100vh] mx-auto">
             <div className="col-span-8">
                 {/* Profile Header */}
                 <div className="w-full flex items-center gap-4 min-h-32 ">
@@ -195,7 +196,11 @@ function Profile() {
                                                     <p className="text-lg font-bold">{followings.username}</p>
                                                     <p className="text-sm text-gray-500">{followings.followers.length} followers</p>
                                                 </div>
-                                                <button className="py-1 px-4 flex-end text-sm border-2 border-blue-500 rounded-full text-blue-500 ">Follow</button>
+                                                {data?.userProfile.followings.includes(followings._id)?
+                                                    <button className="py-1 px-4 flex-end text-sm border-2 border-blue-500 rounded-full text-blue-500 ">Follow</button>
+                                                :
+                                                    <button className="py-1 px-4 flex-end text-sm border-2 border-blue-500 rounded-full text-blue-500 ">unfollow</button>
+                                                }
                                             </div>
                                             <Divider /> 
 
@@ -203,7 +208,48 @@ function Profile() {
                                     )))
                                     }
                                 </div>
-                        ) : null}
+                        ) : (
+                            <div className='w-full h-full md:p-3'>
+                                {followersStatus ? 
+                                <div className="w-full items-center justify-center flex">
+                                    <ThreeDots 
+                                    height="80" 
+                                    width="50" 
+                                    radius="9"
+                                    color="gray" 
+                                    ariaLabel="three-dots-loading"
+                                    wrapperStyle={{}}
+                                    wrapperClassName=""
+                                    visible={true}
+                                    />
+                                </div>
+                                :
+                                (followers?.map((followers, idx)=>(
+                                    <div key={idx} className="">
+                                        <div className="w-[100%] items-center flex gap-2 py-2 md:gap-3 ">
+                                            <Link to={`/profile/${followers.userId}`}> 
+                                                <div className='w-8 h-8 rounded-full bg-black'>
+                                                    <img className="rounded-full w-full h-full object-cover" src={`${BASE_URL}/images/${followers?.profileImage}`} alt="" />
+                                                </div>
+                                            </Link>
+                                            <div className="flex-grow">
+                                                <p className="text-lg font-bold">{followers.username}</p>
+                                                <p className="text-sm text-gray-500">{followers.followers.length} followers</p>
+                                            </div>
+                                            {followers._id === userId ?
+                                                <button className="py-1 px-4 flex-end text-sm border-2 border-blue-500 rounded-full text-blue-500 ">Follow</button>
+                                            :
+                                                <button className="py-1 px-4 flex-end text-sm border-2 border-blue-500 rounded-full text-blue-500 ">unfollow</button>
+                                            }
+                                        </div>
+                                        <Divider /> 
+
+                                    </div>
+                                )))
+                                }
+                            </div>
+                    ) 
+                }
                 </div>
             </div>
             <div className="col-span-4 bg-white">

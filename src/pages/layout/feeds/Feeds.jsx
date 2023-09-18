@@ -11,6 +11,7 @@ import { fetchPosts} from '../../../api/post/post';
 import { useNavigate } from 'react-router-dom';
 import SideBar from '../../common/SideBar';
 import { fetchQuestions } from '../../../api/question/question';
+// import { useEffect } from 'react';
 
 const Feeds = () => {
   const navigate = useNavigate()
@@ -40,6 +41,12 @@ const createPostMutation = useMutation((newPost) =>
     },
   })
 );
+  // const initializeFetch = ()=>{
+  //   refetch()
+  // }
+  // useEffect(()=>{
+  //   initializeFetch()
+  // }, [])
   
   const handleCreatePost = async (newPost) => {
     try {
