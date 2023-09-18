@@ -1,8 +1,7 @@
-import { Link, useNavigate, useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 
 function Courses() {
     const {level, faculty} = useParams()
-    const navigate = useNavigate();
     const courses = [
         {
           title:"PHY 191 ",
@@ -30,16 +29,9 @@ function Courses() {
         },
     ]
   return (
-    <div className="h-[60vh] mx-auto grid grid-cols-3 gap-3 ">
+    <div className="h-[60vh] w-full mx-auto grid grid-cols-3 gap-3">
         {courses.map((item, idx)=>(
-          <Link
-            key={idx}
-            to={`/practice?level=${level}&faculty=${faculty}&course=${item.link}`}
-            className="p-3 rounded-md bg-gray-600 text-white"
-            onClick={() => navigate(`/practice?level=${level}&faculty=${faculty}&course=${item.link}`)}
-          >
-            {item.title}
-          </Link>
+            <Link key={idx} to={`/practice/${level}/${faculty}/${item.link}`} className="p-3 rounded-md bg-gray-600 text-white">{item.title}</Link>
         ))}
      
     </div>
@@ -47,3 +39,12 @@ function Courses() {
 }
 
 export default Courses
+
+{/* <Link
+            key={idx}
+            to={`/practice?level=${level}&faculty=${faculty}&course=${item.link}`}
+            className="p-3 rounded-md bg-gray-600 text-white"
+            onClick={() => navigate(`/practice?level=${level}&faculty=${faculty}&course=${item.link}`)}
+          >
+            {item.title}
+          </Link> */}

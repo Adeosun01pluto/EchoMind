@@ -21,13 +21,13 @@ import Level from './pages/layout/practice/Level';
 function App() {
 
   return (
-    <div className='w-full'>
+    <div className='w-full min-h-screen bg-[#e0e0e0] '>
       <Navbar/>
       <Routes>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<Feeds/>} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/:userId" element={<Profile />} />
         <Route path="/questions" element={<Questions />} />
         <Route path="/followings" element={<Followings />} />
         <Route path="/orbits" element={<Orbits />} />

@@ -7,9 +7,10 @@ import CreatePostForm from './CreatePostForm';
 import Feed from './Feed';
 import { ThreeDots } from 'react-loader-spinner';
 import { BASE_URL } from '../../../constants/constant';
-import { fetchPosts, fetchQuestions} from '../../../api/post/post';
+import { fetchPosts} from '../../../api/post/post';
 import { useNavigate } from 'react-router-dom';
 import SideBar from '../../common/SideBar';
+import { fetchQuestions } from '../../../api/question/question';
 
 const Feeds = () => {
   const navigate = useNavigate()
@@ -32,13 +33,13 @@ const handleCreateQuestion = async (newQuestion) => {
     console.error(error);
   }
 };
-  const createPostMutation = useMutation((newPost) =>
+const createPostMutation = useMutation((newPost) =>
   axios.post(`${BASE_URL}/create_post`, newPost, {
     headers: {
       "Authorization": localStorage.getItem('token'),
     },
   })
-  );
+);
   
   const handleCreatePost = async (newPost) => {
     try {
@@ -68,7 +69,7 @@ const handleCreateQuestion = async (newQuestion) => {
   }
 
   return (
-    <div className="w-full grid grid-cols-12 gap-4 bg-[#e0e0e0] mx-auto p-2 md:p-4">
+    <div className="w-full grid grid-cols-12 gap-4  mx-auto p-2 md:p-4">
       <div className='sm:col-span-4 md:col-span-3'>
         <SideBar />
       </div>

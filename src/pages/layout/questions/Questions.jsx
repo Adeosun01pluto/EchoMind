@@ -1,8 +1,8 @@
 import { useQuery } from "react-query";
-import { fetchQuestions } from "../../../api/post/post";
 import Question from "./Question";
 import { ThreeDots } from "react-loader-spinner";
 import SideBar from "../../common/SideBar";
+import { fetchQuestions } from "../../../api/question/question";
 // import CreateQuestionForm from "./CreateQuestionForm";
 
 function Questions() {

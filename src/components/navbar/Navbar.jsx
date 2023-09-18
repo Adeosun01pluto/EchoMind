@@ -12,11 +12,13 @@ import { RiCalculatorFill, RiChat1Fill, RiTodoFill } from 'react-icons/ri';
 import { BASE_URL } from '../../constants/constant';
 import { useMutation, useQuery } from 'react-query';
 import axios from 'axios';
-import { fetchPosts, fetchQuestions } from '../../api/post/post';
+import { fetchPosts } from '../../api/post/post';
+import { fetchQuestions } from '../../api/question/question';
+import { getUserId } from '../../api/api';
 const Navbar = () => {
   const navigate = useNavigate()
   // const location = useLocation();
-
+  const userId = getUserId()
   const handleLogout = () => {
     // Clear user-related data from localStorage
     localStorage.removeItem('token');
@@ -80,7 +82,7 @@ const Navbar = () => {
   const {refetch} = useQuery('posts', fetchPosts);
 
   const createQuestionMutation = useMutation((newQuestion) =>
-  axios.post(`${BASE_URL}/question/add_question`, newQuestion, {
+  axios.post(`${BASE_URL}/question/add_question`, {question: newQuestion}, {
     headers: {
       "Authorization": localStorage.getItem('token'),
     },
@@ -90,6 +92,8 @@ const Navbar = () => {
     try {
       await createQuestionMutation.mutateAsync(question);
       refetchQuestion()
+      setOpen(false)
+      setQuestion("")
       // if (location.pathname === '/questions') {
       //   console.log("first")
       // } else {
@@ -122,7 +126,6 @@ const Navbar = () => {
     }
   };
   
-
   return (
     <nav className="w-full min-h-16 bg-gray-50 p-2">
       <div className='container mx-auto flex justify-between items-center'>
@@ -217,7 +220,7 @@ const Navbar = () => {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
               >
-                <MenuItem onClick={()=>navigate('/profile')}>
+                <MenuItem onClick={()=>navigate(`/profile/${userId}`)}>
                   <Avatar /> Profile
                 </MenuItem>
                 <Divider />
@@ -280,7 +283,7 @@ const Navbar = () => {
         </DialogTitle>
         <DialogContent sx={{height:400}}>
           {tabValue === 0 ? (
-            <form className='w-full h-full'>
+            <div className='w-full h-full'>
               <div className="mb-4 flex flex-col h-[90%]">
                 <label htmlFor="question" className="block text-gray-600 font-semibold mb-2">
                   Question
@@ -298,9 +301,9 @@ const Navbar = () => {
                 Add Question
               </Button>
               <Button onClick={handleClose}>X</Button>
-            </form>
+            </div>
           ) : (
-            <form className='w-full h-full'>
+            <div className='w-full h-full'>
               <div className="mb-4 flex flex-col h-[90%]">
                 <textarea
                   id="content"
@@ -315,7 +318,7 @@ const Navbar = () => {
                 Create Post
               </Button>
               <Button onClick={handleClose}>X</Button>
-            </form>
+            </div>
           )}
         </DialogContent>
       </Dialog>

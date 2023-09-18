@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useMutation } from 'react-query';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+import { BASE_URL } from '../../constants/constant';
 
 const Login = () => {
   const navigate = useNavigate(); // Initialize useHistory
@@ -22,7 +23,7 @@ const Login = () => {
   const [error, setError ] = useState(null)
 
   const loginMutation = useMutation((formData) =>
-    axios.post('http://localhost:4001/auth/login', formData)
+    axios.post(`${BASE_URL}/auth/login`, formData)
   );
 
   const handleSubmit = async (e) => {

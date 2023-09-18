@@ -1,12 +1,21 @@
-import { Tab, Tabs } from "@mui/material"
+import { Divider, Tab, Tabs } from "@mui/material"
 import axios from 'axios';
 import { useEffect, useState } from "react"
 import { BsCalendarDate, BsFillEyeFill, BsFillPencilFill } from "react-icons/bs"
 import { FaShare } from "react-icons/fa"
 import { useQuery } from "react-query"
+import { Link, useParams } from "react-router-dom";
+import { BASE_URL } from "../../constants/constant";
+import { ThreeDots } from "react-loader-spinner";
+import { fetchPostsById } from "../../api/post/post";
+import Feed from "../layout/feeds/Feed";
+import { fetchQuestionsById } from "../../api/question/question";
+import Question from "../layout/questions/Question";
+import { getFollowings } from "../../api/api";
 
 function Profile() {
     const [tabValue, setTabValue] = useState(0)
+    const {userId} = useParams()
     const [image, setImage] = useState(null)
     const [isUploading, setIsUploading] = useState(false); // Added state for upload feedback
     const handleUpload  = async() =>{
@@ -30,10 +39,10 @@ function Profile() {
     const token = localStorage.getItem('token');
     useEffect(()=>{
         fetchProfile()
-    }, [token])
+    }, [token, userId])
     const fetchProfile = async () => {
         try {
-          const response = await axios.get('http://localhost:4001/auth/profile', {
+          const response = await axios.get(`${BASE_URL}/auth/profile/${userId}`, {
             headers: {
               Authorization: token,
             },
@@ -44,8 +53,23 @@ function Profile() {
         }
     };
     const { data, isLoading} = useQuery('profile', fetchProfile);
+    const { data: posts, isLoading: postStatus, refetch} = useQuery('user_posts', ()=>fetchPostsById(userId));
+    const { data: questions, isLoading: questionStatus,refetch:refetchQuestion} = useQuery('user_questions', ()=>fetchQuestionsById(userId));
+    const { data: followings, isLoading: followingsStatus} = useQuery('followings', ()=>getFollowings(userId));
+    console.log(followings)
     if(isLoading){
-        return " Loading"
+        return <div className="w-full items-center justify-center flex">
+                <ThreeDots 
+                height="80" 
+                width="50" 
+                radius="9"
+                color="gray" 
+                ariaLabel="three-dots-loading"
+                wrapperStyle={{}}
+                wrapperClassName=""
+                visible={true}
+                />
+            </div>
     }
     const handleFileChange = (e) => {
         // Capture the selected file and set it in state
@@ -55,9 +79,10 @@ function Profile() {
     const openImageUpload = () => {
         document.getElementById('image-upload').click(); // Trigger click event of hidden input
     }; 
+    
   return (
     <div>
-        <div className="grid grid-cols-12 p-2 md:gap-12 w-[80%] h-[100vh] mx-auto">
+        <div className="grid bg-gray-50 grid-cols-12 p-2 md:gap-12 w-[80%] h-[100vh] mx-auto">
             <div className="col-span-8">
                 {/* Profile Header */}
                 <div className="w-full flex items-center gap-4 min-h-32 ">
@@ -94,10 +119,91 @@ function Profile() {
                         <Tabs value={tabValue} onChange={(e, newValue) => setTabValue(newValue)}>
                             <Tab label="Posts" sx={{fontSize:12}} />
                             <Tab label="Question" sx={{fontSize:12}} />
-                            <Tab label="Followers" sx={{fontSize:12}} />
                             <Tab label="Followings" sx={{fontSize:12}} />
+                            <Tab label="Followers" sx={{fontSize:12}} />
                         </Tabs>
                     </div>
+                </div>
+                <div className="w-full min-h-36">
+                    {tabValue === 0 ? (
+                        <div className='w-full h-full md:p-3'>
+                            {postStatus ? 
+                             <div className="w-full items-center justify-center flex">
+                                <ThreeDots 
+                                height="80" 
+                                width="50" 
+                                radius="9"
+                                color="gray" 
+                                ariaLabel="three-dots-loading"
+                                wrapperStyle={{}}
+                                wrapperClassName=""
+                                visible={true}
+                                />
+                            </div>
+                            :
+                            (posts?.map((post, idx)=>(
+                                <Feed key={idx} post={post} refetch={refetch} idx={idx} />
+                            )))
+                            }
+                        </div>
+                    ) : tabValue === 1 ? (
+                            <div className='w-full h-full md:p-3'>
+                                {questionStatus ? 
+                                <div className="w-full items-center justify-center flex">
+                                    <ThreeDots 
+                                    height="80" 
+                                    width="50" 
+                                    radius="9"
+                                    color="gray" 
+                                    ariaLabel="three-dots-loading"
+                                    wrapperStyle={{}}
+                                    wrapperClassName=""
+                                    visible={true}
+                                    />
+                                </div>
+                                :
+                                (questions?.map((question, idx)=>(
+                                    <Question key={idx} question={question} refetch={refetchQuestion} idx={idx} />
+                                )))
+                                }
+                            </div>
+                            ) : tabValue === 2 ? (
+                                <div className='w-full h-full md:p-3'>
+                                    {followingsStatus ? 
+                                    <div className="w-full items-center justify-center flex">
+                                        <ThreeDots 
+                                        height="80" 
+                                        width="50" 
+                                        radius="9"
+                                        color="gray" 
+                                        ariaLabel="three-dots-loading"
+                                        wrapperStyle={{}}
+                                        wrapperClassName=""
+                                        visible={true}
+                                        />
+                                    </div>
+                                    :
+                                    (followings?.map((followings, idx)=>(
+                                        <div key={idx} className="">
+                                            <div className="w-[100%] items-center flex gap-2 py-2 md:gap-3 ">
+                                                <Link to={`/profile/${followings.userId}`}> 
+                                                    <div className='w-8 h-8 rounded-full bg-black'>
+                                                        <img className="rounded-full w-full h-full object-cover" src={`${BASE_URL}/images/${followings?.profileImage}`} alt="" />
+                                                    </div>
+                                                </Link>
+                                                <div className="flex-grow">
+                                                    <p className="text-lg font-bold">{followings.username}</p>
+                                                    <p className="text-sm text-gray-500">{followings.followers.length} followers</p>
+                                                </div>
+                                                <button className="py-1 px-4 flex-end text-sm border-2 border-blue-500 rounded-full text-blue-500 ">Follow</button>
+                                            </div>
+                                            <Divider /> 
+
+                                        </div>
+                                    )))
+                                    }
+                                </div>
+                        ) : null}
                 </div>
             </div>
             <div className="col-span-4 bg-white">

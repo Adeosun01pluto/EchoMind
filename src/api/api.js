@@ -72,3 +72,19 @@ export const unfollow = async (followerId, refetch) => {
       console.log(error)
     }
 };
+
+export const getFollowings = async ( userId) => {
+  try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${BASE_URL}/auth/read_followings/${userId}`,
+      {
+          headers: {
+            "Authorization" : token,
+          },
+        }
+      );
+      return response.data.followings;
+    } catch (error) {
+      console.log(error)
+    }
+};

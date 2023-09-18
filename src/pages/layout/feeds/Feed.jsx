@@ -9,16 +9,17 @@ import {  getUserProfile } from '../../../api/api';
 import { BASE_URL } from '../../../constants/constant';
 import Comment from '../../common/Comment';
 import { downVote, follow, tweetPost, unfollow, untweetPost, upVote } from '../../../api/post/post';
+import { ThreeDots } from 'react-loader-spinner';
 
 function Feed({post, refetch}) {
-  // const [username, setUsername] = useState(''); // Initialize with an empty string
+  const [loading, setLoading] = useState(false); // Initialize with an empty string
   const [profile, setProfile] = useState(null); // Initialize with an empty string
   const [text, setText] = useState(''); // Initialize with an empty string
   const [open, setOpen] = useState(false);
   const [comments, setComments] = useState([]);  
   const handleClickOpen = (postId) => {
     getComment(postId)
-    setOpen(true);
+    setOpen(!open);
   };
   const userId = localStorage.getItem('userId');
   
@@ -60,6 +61,7 @@ function Feed({post, refetch}) {
       }
   };
   const getComment = async (postId) => {
+    setLoading(true)
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(
@@ -71,6 +73,7 @@ function Feed({post, refetch}) {
         }
       );
       setComments(response.data.comments)
+      setLoading(false)
       return response.data;
     } catch (error) {
       console.log(error)
@@ -128,14 +131,14 @@ function Feed({post, refetch}) {
                       }
                   </div>
                   <div className="flex gap-2 items-center">
-                      <span>{formatDistanceToNow(Date.parse(post.createdAt))} ago</span>
+                      <span className='text-xs'>{formatDistanceToNow(Date.parse(post.createdAt))} ago</span>
                   </div>
               </div>
           </div>
           {/*  */}
 
           {/* Post Content */}
-          <div className="text-gray-600 py-2">{post?.content}</div>
+          <div className="text-gray-600 text-lg py-2">{post?.content}</div>
           {/*  */}
 
           {/* Post Actions */}
@@ -185,7 +188,7 @@ function Feed({post, refetch}) {
           {
             open? (
               <div className='mt-2 w-full min-h-16'>
-                <div className="mx-auto flex bg-gray-100 mb-2">
+                <div className="mx-auto rounded-md flex bg-gray-100 mb-2">
                   <Avatar className='homeAvatar'/>
                   <textarea
                     type="text"
@@ -199,12 +202,26 @@ function Feed({post, refetch}) {
                     onClick={()=>createComment(post._id)}
                   />
                 </div>
-                {/* getComment(postId) */}
-                <div>
-                  {comments?.map((comment, idx) => (
-                    <Comment key={idx} comment={comment} getComment={getComment} postId={post._id}/>
-                  ))}
-                </div>
+                {loading?
+                  <div className="">
+                    <ThreeDots 
+                      height="30" 
+                      width="30" 
+                      radius="9"
+                      color="gray" 
+                      ariaLabel="three-dots-loading"
+                      wrapperStyle={{}}
+                      wrapperClassName=""
+                      visible={true}
+                      />
+                  </div>
+                :
+                  <div>
+                    {comments?.map((comment, idx) => (
+                      <Comment key={idx} comment={comment} getComment={getComment} postId={post._id}/>
+                      ))}
+                  </div>
+                }
               </div>
             ) : ""
           }
