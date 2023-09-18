@@ -4,6 +4,7 @@ import { useMutation } from 'react-query';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../../constants/constant';
+import { CircularProgress } from '@mui/material';
 
 
 const Register = () => {
@@ -29,14 +30,17 @@ const Register = () => {
   const registerMutation = useMutation((formData) =>
     axios.post(`${BASE_URL}/auth/register`, formData)
   );
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e) => {
+    setLoading(true)
     e.preventDefault();
     console.log("hjsdad")
     try {
       const response = await registerMutation.mutateAsync(formData);
       if (response.data.message === 'User registered successfully') {
         // Registration successful, navigate to /home
+        setLoading(false)
         navigate("/login")
       }
     } catch (error) {
@@ -111,7 +115,7 @@ const Register = () => {
           <button
             type="submit"
             className="w-full bg-emerald-700 flex items-center justify-center gap-1 text-white py-2 px-4 rounded-md hover:bg-emerald-700 focus:outline-none"
-          >Register</button>
+          >Register{loading ? <span><CircularProgress /> </span> : "" } </button>
           <div className="flex justify-between w-[80%] mx-auto text-sm items-center">
             <span className="text-sm text-gray-700">Already have an account?</span>
             <Link to="/login" className="text-emerald-700">Login</Link>

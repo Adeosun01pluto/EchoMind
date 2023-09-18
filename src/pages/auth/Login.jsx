@@ -4,6 +4,7 @@ import { useMutation } from 'react-query';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../../constants/constant';
+import { CircularProgress } from '@mui/material';
 const Login = () => {
   const navigate = useNavigate(); // Initialize useHistory
 
@@ -24,8 +25,10 @@ const Login = () => {
   const loginMutation = useMutation((formData) =>
     axios.post(`${BASE_URL}/auth/login`, formData)
   );
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e) => {
+    setLoading(true)
     e.preventDefault();
     try {
       const response = await loginMutation.mutateAsync(formData);
@@ -33,6 +36,7 @@ const Login = () => {
         // Login successful, navigate to /home
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('userId', response.data.userId);
+        setLoading(false)
         navigate('/');
       }
     } catch (error) {
@@ -68,7 +72,7 @@ const Login = () => {
           <button
             type="submit"
             className="w-full bg-emerald-700 text-white flex items-center justify-center gap-1 py-2 px-4 rounded-md hover:bg-emerald-700 focus:outline-none"
-          >Login</button>
+          >Login {loading ? <span><CircularProgress /> </span> : "" } </button>
           <div className="flex justify-between w-[80%] mx-auto text-sm items-center">
             <span className="text-sm text-gray-700">Do not have an account?</span>
             <Link to="/register" className="text-emerald-700">Register</Link>
