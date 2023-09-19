@@ -10,7 +10,7 @@ function Level() {
           <Link
             key={level}
             to={`/practice/${level}`}
-            className="p-3 rounded-md bg-gray-600 h-36 text-white"
+            className="p-3 rounded-md dark:bg-[#171517] bg-[#f2e4fb] h-36"
           >
             {level}
           </Link>

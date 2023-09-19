@@ -42,12 +42,12 @@ function Followings() {
     )
   }
   return (
-    <div className="w-full grid grid-cols-12 gap-4 bg-[#e0e0e0] mx-auto p-2 md:p-4 min-h-screen">
+    <div className="w-full grid grid-cols-12 gap-4 mx-auto p-2 md:p-4">
       <div className='sm:col-span-4 md:col-span-3'>
         <SideBar />
       </div>
 
-      <div className="bg-white col-span-12 sm:col-span-8 md:col-span-6 lg:col-span-5 ">
+      <div className=" col-span-12 sm:col-span-8 md:col-span-6 lg:col-span-5 ">
         {data?.map((following, idx)=> (
           <Following key={idx} following={following} />
         ))}

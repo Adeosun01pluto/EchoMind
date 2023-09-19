@@ -14,8 +14,8 @@ function Orbit({orbit}) {
   const displayDescription = words.length > maxWords ? `${truncatedDescription} ...` : description;
 
   return (
-    <Link to={`/orbit/${orbit._id}`} className='my-2 w-[100%] bg-[white] min-h-[250px] rounded-lg'>
-      <div className='w-[100%] bg-[green] h-[100px] rounded-md'>
+    <Link to={`/orbit/${orbit._id}`} className='my-2 w-[100%] dark:bg-[#171517] bg-[#f2e4fb] min-h-[250px] rounded-lg'>
+      <div className='w-[100%] bg-[#4f1179] h-[100px] rounded-md'>
         <img className="w-full h-full rounded-md object-cover" src={`http://localhost:4001/images/${orbit.coverPhoto}`} alt="" />
       </div>
       <div className='flex items-center gap-2 p-2 flex-col w-[100%] mt-[-50px]'>

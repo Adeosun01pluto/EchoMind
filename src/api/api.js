@@ -10,7 +10,7 @@ export const getUsernameById = async (userId) => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        `http://localhost:4001/get_username/${userId}`,
+        `${BASE_URL}/get_username/${userId}`,
         {
           headers: {
             "Authorization" : token,

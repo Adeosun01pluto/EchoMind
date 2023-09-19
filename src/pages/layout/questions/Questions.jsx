@@ -4,7 +4,7 @@ import { ThreeDots } from "react-loader-spinner";
 import SideBar from "../../common/SideBar";
 import { fetchQuestions } from "../../../api/question/question";
 // import CreateQuestionForm from "./CreateQuestionForm";
-
+import "../../../App.css"
 function Questions() {
   const { data: questions, isLoading:questionStatus, refetch:refetchQuestion} = useQuery('questions', fetchQuestions);
   if (questionStatus) {
@@ -25,7 +25,7 @@ function Questions() {
   }
 
   return (
-    <div className="w-full grid grid-cols-12 gap-4 bg-[#e0e0e0] mx-auto p-2 md:p-4">
+    <div className="w-full grid grid-cols-12 gap-4 mx-auto p-2 md:p-4">
       <div className='sm:col-span-4 md:col-span-3'>
         <SideBar />
       </div>
@@ -33,7 +33,7 @@ function Questions() {
         {/* CreatePostForm component for creating a new post */}
         {/* <CreateQuestionForm onCreateQuestion={handleCreateQuestion} refetchQuestion={refetchQuestion} /> */}
         <h2 className="p-2 font-light">Questions for you</h2>
-        <div className="bg-gray-50">
+        <div className="">
           {questions?.map((question, idx) => (
             <Question key={idx} question={question} refetchQuestion={refetchQuestion}/>
           ))}

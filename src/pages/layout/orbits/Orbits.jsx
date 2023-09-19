@@ -86,25 +86,25 @@ function Orbits() {
     </div>
   )
   return (
-    <div className="w-full grid grid-cols-12 gap-4 bg-[#e0e0e0] mx-auto p-2 md:p-4">
+    <div className="w-full grid grid-cols-12 gap-4 mx-auto p-2 md:p-4">
       <div className='sm:col-span-4 md:col-span-3'>
         <SideBar />
       </div>
-      <div className="mx-auto col-span-12 sm:col-span-8 md:col-span-6 lg:col-span-5">
+      <div className="col-span-12 sm:col-span-8 md:col-span-6 lg:col-span-5">
         <div className="">
           {/* Top Spaces */}
-          <div className='w-[100%] p-2 bg-white rounded-sm'>
-              <p className='text-lg '>Welcome to Spaces!</p>
-              <span className='text-sm text-gray-600'>Follow Space Lorem, ipsum dolor.</span>
+          <div className='w-[100%] p-2 dark:bg-[#171517] bg-[#f2e4fb] rounded-sm'>
+              <p className='text-lg dark:text-[#f2e4fb] text-[#060109]'>Welcome to Spaces!</p>
+              <span className='text-sm dark:text-[#f2e4fb] text-[#060109]'>Follow Space Lorem, ipsum dolor.</span>
               <div className='flex gap-2 pt-4 pb-3'>
-                  <button onClick={handleClickOpen} className='p-1 px-2 text-sm bg-emerald-700 text-white rounded-full'>Create a Space</button>
-                  <button className='p-1 px-2 text-sm border-emerald-700 text-emerald-700 border-2 rounded-full'>Discover a Space</button>
+                  <button onClick={handleClickOpen} className='p-1 px-2 text-sm font-semibold text-[white] bg-[#4f1179] rounded-full'>Create a Space</button>
+                  <button className='p-1 px-2 text-sm text-[#4f1179] bg-[white] font-semibold border-2 rounded-full'>Discover a Space</button>
               </div>
           </div>
           {/*  */}
           <p className='text-lg py-8'>Discover Spaces!</p>
           {/* Space sections */}
-          <div className='grid grid-cols-1 sm:grid-cols-3 gap-3'>
+          <div className='grid grid-cols-2 sm:grid-col-3 gap-3'>
           {data?.map((orbit, idx)=>(
             <Orbit orbit={orbit} key={idx}/>
           ))}

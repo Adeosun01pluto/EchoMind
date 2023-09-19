@@ -18,12 +18,30 @@ import NotFound from './pages/layout/nofound/NotFound';
 import Level from './pages/layout/practice/Level';
 // import { getUserId } from './api/api';
 
+// primary : #4f1179
+// bg : #f2e4fb
+// text : #060109
+// secondary : #e3c5f7
+// accent : #8a1dd3
+// sx={{background:"#4f1179"}}
+// sx={{color:"#4f1179"}}
+// dark:text-[#f2e4fb] text-[#060109]
+// dark:bg-[#171517] bg-[#f2e4fb]
+// dark:bg-[#171517]
+
+
+// dark mode
+// text : #f2e4fb
+// bg : #060109
+// primary : #4f1179
+// secondary : #150420 
+// accent : #cd98f1 
 
 function App() {
   // const token = localStorage.getItem('token');
   // const userId = getUserId()
   return (
-    <div className='w-full min-h-screen bg-[#e0e0e0] '>
+    <div className='w-full min-h-screen dark:text-[#f2e4fb] text-[#060109] dark:bg-[#060109] bg-[#f3f3f3] '>
       <Navbar/>
       <Routes>
         <Route path="/register" element={<Register />} />

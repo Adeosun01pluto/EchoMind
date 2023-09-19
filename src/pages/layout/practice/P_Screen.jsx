@@ -6,6 +6,7 @@ import { useQuery } from "react-query";
 import { fetchP_Questions, fetchP_Quiz } from "../../../api/practice/practice";
 import { ThreeDots } from "react-loader-spinner";
 
+
 function P_Screen() {
     const [tabValue, setTabValue] = useState(0)
     // Inside your component
@@ -19,7 +20,7 @@ function P_Screen() {
     console.log(quizData)
     const navigate = useNavigate()
     
-    const [courses, _] = useState([
+    const [courses] = useState([
         {category:'Mat 111', value:1, name:"mat_111"},
         {category:'Mat 113', value:2, name:"mat_113"},
         {category:'GNS 112', value:3, name:"gns_112"},
@@ -28,7 +29,7 @@ function P_Screen() {
         {category:'PHY 191', value:7, name:"phy_191"},
         {category:'CHM 111', value:8, name:"chm_111"},
         {category:'CHM 115', value:9, name:"chm_115"},
-      ])
+    ])
     const handleCourses = async(e) =>{
         const newCourse = e.target.value;
 

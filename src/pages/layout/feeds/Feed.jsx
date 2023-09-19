@@ -112,9 +112,9 @@ function Feed({post, refetch}) {
   }, [post.userId]);
   return (
     <div>
-      <div  className="bg-white shadow-md p-1 md:p-2 sm:rounded-sm my-2">
+      <div  className="dark:bg-[#171517] bg-[white] shadow-md p-1 md:p-2 sm:rounded-sm my-2">
           {/* Post Header */}
-          <div className="w-[100%] flex gap-2 py-2 md:gap-3 ">
+          <div className="w-[100%] flex gap-2 py-1 md:gap-3 ">
               <Link to={`/profile/${post.userId}`}> 
               <div className='w-10 h-10 rounded-full bg-black'>
                 <img className="rounded-full w-full h-full object-cover" src={`${BASE_URL}/images/${profile?.profileImage}`} alt="" />
@@ -125,8 +125,8 @@ function Feed({post, refetch}) {
                       <span className="text-sm font-bold">{profile?.username}</span>
                       {userId === post.userId ? null : 
                       ( !profile?.followings.includes(userId) ? 
-                      <span onClick={()=>handleFollow(post.userId)} className="text-green-500 cursor-pointer text-xs">Follow</span>:
-                      <span onClick={()=>handleUnFollow(post.userId)} className="text-blue-500 cursor-pointer text-xs">unfollow</span>
+                      <span onClick={()=>handleFollow(post.userId)} className="dark:text-[#f2e4fb] text-[#8a1dd3] cursor-pointer text-xs">Follow</span>:
+                      <span onClick={()=>handleUnFollow(post.userId)} className="dark:text-[#f2e4fb] text-[#8a1dd3] cursor-pointer text-xs">unfollow</span>
                       )
                       }
                   </div>
@@ -138,44 +138,40 @@ function Feed({post, refetch}) {
           {/*  */}
 
           {/* Post Content */}
-          <div className="text-gray-600 text-lg py-2">{post?.content}</div>
+          <div className="dark:text-[#f2e4fb] text-[#060109] text-lg py-1 px-2">{post?.content}</div>
           {/*  */}
 
           {/* Post Actions */}
           <div className="flex items-center gap-6">
             {/* Render like/unlike button based on liked status */}
-            <div className="flex items-center bg-gray-100 border-2 border-gray-200 rounded-full">
+            <div className="flex items-center  bg-[#e3c5f7] text-[#060109] rounded-full">
               <button
                 onClick={() => handleLike(post?._id)}
                 className="p-1 px-2 border-r-2 border-gray-200 rounded-t-r-full flex items-center gap-2"
               >
-                {
-                  post?.upvotes.includes(userId) ?
-                  <BsFillArrowUpSquareFill size={15} color="green" /> : 
-                  <BsFillArrowUpSquareFill size={15} color="blue" />
-                }
+                <BsFillArrowUpSquareFill size={15} color="#4f1179" />
                 <span className='text-sm'>Upvote . {post.upvotes.length}</span>
               </button>
               <button
                 onClick={() => handleUnlike(post?._id)}
                 className="p-1 px-2 rounded flex items-center gap-2 "
               >
-                <BsFillArrowDownSquareFill size={15} color="black" />
+                <BsFillArrowDownSquareFill size={15} color="gray" />
                 <span className='text-sm'>{post.downvotes.length}</span>
               </button>
             </div>
             {/* Render the tweet and untweet btn */}
             <div className='flex items-center gap-4'>
               <button className='flex items-center gap-2'>
-                <FaRegComment onClick={()=>handleClickOpen(post._id)} />
+                <FaRegComment color="gray" onClick={()=>handleClickOpen(post._id)} />
                 <span>{post.comments.length}</span>
               </button>
               <button className='flex items-center gap-2'>
                 {
                   post?.tweets.includes(userId) ? 
-                  <FaRetweet onClick={()=>untweetPost(post._id, refetch, getUserProfileHandler)} color='green'/>
+                  <FaRetweet onClick={()=>untweetPost(post._id, refetch, getUserProfileHandler)} color='#4f1179' size={20}/>
                   :
-                  <FaRetweet onClick={()=>tweetPost(post._id, refetch)}  color='blue'/>
+                  <FaRetweet onClick={()=>tweetPost(post._id, refetch)}  color='gray' size={20}/>
                 } 
                 <span>{post.tweets.length}</span>
 

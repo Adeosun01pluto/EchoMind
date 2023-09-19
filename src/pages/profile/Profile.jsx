@@ -12,6 +12,7 @@ import Feed from "../layout/feeds/Feed";
 import { fetchQuestionsById } from "../../api/question/question";
 import Question from "../layout/questions/Question";
 import { getFollowers, getFollowings } from "../../api/api";
+import "../.././App.css"
 
 function Profile() {
     const [tabValue, setTabValue] = useState(0)
@@ -83,10 +84,10 @@ function Profile() {
     console.log(data)
   return (
     <div>
-        <div className="grid bg-gray-50 grid-cols-12 p-2 md:gap-12 w-[80%] min-h-[100vh] mx-auto">
-            <div className="col-span-8">
+        <div className="grid grid-cols-12 p-2 md:gap-12 w-full lg:w-[90%] min-h-[100vh] mx-auto">
+            <div className="col-span-12 sm:col-span-8 profile_left">
                 {/* Profile Header */}
-                <div className="w-full flex items-center gap-4 min-h-32 ">
+                <div className="w-[100%] flex items-center gap-4 min-h-32 ">
                     <div className="flex flex-col items-center">
                         <div onClick={openImageUpload} className="profileImage w-32 h-32 rounded-full bg-black">
                             {/* <img className="rounded-full w-full h-full object-cover" src={`http://localhost:4001/images/${image || data.userProfile.profileImage}`} alt="" /> */}
@@ -116,7 +117,7 @@ function Profile() {
                 </div>
                 <div className="text-sm text-gray-500 hover:underline cursor-pointer">Write a description about yourself</div>
                 <div>
-                    <div className="flex justify-between border-b-[1px] border-gray-300">
+                    <div className="flex justify-between border-b-[1px]  border-gray-300">
                         <Tabs value={tabValue} onChange={(e, newValue) => setTabValue(newValue)}>
                             <Tab label="Posts" sx={{fontSize:12}} />
                             <Tab label="Question" sx={{fontSize:12}} />
@@ -252,7 +253,7 @@ function Profile() {
                 }
                 </div>
             </div>
-            <div className="col-span-4 bg-white">
+            <div className="md:col-span-4 dark:bg-[#171517] bg-[#f2e4fb] profile_right p-2">
                 <div>
                     <div className="flex py-2 justify-between border-b-2 border-gray-200 items-center w-full">
                         <span className="mb-2 font-light">Credential & Highlights</span>

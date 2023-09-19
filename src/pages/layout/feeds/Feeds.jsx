@@ -41,13 +41,7 @@ const createPostMutation = useMutation((newPost) =>
     },
   })
 );
-  // const initializeFetch = ()=>{
-  //   refetch()
-  // }
-  // useEffect(()=>{
-  //   initializeFetch()
-  // }, [])
-  
+
   const handleCreatePost = async (newPost) => {
     try {
       // Use the createPostMutation to create a new post
@@ -76,11 +70,11 @@ const createPostMutation = useMutation((newPost) =>
   }
 
   return (
-    <div className="w-full grid grid-cols-12 gap-4  mx-auto p-2 md:p-4">
-      <div className='sm:col-span-4 md:col-span-3'>
+    <div className="w-full grid dark:text-[#f2e4fb] text-[#060109] grid-cols-12 gap-2 md:gap-4  mx-auto p-2 md:p-4">
+      <div className='sm:col-span-3 md:col-span-2'>
         <SideBar />
       </div>
-      <div className='col-span-12 sm:col-span-8 md:col-span-6 lg:col-span-5 '>
+      <div className='col-span-12 sm:col-span-9 md:col-span-7 lg:col-span-6 '>
 
         {/* CreatePostForm component for creating a new post */}
         <CreatePostForm onCreatePost={handleCreatePost} onCreateQuestion={handleCreateQuestion} refetch={refetch} />

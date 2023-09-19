@@ -46,7 +46,7 @@ function Question({refetchQuestion, question}) {
 
 
   return (
-    <div className="border-t-[1px] border-gray-200 p-3">
+    <div className=" my-1 rounded-md dark:bg-[#171517] bg-[#f2e4fb] p-3">
       {/*  */}
       <div className="font-semibold hover:underline cursor-pointer sm:text-lg">{question?.question}</div>
       {/*  */}

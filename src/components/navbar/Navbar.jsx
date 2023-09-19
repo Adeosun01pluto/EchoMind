@@ -1,9 +1,8 @@
-import { Avatar, Badge, Button, Dialog, DialogContent, DialogTitle, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tab, Tabs, Tooltip } from '@mui/material';
-import { useState } from 'react';
+import { Avatar,  Button, Dialog, DialogContent, DialogTitle, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tab, Tabs, Tooltip } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { AiOutlineHome, AiOutlineLogout} from 'react-icons/ai'
 import { BsPeopleFill } from 'react-icons/bs';
 import { Link, useNavigate,  } from 'react-router-dom';
-import { GrNotification } from 'react-icons/gr'
 import { BiMessageEdit } from 'react-icons/bi'
 import { GiMoonOrbit } from 'react-icons/gi'
 import { FiSettings } from 'react-icons/fi'
@@ -30,27 +29,27 @@ const Navbar = () => {
   const menuList = [
     {
       to: '/',
-      icon: <AiOutlineHome color='' size={22} />,
+      icon: <AiOutlineHome color='white' size={22} />,
       label: 'Home',
     },
     {
       to: '/orbits',
-      icon: <GiMoonOrbit color='' size={22} />,
+      icon: <GiMoonOrbit color='white' size={22} />,
       label: 'Orbit',
     },
     {
       to: '/followings',
-      icon: <BsPeopleFill color='' size={22} />,
+      icon: <BsPeopleFill color='white' size={22} />,
       label: 'Followings',
     },
     {
       to: '/questions',
-      icon: <BiMessageEdit color='' size={22} />,
+      icon: <BiMessageEdit color='white' size={22} />,
       label: 'Question',
     },
     {
       to: '/practice',
-      icon:<RiTodoFill size={22} />,
+      icon:<RiTodoFill color='white' size={22} />,
       label: 'Practice',
     },
   ];
@@ -125,20 +124,38 @@ const Navbar = () => {
       console.error(error);
     }
   };
-  
+  const [theme, setTheme] = useState(null)
+  useEffect(() => {
+    if(window.matchMedia(("prefers-color-scheme : dark")).matches){
+      setTheme("dark")
+    }else{
+      setTheme("light")
+    }
+  }, [])
+  useEffect(() => {
+    if(theme === "dark"){
+      document.documentElement.classList.add("dark")
+    }
+    if(theme === "light"){
+      document.documentElement.classList.remove("dark")
+    }
+  }, [theme])
+  const handleThemeSwitch = () =>{
+    setTheme(theme === "dark"? "light" : "dark")
+  }
   return (
-    <nav className="w-full min-h-16 bg-gray-50 p-2">
+    <nav className="w-full min-h-16 bg-transparent p-2">
       <div className='container mx-auto flex justify-between items-center'>
-      <Link to="/" className='text-3x text-emerald-900 font-extrabold'>Demo</Link>
+      <div onClick={handleThemeSwitch} className='text-2xl md:text-3xl dark:text-[#f2e4fb] text-[#060109] font-extrabold'>Demo</div>
             {/* Desktop Nav Menu */}
-            <ul className='items-center bg-white rounded-xl navMenu'>
+            <ul className='items-center bg-[#4f1179] rounded-xl navMenu'>
             {menuList.map((menuItem, index) => (
               <Link
                 key={menuItem.to}
                 to={menuItem.to}
                 onClick={() => handleLinkClick(menuItem.to)}
-                className={`flex flex-col hover:bg-emerald-600 items-center text-emerald-900 ${
-                  activeLink === menuItem.to ? 'bg-emerald-600' : ''
+                className={`flex flex-col items-center text-emerald-900 ${
+                  activeLink === menuItem.to ? 'bg-[#8a1dd3]' : ''
                 } ${
                   index === 0
                     ? 'rounded-tl-xl rounded-bl-xl'
@@ -148,12 +165,12 @@ const Navbar = () => {
                 } px-3 py-1`}
               >
                 {menuItem.icon}
-                <span className='text-emerald-900 text-sm'>{menuItem.label}</span>
+                <span className='text-white text-sm'>{menuItem.label}</span>
               </Link>
             ))}
             </ul>
             <div className='navMenu gap-1 items-center'>
-              <button onClick={handleClickOpen} className='bg-emerald-700 px-2 py-1 text-sm text-white rounded-full'>Add Question</button>
+              <button onClick={handleClickOpen} className=' bg-[#4f1179] px-2 py-1 text-sm text-white rounded-full'>Add Question</button>
               <Tooltip title="Account settings">
                 <IconButton
                   onClick={handleClick}
@@ -170,7 +187,7 @@ const Navbar = () => {
 
             {/* Mobile Nav menu */}
             <div className='items-center gap-3 mobileNavMenu'>
-              <button onClick={handleClickOpen} className='bg-emerald-700 px-2 py-1 text-sm text-white rounded-full'>+</button>
+              <button onClick={handleClickOpen} className='bg-[#4f1179] px-2 py-1 text-sm text-white rounded-full'>+</button>
               <div className='gap-1 mobileNavMenu flex items-center'>
                 <Tooltip title="Account settings">
                   <IconButton
@@ -260,24 +277,22 @@ const Navbar = () => {
 
       {/*  */}
       <ul className='w-[100%] mobileNavMenu items-center justify-between'>
-              <Link to="/" className='p-1 sm:p-3 border-gray-200 flex items-center justify-center flex-1'><AiOutlineHome size={26} color="#046307"/></Link>
-              <Link to="/orbits" className='p-1 sm:p-3 border-gray-200 flex items-center justify-center flex-1'><GiMoonOrbit size={26} color="#046307"/></Link>
-              <Link to="/followings" className='p-1 sm:p-3 border-gray-200 flex items-center justify-center flex-1'><BsPeopleFill size={26} color="#046307"/></Link>
-              <Link to="/questions" className='p-1 sm:p-3 border-gray-200 flex items-center justify-center flex-1'><BiMessageEdit size={26} color="#046307"/></Link>
-              <Link to="/notifications" className='p-1 sm:p-3 border-gray-200 flex items-center justify-center flex-1'>
-                <Badge badgeContent={0} color="error">
-                  <GrNotification size={22} /> {/* Display the GrNotification icon */}
-                </Badge>
+              <Link to="/" className='p-1 sm:p-3 border-gray-200 flex items-center justify-center flex-1'><AiOutlineHome size={26} color="#4f1179"/></Link>
+              <Link to="/orbits" className='p-1 sm:p-3 border-gray-200 flex items-center justify-center flex-1'><GiMoonOrbit size={26} color="#4f1179"/></Link>
+              <Link to="/followings" className='p-1 sm:p-3 border-gray-200 flex items-center justify-center flex-1'><BsPeopleFill size={26} color="#4f1179"/></Link>
+              <Link to="/questions" className='p-1 sm:p-3 border-gray-200 flex items-center justify-center flex-1'><BiMessageEdit size={26} color="#4f1179"/></Link>
+              <Link to="/practice" className='p-1 sm:p-3 border-gray-200 flex items-center justify-center flex-1'>
+                <RiTodoFill color='#4f1179' size={22} />
               </Link>
         </ul>
 
       {/* Dialog */}
-      <Dialog open={open} onClose={handleClose} maxWidth="lg" fullWidth={true}>
-        <DialogTitle>
-          <div className="flex justify-between border-b-2 border-gray-300">
-            <Tabs value={tabValue} onChange={(e, newValue) => setTabValue(newValue)}>
-              <Tab label="Add Question" />
-              <Tab label="Create Post" />
+      <Dialog open={open} sx={{color:"#060109"}} onClose={handleClose} maxWidth="lg" fullWidth={true}>
+        <DialogTitle sx={{color:"#060109"}}>
+          <div className="flex justify-between border-b-2 border-[#8a1dd3]">
+            <Tabs value={tabValue}  onChange={(e, newValue) => setTabValue(newValue)}>
+              <Tab label="Add Question" sx={{color:"#060109"}}/>
+              <Tab label="Create Post" sx={{color:"#060109"}}/>
             </Tabs>
           </div>
         </DialogTitle>
@@ -297,7 +312,7 @@ const Navbar = () => {
                   required
                 />
               </div>
-              <Button type="submit" variant="contained" onClick={handleCreateQuestion} color="primary">
+              <Button type="submit" sx={{background:"#4f1179"}} variant="contained" onClick={handleCreateQuestion} color="primary">
                 Add Question
               </Button>
               <Button onClick={handleClose}>X</Button>
@@ -314,7 +329,7 @@ const Navbar = () => {
                   required
                 />
               </div>
-              <Button type="submit" variant="contained" onClick={handleCreatePost} color="primary">
+              <Button type="submit" sx={{background:"#4f1179"}} variant="contained" onClick={handleCreatePost}>
                 Create Post
               </Button>
               <Button onClick={handleClose}>X</Button>
