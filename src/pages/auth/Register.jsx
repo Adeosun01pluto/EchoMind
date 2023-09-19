@@ -115,7 +115,7 @@ const Register = () => {
           <button
             type="submit"
             className="w-full bg-emerald-700 flex items-center justify-center gap-1 text-white py-2 px-4 rounded-md hover:bg-emerald-700 focus:outline-none"
-          >Register{loading ? <span><CircularProgress /> </span> : "" } </button>
+          >Register{loading ? <span><CircularProgress size={15} /> </span> : "" } </button>
           <div className="flex justify-between w-[80%] mx-auto text-sm items-center">
             <span className="text-sm text-gray-700">Already have an account?</span>
             <Link to="/login" className="text-emerald-700">Login</Link>

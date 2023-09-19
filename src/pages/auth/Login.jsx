@@ -72,7 +72,7 @@ const Login = () => {
           <button
             type="submit"
             className="w-full bg-emerald-700 text-white flex items-center justify-center gap-1 py-2 px-4 rounded-md hover:bg-emerald-700 focus:outline-none"
-          >Login {loading ? <span><CircularProgress /> </span> : "" } </button>
+          >Login {loading ? <span><CircularProgress size={15} /> </span> : "" } </button>
           <div className="flex justify-between w-[80%] mx-auto text-sm items-center">
             <span className="text-sm text-gray-700">Do not have an account?</span>
             <Link to="/register" className="text-emerald-700">Register</Link>
