@@ -28,14 +28,14 @@ function SideBar() {
     }, [userId]);
     if(loading) "Loading"
   return (
-    <div className="h-full side_bar">
+    <div className="h-full p-2 side_bar dark:bg-[#171517] bg-[#f2e4fb]">
          <div className="">
-            <ul className='w-full flex flex-col rounded-sm mx-auto'>
+            <ul className='w-full flex flex-col rounded-sm mx-auto '>
                 {data?.map((datum, idx)=>(
                 <div key={idx} className="h-12 rounded-md ">
-                    <Link to={`/orbit/${datum._id}`} className='lg:p-2 flex gap-2 cursor-pointer items-center py-3'>
-                        <img className="rounded-md md:w-8 h-8 object-cover" src={`${BASE_URL}/images/${datum?.coverPhoto}`} alt="" />
-                        <span className='text-sm lg:text-md'>{datum?.name}</span>
+                    <Link to={`/orbit/${datum._id}`} className='lg:p-2 flex gap-2 cursor-pointer items-center py-3 w-[100%] '>
+                        <img className="rounded-md h-8 object-cover w-[15%] sm:w-[25%]" src={datum?.coverPhoto ? `${BASE_URL}/images/${datum?.coverPhoto}` : `/${datum?.tempCoverImage}.avif`} alt="" />
+                        <span className=' text-sm  flex-1 lg:text-md'>{datum?.name}</span>
                     </Link>
                 </div>
                 ))}

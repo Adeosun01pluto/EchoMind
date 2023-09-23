@@ -88,19 +88,17 @@ function Feed({post, refetch}) {
     }
   }
   const handleFollow = async (followerId) => {
-    const postUserId = post.userId 
     try {
-      await follow(followerId, getUserProfileHandler,  postUserId);
+      await follow(followerId, refetch);
     } catch (error) {
       console.error(error);
     }
   };
   
   const handleUnFollow = async (followerId) => {
-    const postUserId = post.userId 
 
     try {
-      await unfollow(followerId, getUserProfileHandler, postUserId);
+      await unfollow(followerId, refetch);
     } catch (error) {
       console.error(error);
     }
@@ -148,23 +146,31 @@ function Feed({post, refetch}) {
               <button
                 onClick={() => handleLike(post?._id)}
                 className="p-1 px-2 border-r-2 border-gray-200 rounded-t-r-full flex items-center gap-2"
-              >
+                >
+                {post.upvotes.includes(userId)?
                 <BsFillArrowUpSquareFill size={15} color="#4f1179" />
-                <span className='text-sm'>Upvote . {post.upvotes.length}</span>
+                :
+                <BsFillArrowUpSquareFill size={15} color="gray" />
+                }
+                <span className='text-xs md:text-sm'>Upvote . {post.upvotes.length}</span>
               </button>
               <button
                 onClick={() => handleUnlike(post?._id)}
                 className="p-1 px-2 rounded flex items-center gap-2 "
               >
+                {post.downvotes.includes(userId)?
+                <BsFillArrowDownSquareFill size={15} color="#4f1179" />
+                :
                 <BsFillArrowDownSquareFill size={15} color="gray" />
-                <span className='text-sm'>{post.downvotes.length}</span>
+                }
+                <span className='text-xs md:text-sm'>{post.downvotes.length}</span>
               </button>
             </div>
             {/* Render the tweet and untweet btn */}
             <div className='flex items-center gap-4'>
               <button className='flex items-center gap-2'>
                 <FaRegComment color="gray" onClick={()=>handleClickOpen(post._id)} />
-                <span>{post.comments.length}</span>
+                <span className='text-xs md:text-sm'>{post.comments.length}</span>
               </button>
               <button className='flex items-center gap-2'>
                 {
@@ -173,7 +179,7 @@ function Feed({post, refetch}) {
                   :
                   <FaRetweet onClick={()=>tweetPost(post._id, refetch)}  color='gray' size={20}/>
                 } 
-                <span>{post.tweets.length}</span>
+                <span className='text-xs md:text-sm'>{post.tweets.length}</span>
 
               </button>
             </div>

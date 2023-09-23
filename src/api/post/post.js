@@ -101,7 +101,6 @@ export const untweetPost = async (postId, refetch) => {
           },
         }
       );
-      console.log(response.data)
       refetch()
       return response.data;
     } catch (error) {
@@ -109,7 +108,7 @@ export const untweetPost = async (postId, refetch) => {
       }
   };
 
-  export const follow = async (followerId, getUserProfileHandler, postUserId) => {
+  export const follow = async (followerId, refetch) => {
     try {
         const token = localStorage.getItem('token');
         const response = await axios.get(`${BASE_URL}/auth/follow/${followerId}`,
@@ -119,14 +118,14 @@ export const untweetPost = async (postId, refetch) => {
             },
           }
         );
-        getUserProfileHandler(postUserId)
+        refetch()
         return response.data;
       } catch (error) {
        console.log(error)
       }
   };
   
-  export const unfollow = async (followerId, getUserProfileHandler, postUserId) => {
+  export const unfollow = async (followerId, refetch) => {
     try {
         const token = localStorage.getItem('token');
         const response = await axios.get(`${BASE_URL}/auth/un_follow/${followerId}`,
@@ -136,7 +135,7 @@ export const untweetPost = async (postId, refetch) => {
             },
           }
         );
-        getUserProfileHandler(postUserId)
+        refetch()
         return response.data;
       } catch (error) {
         console.log(error)

@@ -6,6 +6,7 @@ import Orbit from "./Orbit";
 import { useNavigate } from "react-router-dom";
 import { ThreeDots } from "react-loader-spinner";
 import SideBar from "../../common/SideBar";
+import { BASE_URL } from "../../../constants/constant";
 
 function getRandomNumber() {
   return Math.floor(Math.random() * 36) + 1;
@@ -35,7 +36,7 @@ function Orbits() {
   const fetchOrbits = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:4001/orbit/read_orbits', {
+      const response = await axios.get(`${BASE_URL}/orbit/read_orbits`, {
         headers: {
           Authorization: token,
         },
@@ -53,7 +54,7 @@ function Orbits() {
       const tempCoverImage = getRandomNumber();
       const orbitColor = getRandomHexColor();
       const token = localStorage.getItem('token');
-      const response = await axios.post('http://localhost:4001/orbit/create_orbit', {name, description, tempIconImage, tempCoverImage, orbitColor},
+      const response = await axios.post(`${BASE_URL}/orbit/create_orbit`, {name, description, tempIconImage, tempCoverImage, orbitColor},
       {
         headers: {
           Authorization: token,

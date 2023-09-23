@@ -11,7 +11,7 @@ import { BASE_URL } from "../../../constants/constant";
 import { getUserId } from "../../../api/api";
 import O_Question from "./O_Question";
 import { fetchO_Questions, followOrbit, unFollowOrbit } from "../../../api/orbit/orbit";
-
+import "../../../App.css"
 
 function SingleOrbit() {
     const {orbitId} = useParams()
@@ -31,7 +31,7 @@ function SingleOrbit() {
     const fetchOrbit = async () => {
         try {
           const token = localStorage.getItem('token');
-          const response = await axios.get(`http://localhost:4001/orbit/get_orbit/${orbitId}`, {
+          const response = await axios.get(`${BASE_URL}/orbit/get_orbit/${orbitId}`, {
             headers: {
               Authorization: token,
             },
@@ -44,7 +44,7 @@ function SingleOrbit() {
     const fetchOrbitPosts = async (orbitId) => {
         try {
           const token = localStorage.getItem('token');
-          const response = await axios.get(`http://localhost:4001/orbit/get_posts/${orbitId}`, {
+          const response = await axios.get(`${BASE_URL}/orbit/get_posts/${orbitId}`, {
             headers: {
               Authorization: token,
             },
@@ -63,7 +63,7 @@ function SingleOrbit() {
       e.preventDefault()
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.post(`http://localhost:4001/orbit/create_post/${orbitId}`, {content},{
+        const response = await axios.post(`${BASE_URL}/orbit/create_post/${orbitId}`, {content},{
           headers: {
             Authorization: token,
           },
@@ -90,7 +90,7 @@ function SingleOrbit() {
         formData.append('orbitName', orbitName);
         formData.append('images', coverPhoto); // Append the first image
         formData.append('images', iconImage);  // Append the second image
-        const response = await axios.put(`http://localhost:4001/orbit/edit/${orbitId}`,
+        const response = await axios.put(`${BASE_URL}/orbit/edit/${orbitId}`,
           formData,
           {
             headers: {
@@ -169,7 +169,6 @@ function SingleOrbit() {
         console.error(error);
       }
     };
-    console.log(orbit)
     if(isLoading)return (
       <div className="w-full items-center justify-center flex">
         <ThreeDots 
@@ -185,15 +184,15 @@ function SingleOrbit() {
       </div>
     )
   return (  
-    <div className='bg-white w-[100%] min-h-[400vh]'>
-    <div className={`w-[100%] md:pb-2 bg-[black] flex flex-col md:gap-12`}>
-      <div className='w-[100%] relative bg-red-500 sm:w-[80%] h-[200px] md:h-[250px] mx-auto mb-6 md:mb-2'>
-        <img className="w-full h-full object-cover" src={`http://localhost:4001/images/${orbit.coverPhoto}`} alt="" />
+    <div className='w-[100%] min-h-[400vh]'>
+    <div className={`w-[100%] pb-2 dark:bg-[#060109] bg-[#f2e4fb] flex flex-col md:gap-12`}>
+      <div className='md:w-[90%] w-[95%] relative rounded-md h-[200px] md:h-[250px] mx-auto mb-6 md:mb-2'>
+        <img className="rounded-md w-full h-full object-cover" src={orbit.coverPhoto ? `${BASE_URL}/images/${orbit.coverPhoto} ` :  `/${orbit.tempCoverImage}.avif`} alt="" />
         <div className="absolute bottom-[-20px] bg-white left-6 w-[130px]  rounded-md h-[100px] md:h-[130px]">
-          <img className="w-full rounded-xl h-full object-cover" src={`http://localhost:4001/images/${orbit.iconImage}`} alt="" />
+          <img className="w-full rounded-xl h-full object-cover" src={orbit.iconImage ? `${BASE_URL}/images/${orbit.iconImage}` :  `/${orbit.tempIconImage}.avif`} alt="" />
         </div>
       </div>
-      <div className='w-[100%] bg-emerald-600 sm:w-[80%] mx-auto flex flex-col gap-2 p-2 md:p-4'>
+      <div className='md:w-[90%] w-[95%] dark:bg-[#171517] bg-[#4f1179] mx-auto flex flex-col gap-2 my-2 rounded-md p-2 md:p-4'>
         <div className='text-lg md:text-2xl text-white w-[100%] flex gap-3 items-center justify-between'>
           <div className="flex gap-1 md:gap-3 cursor-pointer items-center">
             <span className="md:font-bold font-light text-xl md:text-3xl">{`${orbit?.name?.trim()}'s`} Orbit</span>
@@ -203,8 +202,8 @@ function SingleOrbit() {
           {userId === orbit?.admin ?
           (
             <>
-            <div className="flex gap-2 md:gap-3 bg-transparent border-2 py-1 px-2 border-white rounded-full text-black p-1 sm:p-2 items-center">
-            <span className="text-lg text-white ">Admin</span>
+            <div className="flex gap-2 md:gap-3 bg-transparent border-2 py-1 px-2 border-white rounded-full text-black p-1 items-center">
+            <span className="text-sm md:text-md text-white ">Admin</span>
             <AiFillSecurityScan color="white" />
             </div> 
             </>
@@ -217,8 +216,8 @@ function SingleOrbit() {
             <p className="text-gray-100">{orbit?.followers?.length} Followers</p>
             <div className='flex items-center gap-3'>
               { orbit?.followers?.includes(userId)? 
-                <button onClick={handleUnFollow} className='py-1 px-3 text-white border-white rounded-full bg-transparent border-2'>unfollow</button> :
-                <button onClick={handleFollow} className='py-1 px-3 text-black bg-white text-white800 rounded-full border-2 border-white'>Follow</button>
+                <button onClick={handleUnFollow} className='py-1 px-3 text-sm text-white border-white rounded-full bg-transparent border-2'>unfollow</button> :
+                <button onClick={handleFollow} className='py-1 px-3 text-sm text-black bg-white text-white800 rounded-full border-2 border-white'>Follow</button>
               }
               {/* <button className=''>Invite</button> */}
             </div>
@@ -227,8 +226,8 @@ function SingleOrbit() {
         </div>
       </div>
     </div>
-    <div className='mx-auto p-1 sm:p-2 w-[100%] md:w-[85%] gap-2 md:gap-5 grid grid-cols-12'>
-      <div className=" md:p-3 col-span-12 sm:col-span-8 w-[100%] min-h-[600px]">
+    <div className='mx-auto p-1 sm:p-2 w-[100%] md:w-[95%] gap-2 md:gap-4 grid grid-cols-12'>
+      <div className="col-span-12 md:col-span-8 w-[100%] min-h-[600px]">
       {/* Tabs */}
         <div className="flex justify-between border-b-2 border-gray-300">
           <Tabs value={tabValue} onChange={(e, newValue) => setTabValue(newValue)}>
@@ -238,7 +237,7 @@ function SingleOrbit() {
           </Tabs>
         </div>
         {userId === orbit?.admin ?
-          <div className='w-[100%] my-2 flex justify-around h-[100px] gap-1 sm:gap-2 bg-gray-100 p-1 sm:p-2 rounded-md'>
+          <div className='w-[100%] my-2 flex justify-around h-[100px] gap-1 sm:gap-2 dark:bg-[#171517] bg-[#f2e4fb] p-1 sm:p-2 rounded-md'>
             <div className='flex flex-col hover:bg-[#cececece] items-center rounded-md w-[100%] cursor-pointer justify-center'>
               <AiFillAccountBook size={30} color='gray' />
               <span className='text-xs sm:text-md text-gray-400'>Invite</span>
@@ -258,7 +257,7 @@ function SingleOrbit() {
           </div>
           : null
         }
-        <div className='w-[100%] p-1 md:p-3 my-2 flex gap-1 md:gap-3 items-center justify-around h-[70px] bg-gray-100 rounded-md'>
+        <div className='w-[100%] p-1 md:p-3 my-2 flex gap-1 md:gap-3 items-center justify-around h-[70px] dark:bg-[#171517] bg-[#f2e4fb] rounded-md'>
           <Avatar size={30} />
           <input type="text" onClick={handleClickOpen}  placeholder={`Post in ${orbit?.name} Orbit`} className=' flex-1 rounded-full p-3 sm:p-2 text-sm border-none outline-none' />
           <button className="space-inboxBtn p-1 sm:p-2 rounded-full bg-emerald-700 text-white text-xs sm:text-sm" onClick={handleClickOpen}  >Inbox</button>
@@ -296,7 +295,7 @@ function SingleOrbit() {
             </div>
           ) : null }
       </div>
-      <div className="bg-emerald-100 spaceYouMayLike col-span-4 w-[100%] min-h-[100vh] p-3">
+      <div className="bg-emerald-700 spaceYouMayLike md:col-span-4 w-[100%] h-[100vh] p-1">
         <div className="w-[100%] bg-white h-[80px]"></div>
         <div className="w-[100%] bg-white h-[600px] my-2"></div>
       </div>

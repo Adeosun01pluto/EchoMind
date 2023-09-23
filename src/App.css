@@ -10,13 +10,13 @@
     }
 }
 /* Profile */
-@media screen and (max-width: 830px) {
+@media screen and (max-width: 750px) {
     .profile_left {
         width: 100%;
     }
-    /* .profile_right {
+    .profile_right, .spaceYouMayLike {
         display: none;
-    } */
+    }
 }
 @media screen and (min-width:800px) {
     .profile_left {

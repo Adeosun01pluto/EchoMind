@@ -18,6 +18,7 @@ function Profile() {
     const [tabValue, setTabValue] = useState(0)
     const {userId} = useParams()
     const [image, setImage] = useState(null)
+    // const [isOpen, setIsOpen] = useState(null)
     // const [userData, setUserData] = useState(null)
     const [isUploading, setIsUploading] = useState(false); // Added state for upload feedback
     const handleUpload  = async() =>{
@@ -25,7 +26,7 @@ function Profile() {
         const formData = new FormData();
         formData.append('image', image);
         try {
-            const response = await axios.put('http://localhost:4001/auth/profile', formData,  {
+            const response = await axios.put(`${BASE_URL}/auth/profile`, formData,  {
               headers: {
                 'Content-Type': 'multipart/form-data', // Set the content type to multipart/form-data
                 Authorization: token,
@@ -84,13 +85,12 @@ function Profile() {
     console.log(data)
   return (
     <div>
-        <div className="grid grid-cols-12 p-2 md:gap-12 w-full lg:w-[90%] min-h-[100vh] mx-auto">
-            <div className="col-span-12 sm:col-span-8 profile_left">
+        <div className="grid grid-cols-12 p-2 md:gap-4 w-full lg:w-[85%] min-h-[100vh] mx-auto">
+            <div className="col-span-12 md:col-span-7 w-[100%]">
                 {/* Profile Header */}
                 <div className="w-[100%] flex items-center gap-4 min-h-32 ">
                     <div className="flex flex-col items-center">
                         <div onClick={openImageUpload} className="profileImage w-32 h-32 rounded-full bg-black">
-                            {/* <img className="rounded-full w-full h-full object-cover" src={`http://localhost:4001/images/${image || data.userProfile.profileImage}`} alt="" /> */}
                             {image ? (
                                 <img className="rounded-full w-full h-full object-cover" src={URL.createObjectURL(image)} alt="Selected Image" />
                             ) : (
@@ -98,17 +98,17 @@ function Profile() {
                             )}
                             <input type="file" accept="image/*" id="image-upload" style={{ display: 'none' }} onChange={handleFileChange} />
                         </div>
-                        {image && !isUploading && (
+                        {image && isUploading && (
                             <button className="text-sm py-1 px-2 text-white my-1 rounded-lg bg-blue-400" onClick={handleUpload}>Upload</button>
                         )}
                         {isUploading && <div>Uploading...</div>}
                     </div>
-                    <div className=" md:flex-1">
+                    <div className=" md:flex-1 flex-grow">
                         <p className="text-2xl font-bold ">{data?.userProfile.username}</p>
                         <p className="text-sm text-gray-400 hover:underline cursor-pointer">Add profile credential</p>
                         <div className="flex items-center gap-2 md:gap-3">
-                            <span>{data?.userProfile.followers.length} followers</span>
-                            <span>{data?.userProfile.followings.length} followings</span>
+                            <span className="md:text-sm text-xs">{data?.userProfile.followers.length} followers</span>
+                            <span className="md:text-sm text-xs">{data?.userProfile.followings.length} followings</span>
                         </div>
                     </div>
                     <div className="item">
@@ -253,7 +253,7 @@ function Profile() {
                 }
                 </div>
             </div>
-            <div className="md:col-span-4 dark:bg-[#171517] bg-[#f2e4fb] profile_right p-2">
+            <div className="col-span-0 profile_right md:col-span-5 dark:bg-[#171517] bg-[#f2e4fb] p-2">
                 <div>
                     <div className="flex py-2 justify-between border-b-2 border-gray-200 items-center w-full">
                         <span className="mb-2 font-light">Credential & Highlights</span>

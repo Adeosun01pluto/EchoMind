@@ -1,7 +1,7 @@
 import { Avatar,  Button, Dialog, DialogContent, DialogTitle, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tab, Tabs, Tooltip } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { AiOutlineHome, AiOutlineLogout} from 'react-icons/ai'
-import { BsPeopleFill } from 'react-icons/bs';
+import { BsCloudMoonFill, BsFillSunFill, BsPeopleFill } from 'react-icons/bs';
 import { Link, useNavigate,  } from 'react-router-dom';
 import { BiMessageEdit } from 'react-icons/bi'
 import { GiMoonOrbit } from 'react-icons/gi'
@@ -146,7 +146,7 @@ const Navbar = () => {
   return (
     <nav className="w-full min-h-16 bg-transparent p-2">
       <div className='container mx-auto flex justify-between items-center'>
-      <div onClick={handleThemeSwitch} className='text-2xl md:text-3xl dark:text-[#f2e4fb] text-[#060109] font-extrabold'>Demo</div>
+      <div className='text-2xl md:text-3xl dark:text-[#f2e4fb] text-[#060109] font-extrabold'>Demo</div>
             {/* Desktop Nav Menu */}
             <ul className='items-center bg-[#4f1179] rounded-xl navMenu'>
             {menuList.map((menuItem, index) => (
@@ -170,6 +170,14 @@ const Navbar = () => {
             ))}
             </ul>
             <div className='navMenu gap-1 items-center'>
+              <button onClick={handleThemeSwitch} className=' '>
+                {
+                  theme === "dark" ?
+                  <BsFillSunFill size={20} color="gold" />
+                  :
+                  <BsCloudMoonFill size={20} />
+                }
+              </button>
               <button onClick={handleClickOpen} className=' bg-[#4f1179] px-2 py-1 text-sm text-white rounded-full'>Add Question</button>
               <Tooltip title="Account settings">
                 <IconButton
@@ -187,6 +195,14 @@ const Navbar = () => {
 
             {/* Mobile Nav menu */}
             <div className='items-center gap-3 mobileNavMenu'>
+              <button onClick={handleThemeSwitch} className=' '>
+                {
+                  theme === "dark" ?
+                  <BsFillSunFill size={20} color="gold" />
+                  :
+                  <BsCloudMoonFill size={20} />
+                }
+              </button>
               <button onClick={handleClickOpen} className='bg-[#4f1179] px-2 py-1 text-sm text-white rounded-full'>+</button>
               <div className='gap-1 mobileNavMenu flex items-center'>
                 <Tooltip title="Account settings">
@@ -312,7 +328,19 @@ const Navbar = () => {
                   required
                 />
               </div>
-              <Button type="submit" sx={{background:"#4f1179"}} variant="contained" onClick={handleCreateQuestion} color="primary">
+              <Button type="submit" 
+                sx={{
+                  background:"#4f1179",
+                    "&:hover": {
+                      backgroundColor: "#4f1179 !important",
+                      boxShadow: "none !important",
+                    },
+                    "&:active": {
+                      boxShadow: "none !important",
+                      backgroundColor: "#4f1179 !important",
+                    },
+                }}
+               variant="contained" onClick={handleCreateQuestion} color="primary">
                 Add Question
               </Button>
               <Button onClick={handleClose}>X</Button>
@@ -329,7 +357,18 @@ const Navbar = () => {
                   required
                 />
               </div>
-              <Button type="submit" sx={{background:"#4f1179"}} variant="contained" onClick={handleCreatePost}>
+              <Button type="submit" sx={{
+                background:"#4f1179",
+                  "&:hover": {
+                    backgroundColor: "#4f1179 !important",
+                    boxShadow: "none !important",
+                  },
+                  "&:active": {
+                    boxShadow: "none !important",
+                    backgroundColor: "#4f1179 !important",
+                  },
+                }}
+               variant="contained" onClick={handleCreatePost}>
                 Create Post
               </Button>
               <Button onClick={handleClose}>X</Button>
