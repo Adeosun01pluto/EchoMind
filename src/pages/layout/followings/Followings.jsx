@@ -13,7 +13,7 @@ function Followings() {
     setLoading(true)
     try {
       const response = await getUserProfile(userId)
-      const orbitIds = response.orbitFollowings
+      const orbitIds = response?.orbitFollowings
       const res = await fetchFollowingOrbits(orbitIds)
       setData(res)
       setLoading(false)

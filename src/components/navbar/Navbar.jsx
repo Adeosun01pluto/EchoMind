@@ -102,8 +102,8 @@ const Navbar = () => {
       console.error(error);
     }
   };
-  const createPostMutation = useMutation((newPost) =>
-  axios.post(`${BASE_URL}/create_post`, newPost, {
+  const createPostMutation = useMutation((content) =>
+  axios.post(`${BASE_URL}/create_post`, content, {
     headers: {
       "Authorization": localStorage.getItem('token'),
     },
@@ -112,14 +112,12 @@ const Navbar = () => {
   const handleCreatePost = async () => {
     try {
       // Use the createPostMutation to create a new post
-      await createPostMutation.mutateAsync(content);
+      const newQuestion = { content };
+      console.log(newQuestion)
+      await createPostMutation.mutateAsync(newQuestion);
       // Refetch the list of posts after creating a new one
       refetch()
-      // if (location.pathname === '/') {
-      //   console.log("first")
-      // } else {
-      //   navigate('/');
-      // }
+      setOpen(false);
     } catch (error) {
       console.error(error);
     }
@@ -369,7 +367,7 @@ const Navbar = () => {
                   },
                 }}
                variant="contained" onClick={handleCreatePost}>
-                Create Post
+                Create Post 
               </Button>
               <Button onClick={handleClose}>X</Button>
             </div>

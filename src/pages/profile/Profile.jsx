@@ -1,4 +1,4 @@
-import { Divider, Tab, Tabs } from "@mui/material"
+import { Dialog, DialogTitle, Divider, Tab, Tabs } from "@mui/material"
 import axios from 'axios';
 import { useEffect, useState } from "react"
 import { BsCalendarDate, BsFillEyeFill, BsFillPencilFill } from "react-icons/bs"
@@ -11,15 +11,33 @@ import { fetchPostsById } from "../../api/post/post";
 import Feed from "../layout/feeds/Feed";
 import { fetchQuestionsById } from "../../api/question/question";
 import Question from "../layout/questions/Question";
-import { getFollowers, getFollowings } from "../../api/api";
+import { getFollowers, getFollowings, getUserId } from "../../api/api";
 import "../.././App.css"
 
 function Profile() {
     const [tabValue, setTabValue] = useState(0)
     const {userId} = useParams()
+    const loggedInUserId = getUserId()
+    const fetchProfile = async () => {
+        try {
+          const response = await axios.get(`${BASE_URL}/auth/profile/${userId}`, {
+            headers: {
+              Authorization: token,
+            },
+          });
+          return response.data;
+        } catch (error) {
+          console.log(error.message);
+        }
+    };
+    const { data, isLoading} = useQuery(['profile', userId], fetchProfile);
+    const { data: posts, isLoading: postStatus, refetch} = useQuery(['user_posts', userId], ()=>fetchPostsById(userId));
+    const { data: questions, isLoading: questionStatus,refetch:refetchQuestion} = useQuery(['user_questions',userId], ()=>fetchQuestionsById(userId));
+    const { data: followings, isLoading: followingsStatus} = useQuery(['followings', userId], ()=>getFollowings(userId));
+    const { data: followers, isLoading: followersStatus} = useQuery(['followers', userId], ()=>getFollowers(userId));
     const [image, setImage] = useState(null)
-    // const [isOpen, setIsOpen] = useState(null)
-    // const [userData, setUserData] = useState(null)
+    
+    const [openSetting, setOpenSetting] = useState(false);
     const [isUploading, setIsUploading] = useState(false); // Added state for upload feedback
     const handleUpload  = async() =>{
         setIsUploading(true); // Show loading feedback
@@ -43,23 +61,11 @@ function Profile() {
     useEffect(()=>{
         fetchProfile()
     }, [token, userId])
-    const fetchProfile = async () => {
-        try {
-          const response = await axios.get(`${BASE_URL}/auth/profile/${userId}`, {
-            headers: {
-              Authorization: token,
-            },
-          });
-          return response.data;
-        } catch (error) {
-          console.log(error.message);
-        }
-    };
-    const { data, isLoading} = useQuery(['profile', userId], fetchProfile);
-    const { data: posts, isLoading: postStatus, refetch} = useQuery(['user_posts', userId], ()=>fetchPostsById(userId));
-    const { data: questions, isLoading: questionStatus,refetch:refetchQuestion} = useQuery(['user_questions',userId], ()=>fetchQuestionsById(userId));
-    const { data: followings, isLoading: followingsStatus} = useQuery(['followings', userId], ()=>getFollowings(userId));
-    const { data: followers, isLoading: followersStatus} = useQuery(['followers', userId], ()=>getFollowers(userId));
+    const [username, setUsername] = useState(data?.userProfile?.username)
+    const [bio, setBio] = useState(data?.userProfile?.bio)
+    const [location, setLocation] = useState(data?.userProfile?.location)
+    const [fullname , setFullname] = useState(data?.userProfile?.fullname)
+
     if(isLoading){
         return <div className="w-full items-center justify-center flex">
                 <ThreeDots 
@@ -74,6 +80,7 @@ function Profile() {
                 />
             </div>
     }
+
     const handleFileChange = (e) => {
         // Capture the selected file and set it in state
         const selectedImage = e.target.files[0];
@@ -82,30 +89,70 @@ function Profile() {
     const openImageUpload = () => {
         document.getElementById('image-upload').click(); // Trigger click event of hidden input
     }; 
-    console.log(data)
-  return (
+    const handleSaveProfile = async ()=>{
+        try {
+            const response = await axios.put(`${BASE_URL}/profile`,
+                {
+                location, bio, username , fullname
+                },
+                {
+                    headers: {
+                    "Authorization" : token,
+                    },
+                }
+            );
+            console.log(response)
+            return response.data;
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const  openSettingHandler = () =>{
+        setOpenSetting(true)
+    }
+    const handleCloseSetting = () => {
+        setOpenSetting(false);
+    };
+    return (
     <div>
         <div className="grid grid-cols-12 p-2 md:gap-4 w-full lg:w-[85%] min-h-[100vh] mx-auto">
             <div className="col-span-12 md:col-span-7 w-[100%]">
                 {/* Profile Header */}
                 <div className="w-[100%] flex items-center gap-4 min-h-32 ">
                     <div className="flex flex-col items-center">
-                        <div onClick={openImageUpload} className="profileImage w-32 h-32 rounded-full bg-black">
+                        <div onClick={openImageUpload} className="profileImage w-32 h-32 rounded-full">
+                        {/*  */}
                             {image ? (
-                                <img className="rounded-full w-full h-full object-cover" src={URL.createObjectURL(image)} alt="Selected Image" />
-                            ) : (
-                                <img className="rounded-full w-full h-full object-cover" src={`http://localhost:4001/images/${data.userProfile.profileImage}`} alt="" />
-                            )}
-                            <input type="file" accept="image/*" id="image-upload" style={{ display: 'none' }} onChange={handleFileChange} />
+                                <img
+                                    className="rounded-full w-full h-full object-cover"
+                                    src={URL.createObjectURL(image)}
+                                    alt="Selected Image"
+                                />
+                                ) : data?.userProfile?.profileImage ? (
+                                <img
+                                    className="rounded-full w-full h-full object-cover"
+                                    src={`${BASE_URL}/images/${data.userProfile.profileImage}`}
+                                    alt=""
+                                />) : (
+                                <img
+                                    className="rounded-full w-full h-full object-cover"
+                                    src={data.userProfile.avatarData}
+                                    alt=""
+                                />)
+                            }
+                            {userId === loggedInUserId ? 
+                                <input type="file" accept="image/*" id="image-upload" style={{ display: 'none' }} onChange={handleFileChange} />
+                                : null
+                            }
                         </div>
-                        {image && isUploading && (
+                        {image && (
                             <button className="text-sm py-1 px-2 text-white my-1 rounded-lg bg-blue-400" onClick={handleUpload}>Upload</button>
                         )}
                         {isUploading && <div>Uploading...</div>}
                     </div>
                     <div className=" md:flex-1 flex-grow">
                         <p className="text-2xl font-bold ">{data?.userProfile.username}</p>
-                        <p className="text-sm text-gray-400 hover:underline cursor-pointer">Add profile credential</p>
+                        <p onClick={()=>openSettingHandler()} className="text-sm text-gray-400 hover:underline cursor-pointer">Add profile credential</p>
                         <div className="flex items-center gap-2 md:gap-3">
                             <span className="md:text-sm text-xs">{data?.userProfile.followers.length} followers</span>
                             <span className="md:text-sm text-xs">{data?.userProfile.followings.length} followings</span>
@@ -270,6 +317,35 @@ function Profile() {
                 </div>
             </div>
         </div>
+        {/* Setting */}
+        <Dialog open={openSetting} onClose={handleCloseSetting} fullWidth={true} maxWidth="sm" className="">
+                <DialogTitle className='p-2 text-lg text-blue-500'>Orbit Setting</DialogTitle>
+                <div className='w-full gap-2 flex'>
+                    <div className='w-[95%] mx-auto flex flex-col gap-3'>
+                        <div className="flex flex-col gap-2">
+                            <label htmlFor="" className="text-lg">Full Name</label>
+                            <input type="text" value={fullname} onChange={(e)=>setFullname(e.target.value)} className="p-2 border-[1px] rounded-sm outline-gray-100 border-gray-100" />
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <label htmlFor="" className="text-lg">Username</label>
+                            <input type="text" value={username} onChange={(e)=>setUsername(e.target.value)} className="p-2 border-[1px] rounded-sm outline-gray-100 border-gray-100" />
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <label htmlFor="" className="text-lg">Bio</label>
+                            <textarea type="text" value={bio} onChange={(e)=>setBio(e.target.value)} className="p-2 border-[1px] rounded-sm outline-gray-100 border-gray-100"></textarea>
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <label htmlFor="" className="text-lg">Location</label>
+                            <input type="text" value={location} onChange={(e)=>setLocation(e.target.value)} className="p-2 border-[1px] rounded-sm outline-gray-100 border-gray-100"/>
+                        </div>
+                        <div className="flex flex-col gap-3">
+                        </div>
+                    </div>
+                </div>
+                <div className='flex justify-between items-center px-4 py-2'>
+                    <button onClick={handleSaveProfile} className='py-2 px-5 bg-emerald-700 text-white text-md rounded-lg'>Save</button>
+                </div>
+        </Dialog>
     </div>
   )
 }

@@ -13,7 +13,7 @@ export const fetchPosts = async () => {
       });
       return response.data;
     } catch (error) {
-      console.log(error.message);
+      throw Error (error)
     }
 };
 

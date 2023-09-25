@@ -57,13 +57,13 @@ const CreatePostForm = ({ onCreatePost, refetch, onCreateQuestion}) => {
         <DialogTitle>
           <div className="flex justify-between border-b-2 border-gray-300">
             <Tabs value={tabValue} onChange={(e, newValue) => setTabValue(newValue)}>
-              <Tab label="Add Question" />
               <Tab label="Create Post" />
+              <Tab label="Add Question" />
             </Tabs>
           </div>
         </DialogTitle>
         <DialogContent sx={{height:400}}>
-          {tabValue === 0 ? (
+          {tabValue === 1 ? (
             <form onSubmit={handleCreatePost} className='w-full h-full'>
               <div className="mb-4 flex flex-col h-[90%]">
                 <label htmlFor="question" className="block text-gray-600 font-semibold mb-2">

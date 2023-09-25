@@ -115,7 +115,11 @@ function Feed({post, refetch}) {
           <div className="w-[100%] flex gap-2 py-1 md:gap-3 ">
               <Link to={`/profile/${post.userId}`}> 
               <div className='w-10 h-10 rounded-full bg-black'>
+                {profile?.profileImage ? 
                 <img className="rounded-full w-full h-full object-cover" src={`${BASE_URL}/images/${profile?.profileImage}`} alt="" />
+                :
+                <img className="rounded-full w-full h-full object-cover" src={profile?.avatarData} alt />
+              }
               </div>
               </Link>
               <div>

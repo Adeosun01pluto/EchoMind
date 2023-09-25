@@ -18,7 +18,6 @@ const Register = () => {
   });
   const [error, setError] = useState(''); // Initialize error state
   const [suggestedUsername, setSuggestedUsername] = useState(''); // Initialize error state
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -33,21 +32,27 @@ const Register = () => {
   const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e) => {
-    setLoading(true)
+    setLoading(true);
     e.preventDefault();
-    console.log("hjsdad")
+    // Generate the avatar using DiceBear
+    const genderParam = formData.gender === 'female' ? 'female' : 'male';
+    const avatarData = `https://avatars.dicebear.com/api/${genderParam}/${formData.username}.svg`;
     try {
-      const response = await registerMutation.mutateAsync(formData);
+      const response = await registerMutation.mutateAsync({
+        ...formData,
+        avatarData, // Include the avatar URL in the form data
+      });
       if (response.data.message === 'User registered successfully') {
-        // Registration successful, navigate to /home
-        setLoading(false)
-        navigate("/login")
+        // Registration successful, navigate to /login
+        setLoading(false);
+        navigate('/login');
       }
     } catch (error) {
-      setSuggestedUsername(error.response.data.suggestedUsername)
+      setSuggestedUsername(error.response.data.suggestedUsername);
       setError(error.response.data.message); // Set error message from the API response
     }
   };
+  
   return (
     <div className="w-[100%] md:w-[90%] pt-[110px] md:pt-[70px] mx-auto min-h-[110vh] flex justify-center items-center">
       <div className="w-[95%] md:w-[50%] py-8 min-h-[70vh] bg-white rounded-md flex flex-col shadow-lg items-center">
@@ -85,6 +90,18 @@ const Register = () => {
               value={formData.username}
               onChange={handleChange}
             />
+          </div>
+          <div className="">
+            {/* <label className="mb-2 text-md font-semibold">Gender</label> */}
+            <select
+              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-700"
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+            >
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
           </div>
           <div className="">
             {/* <label className="mb-2 text-md font-semibold">password</label> */}

@@ -11,12 +11,11 @@ import { fetchPosts} from '../../../api/post/post';
 import { useNavigate } from 'react-router-dom';
 import SideBar from '../../common/SideBar';
 import { fetchQuestions } from '../../../api/question/question';
-// import { useEffect } from 'react';
 
 const Feeds = () => {
   const navigate = useNavigate()
   const { refetch:refetchQuestion} = useQuery('questions', fetchQuestions);
-  const { data: posts, isLoading, refetch} = useQuery('posts', fetchPosts);
+  const { data: posts, isLoading, refetch, isError} = useQuery('posts', fetchPosts);
 
   const createQuestionMutation = useMutation((newQuestion) =>
   axios.post(`${BASE_URL}/question/add_question`, newQuestion, {
@@ -65,6 +64,13 @@ const createPostMutation = useMutation((newPost) =>
           wrapperClassName=""
           visible={true}
           />
+      </div>
+    )
+  }
+  if (isError) {
+    return (
+      <div className="w-full items-center justify-center flex">
+        An Error Occurred
       </div>
     )
   }
