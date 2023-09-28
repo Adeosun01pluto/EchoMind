@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
 import { Avatar, Button, Tab, Tabs } from '@mui/material';
 
 const CreatePostForm = ({ onCreatePost, refetch, onCreateQuestion}) => {
@@ -44,47 +43,60 @@ const CreatePostForm = ({ onCreatePost, refetch, onCreateQuestion}) => {
 
   return (
     <div>
-      <form onSubmit={handleCreatePost}>
+      <div>
         <div onClick={handleClickOpen} className=" border-2 border-gray-300 mx-auto shadow-lg bg-white rounded-sm p-2 py-6 md:p-3 mb-2">
           <div className="flex gap-2">
             <Avatar className='homeAvatar'/>
             <input type="text" className="rounded-full w-[100%] p-2 bg-gray-100 border-2 border-gray-400 text-sm outline-none " placeholder="What do you wanna ask or share?"/>
           </div>
         </div>
-      </form>
+      </div>
 
-      <Dialog open={open} onClose={handleClose} maxWidth="lg" fullWidth={true}>
-        <DialogTitle>
-          <div className="flex justify-between border-b-2 border-gray-300">
+      <Dialog open={open} sx={{color:"#060109", minHeight:400}} onClose={handleClose} maxWidth="lg" fullWidth={true}>
+        <div className='w-full flex'>
+          <button onClick={handleClose} className='px-2 py-1 font-bold'>X</button>
+        </div>
+        <div>
+          <div className="flex justify-between border-b-2 border-[#8a1dd3]">
             <Tabs value={tabValue} onChange={(e, newValue) => setTabValue(newValue)}>
               <Tab label="Create Post" />
               <Tab label="Add Question" />
             </Tabs>
           </div>
-        </DialogTitle>
-        <DialogContent sx={{height:400}}>
+        </div>
+        <DialogContent sx={{height:300}}>
           {tabValue === 1 ? (
-            <form onSubmit={handleCreatePost} className='w-full h-full'>
+            <div className='w-full h-full flex flex-col'>
               <div className="mb-4 flex flex-col h-[90%]">
                 <label htmlFor="question" className="block text-gray-600 font-semibold mb-2">
                   Question
                 </label>
                 <textarea
                   id="question"
-                  className="w-full p-2 flex-1 outline-none border-b-2 border-gray-300"
+                  className="w-full p-2 flex-1 outline-none"
                   placeholder="Start your question with 'What' 'how' etc"
                   value={question}
                   onChange={(e) => setQuestion(e.target.value)}
                   required
                 />
               </div>
-              <Button type="submit" variant="contained" onClick={handleCreateQuestion} color="primary">
+              <Button type="submit" sx={{
+                background:"#4f1179",
+                  "&:hover": {
+                    backgroundColor: "#4f1179 !important",
+                    boxShadow: "none !important",
+                  },
+                  "&:active": {
+                    boxShadow: "none !important",
+                    backgroundColor: "#4f1179 !important",
+                  },
+                }}
+                variant="contained" onClick={handleCreateQuestion}>
                 Add Question
               </Button>
-              <Button onClick={handleClose}>X</Button>
-            </form>
+            </div>
           ) : (
-            <form className='w-full h-full' onSubmit={handleCreatePost}>
+            <div className='w-full h-full flex flex-col' >
               <div className="mb-4 flex flex-col h-[90%]">
                 <textarea
                   id="content"
@@ -95,11 +107,21 @@ const CreatePostForm = ({ onCreatePost, refetch, onCreateQuestion}) => {
                   required
                 />
               </div>
-              <Button type="submit" variant="contained" onSubmit={handleCreatePost} color="primary">
-                Create Post
+              <Button type="submit" sx={{
+                background:"#4f1179",
+                  "&:hover": {
+                    backgroundColor: "#4f1179 !important",
+                    boxShadow: "none !important",
+                  },
+                  "&:active": {
+                    boxShadow: "none !important",
+                    backgroundColor: "#4f1179 !important",
+                  },
+                }}
+               variant="contained" onClick={handleCreatePost}>
+                Create Post 
               </Button>
-              <Button onClick={handleClose}>X</Button>
-            </form>
+            </div>
           )}
         </DialogContent>
       </Dialog>

@@ -38,58 +38,82 @@ function Gp() {
   };
 
   const calculateGpa = () => {
-    const totalScore = courseData.reduce((total, course) => {
-      const gradeValue = {
+    // Filter out courses with empty grade and point values
+    const validCourses = courseData.filter(course => course.grade && course.point);
+  
+    if (validCourses.length === 0) {
+      // No valid courses to calculate GPA
+      setCalculatedGpa(null);
+      return;
+    }
+    const calculateTotalScoreAndPoints = (courses) => {
+      const gradeValues = {
         A: 5,
         B: 4,
         C: 3,
         D: 2,
-      }[course.grade.toUpperCase()];
-      return total + gradeValue * course.point;
-    }, 0);
-
-    const totalCourses = courseData.length;
-    const gpa = totalScore / totalCourses;
-
-    setCalculatedGpa(gpa);
+      };
+    
+      // Initialize totalScore and totalPoints
+      let totalScore = 0;
+      let totalPoints = 0;
+    
+      // Calculate the total score and total points by iterating over the courses
+      courses.forEach((course) => {
+        // Convert the grade to uppercase to handle case insensitivity
+        const grade = course.grade.toUpperCase();
+    
+        // Check if the grade is valid
+        if (gradeValues.hasOwnProperty(grade)) {
+          // Multiply grade value by the point and add it to the total score
+          const gradeValue = gradeValues[grade];
+          const point = parseInt(course.point); // Convert point to integer
+          if (!isNaN(point)) {
+            totalScore += gradeValue * point;
+            totalPoints += point;
+          }
+        }
+      });
+      return { totalScore, totalPoints };
+    };
+    
+    const { totalScore, totalPoints } = calculateTotalScoreAndPoints(courseData)
+    const gpa = totalScore / totalPoints;
+    const roundedGpa = parseFloat(gpa.toFixed(2));
+    setCalculatedGpa(roundedGpa);
   };
   const [option, setOption] = useState("")
   const Display = () =>{
-
   }
   const handleSelectChange = (e) =>{
     setOption(e.target.value)
   }
 
   return (
-    <div className='w-full md:p-3 flex justify-center bg-[#f3f3f3] min-h-[110vh]'>
-      <div className='md:w-[70%] md:p-6 rounded-md'>
-        <div className='mx-auto md:w-[80%] bg-white shadow-md rounded-md p-2'>
+    <div className='w-full md:p-3 flex justify-center py-6 min-h-[100vh]'>
+      <div className='md:w-[70%] w-full md:p-6'>
+        <div className='mx-auto md:w-[80%] h-[70vh] dark:bg-[#171517] bg-[#f2e4fb] shadow-md md:rounded-md p-2'>
           <h2 className='text-3xl font-semibold mb-4'>Calculate your CGPA</h2>
-          {!show? null :
-          <div className='bg-[black] w-[100%] h-[400px]'></div>
-          }
           <div className='w-[100%] h-[100px] flex flex-col gap-2 items-start'>
-            <select name="" value={option} onChange={handleSelectChange} id="" className='w-48 p-2 rounded-md text-xl font-bold' >
-              <option value="..."></option>
-              <option value="semester" className=' text-xl font-bold' >Semester</option>
-              <option value="Session" className=' text-xl font-bold'>Session</option>
+            <select name="" value={option} onChange={handleSelectChange} id="" className='w-48 p-2  rounded-md text-md font-semibold text-[#171517] bg-white' >
+              <option value="semester" className='' >Semester</option>
+              <option value="Session" className=''>Session</option>
             </select>
-            <button onClick={Display} className='py-1 px-2 bg-blue-500 text-white rounded-lg'>Display</button>
+            <button onClick={Display} className='py-1 px-2 bg-[#4f1179] text-white rounded-lg'>Display</button>
           </div>
-          <div className='bg-[#f3f3f3] my-2 p-1 md:p-3 rounded-md '>
+          <div className='bg-[#fff] my-2 p-1 md:p-3 rounded-md '>
             <div className='flex items-center gap-1 md:gap-3'>
-              <span className='text-md md:text-lg text-black font-bold'>No of Courses</span>
+              {/* <span className='text-md md:text-lg text-black font-bold'>No of Courses</span> */}
               <input
                 type="number"
                 value={noOfCourses}
-                placeholder='Enter the number of courses'
+                placeholder='Number of courses'
                 onChange={(e) => setNoOfCourses(e.target.value)}
-                className='p-2 rounded-sm md:flex-1 bg-white text-emerald-500'
+                className='p-2 rounded-sm flex-grow bg-white text-back'
               />
               <button
                 onClick={StartTo}
-                className='px-4 py-2 rounded-md bg-emerald-500 text-white'
+                className='px-4 py-2 rounded-md bg-[#4f1179] text-white'
               >
                 Save
               </button>
@@ -100,7 +124,7 @@ function Gp() {
               {courseData.map((course, idx) => (
                 <div
                   key={course.id}
-                  className='md:w-full p-4 flex flex-col gap-2'
+                  className='md:w-full p-2 flex flex-col gap-2'
                 >
                   <label className='text-md md:text-lg font-semibold text-black' htmlFor={`grade-${course.id}`}>
                     Course: {idx + 1}
@@ -116,7 +140,7 @@ function Gp() {
                         id={`grade-${course.id}`}
                         value={course.grade}
                         onChange={e => handleGradeChange(course.id, e.target.value)}
-                        className='p-2 w-full rounded-sm text-emerald-500'
+                        className='p-2 w-full rounded-sm text-[#4f1179]'
                       />
                     </div>
                     <div className='flex flex-1 items-center gap-3'>
@@ -129,7 +153,7 @@ function Gp() {
                         id={`point-${course.id}`}
                         value={course.point}
                         onChange={e => handlePointChange(course.id, e.target.value)}
-                        className='p-2 w-full rounded-sm bg-white text-emerald-500'
+                        className='p-2 w-full rounded-sm bg-white text-[#4f1179]'
                       />
                     </div>
                   </div>
@@ -148,13 +172,15 @@ function Gp() {
           )}
           {calculatedGpa !== null && (
             <div className='mt-4'>
-              <p className='text-xl text-emerald-500'>
+              <p className='text-xl text-[#4f1179]'>
                 Calculated GPA: {calculatedGpa}
               </p>
             </div>
           )}
           <button className='' onClick={howTo}>How to calculate</button>
-
+          {!show? null :
+          <div className='bg-[black] w-[100%] h-[400px]'></div>
+          }
       </div>
 
       </div>

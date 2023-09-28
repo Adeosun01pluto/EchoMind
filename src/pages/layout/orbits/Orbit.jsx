@@ -8,7 +8,6 @@ function Orbit({orbit}) {
   const tempCoverImage = orbit.tempCoverImage 
   const description = orbit.description;
   const words = description.split(' ');
-  console.log(tempIconImage)
 
   const maxWords = 8;
   const truncatedDescription = words.slice(0, maxWords).join(' ');

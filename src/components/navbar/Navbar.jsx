@@ -1,13 +1,13 @@
-import { Avatar,  Button, Dialog, DialogContent, DialogTitle, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tab, Tabs, Tooltip } from '@mui/material';
+import { Avatar,  Button, Dialog, DialogContent,Divider, IconButton, ListItemIcon, Menu, MenuItem, Tab, Tabs, Tooltip } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { AiOutlineHome, AiOutlineLogout} from 'react-icons/ai'
-import { BsCloudMoonFill, BsFillSunFill, BsPeopleFill } from 'react-icons/bs';
-import { Link, useNavigate,  } from 'react-router-dom';
+import { BsCalculator, BsCloudMoonFill, BsFillSunFill, BsPeopleFill } from 'react-icons/bs';
+import {  NavLink, useNavigate,  } from 'react-router-dom';
 import { BiMessageEdit } from 'react-icons/bi'
 import { GiMoonOrbit } from 'react-icons/gi'
 import { FiSettings } from 'react-icons/fi'
 import "./Navbar.css"
-import { RiCalculatorFill, RiChat1Fill, RiTodoFill } from 'react-icons/ri';
+import { RiCalculatorFill, RiChat1Fill,} from 'react-icons/ri';
 import { BASE_URL } from '../../constants/constant';
 import { useMutation, useQuery } from 'react-query';
 import axios from 'axios';
@@ -48,9 +48,9 @@ const Navbar = () => {
       label: 'Question',
     },
     {
-      to: '/practice',
-      icon:<RiTodoFill color='white' size={22} />,
-      label: 'Practice',
+      to: '/gp',
+      icon:<BsCalculator color='white' size={22} />,
+      label: 'Gp',
     },
   ];
   const [anchorEl, setAnchorEl] =useState(null);
@@ -113,7 +113,6 @@ const Navbar = () => {
     try {
       // Use the createPostMutation to create a new post
       const newQuestion = { content };
-      console.log(newQuestion)
       await createPostMutation.mutateAsync(newQuestion);
       // Refetch the list of posts after creating a new one
       refetch()
@@ -148,7 +147,7 @@ const Navbar = () => {
             {/* Desktop Nav Menu */}
             <ul className='items-center bg-[#4f1179] rounded-xl navMenu'>
             {menuList.map((menuItem, index) => (
-              <Link
+              <NavLink
                 key={menuItem.to}
                 to={menuItem.to}
                 onClick={() => handleLinkClick(menuItem.to)}
@@ -164,7 +163,7 @@ const Navbar = () => {
               >
                 {menuItem.icon}
                 <span className='text-white text-sm'>{menuItem.label}</span>
-              </Link>
+              </NavLink>
             ))}
             </ul>
             <div className='navMenu gap-1 items-center'>
@@ -291,35 +290,38 @@ const Navbar = () => {
 
       {/*  */}
       <ul className='w-[100%] mobileNavMenu items-center justify-between'>
-              <Link to="/" className='p-1 sm:p-3 border-gray-200 flex items-center justify-center flex-1'><AiOutlineHome size={26} color="#4f1179"/></Link>
-              <Link to="/orbits" className='p-1 sm:p-3 border-gray-200 flex items-center justify-center flex-1'><GiMoonOrbit size={26} color="#4f1179"/></Link>
-              <Link to="/followings" className='p-1 sm:p-3 border-gray-200 flex items-center justify-center flex-1'><BsPeopleFill size={26} color="#4f1179"/></Link>
-              <Link to="/questions" className='p-1 sm:p-3 border-gray-200 flex items-center justify-center flex-1'><BiMessageEdit size={26} color="#4f1179"/></Link>
-              <Link to="/practice" className='p-1 sm:p-3 border-gray-200 flex items-center justify-center flex-1'>
-                <RiTodoFill color='#4f1179' size={22} />
-              </Link>
-        </ul>
+              <NavLink to="/" className='p-1 sm:p-3 border-gray-200 flex items-center justify-center flex-1'><AiOutlineHome size={26} color="#4f1179"/></NavLink>
+              <NavLink to="/orbits" className='p-1 sm:p-3 border-gray-200 flex items-center justify-center flex-1'><GiMoonOrbit size={26} color="#4f1179"/></NavLink>
+              <NavLink to="/followings" className='p-1 sm:p-3 border-gray-200 flex items-center justify-center flex-1'><BsPeopleFill size={26} color="#4f1179"/></NavLink>
+              <NavLink to="/questions" className='p-1 sm:p-3 border-gray-200 flex items-center justify-center flex-1'><BiMessageEdit size={26} color="#4f1179"/></NavLink>
+              <NavLink to="/gp" className='p-1 sm:p-3 border-gray-200 flex items-center justify-center flex-1'>
+                <BsCalculator color='#4f1179' size={22} />
+              </NavLink>
+      </ul>
 
       {/* Dialog */}
-      <Dialog open={open} sx={{color:"#060109"}} onClose={handleClose} maxWidth="lg" fullWidth={true}>
-        <DialogTitle sx={{color:"#060109"}}>
+      <Dialog open={open} sx={{color:"#060109", minHeight:400}} onClose={handleClose} maxWidth="lg" fullWidth={true}>
+        <div className='w-full flex'>
+          <button onClick={handleClose} className='px-2 py-1 font-bold'>X</button>
+        </div>  
+        <div>
           <div className="flex justify-between border-b-2 border-[#8a1dd3]">
             <Tabs value={tabValue}  onChange={(e, newValue) => setTabValue(newValue)}>
               <Tab label="Add Question" sx={{color:"#060109"}}/>
               <Tab label="Create Post" sx={{color:"#060109"}}/>
             </Tabs>
           </div>
-        </DialogTitle>
-        <DialogContent sx={{height:400}}>
+        </div>
+        <DialogContent sx={{height:300}}>
           {tabValue === 0 ? (
-            <div className='w-full h-full'>
+            <div className='w-full h-full flex flex-col'>
               <div className="mb-4 flex flex-col h-[90%]">
                 <label htmlFor="question" className="block text-gray-600 font-semibold mb-2">
                   Question
                 </label>
                 <textarea
                   id="question"
-                  className="w-full p-2 flex-1 outline-none border-b-2 border-gray-300"
+                  className="w-full p-2 flex-1 outline-none"
                   placeholder="Start your question with 'What' 'how' etc"
                   value={question}
                   onChange={(e) => setQuestion(e.target.value)}
@@ -341,14 +343,14 @@ const Navbar = () => {
                variant="contained" onClick={handleCreateQuestion} color="primary">
                 Add Question
               </Button>
-              <Button onClick={handleClose}>X</Button>
+              {/* <Button onClick={handleClose}>X</Button> */}
             </div>
           ) : (
-            <div className='w-full h-full'>
+            <div className='w-full h-full flex flex-col'>
               <div className="mb-4 flex flex-col h-[90%]">
                 <textarea
                   id="content"
-                  className="w-full p-2 flex-1 outline-none border-b-2 border-gray-300"
+                  className="w-full p-2 flex-1 outline-none"
                   placeholder="Say Something"
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
@@ -369,7 +371,7 @@ const Navbar = () => {
                variant="contained" onClick={handleCreatePost}>
                 Create Post 
               </Button>
-              <Button onClick={handleClose}>X</Button>
+              {/* <Button onClick={handleClose}>X</Button> */}
             </div>
           )}
         </DialogContent>

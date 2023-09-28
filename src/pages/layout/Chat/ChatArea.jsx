@@ -3,9 +3,10 @@ import { FiMenu } from 'react-icons/fi'; // Example icon for the sidebar toggle
 import { useParams } from 'react-router-dom';
 import io from 'socket.io-client';
 import axios from 'axios';
+// import { getUserId, getUserInfo } from '../../api/auth';
 import ChatSidebar from './ChatSideBar';
-import { getUserId } from '../../../api/api';
 import { BASE_URL } from '../../../constants/constant';
+import { getUserId, getUserProfile } from '../../../api/api';
 
 const ChatArea = () => {
   const { receiverId } = useParams(); // Get the receiverId from the URL parameter
@@ -37,15 +38,15 @@ const ChatArea = () => {
     }
   };
   const sendMessage = async () => {
-    // const {username} = await getUserInfo(senderId)
-    // const {username :receiverUsername} = await getUserInfo(receiverId)
+    const {username} = await getUserProfile(senderId)
+    const {username :receiverUsername} = await getUserProfile(receiverId)
     // if (message !== "") {
       const newMessageData = {
         room: 12,
         sender:senderId,
         receiver:receiverId,
-        // receiverUsername,
-        // senderUsername: username,
+        receiverUsername,
+        senderUsername: username,
         message: message,
         time:
           new Date(Date.now()).getHours() +

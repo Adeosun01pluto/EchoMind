@@ -22,7 +22,7 @@ function SideBar() {
         console.log(error)
       }
     }
-      // Fetch and set the username when the component mounts
+    // Fetch and set the username when the component mounts
     useEffect(() => {
         getUserProfileHandler(userId)
     }, [userId]);

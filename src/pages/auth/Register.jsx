@@ -4,7 +4,7 @@ import { useMutation } from 'react-query';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../../constants/constant';
-import { CircularProgress } from '@mui/material';
+import { ThreeDots } from 'react-loader-spinner';
 
 
 const Register = () => {
@@ -48,53 +48,54 @@ const Register = () => {
         navigate('/login');
       }
     } catch (error) {
+      setLoading(false)
       setSuggestedUsername(error.response.data.suggestedUsername);
       setError(error.response.data.message); // Set error message from the API response
     }
   };
   
   return (
-    <div className="w-[100%] md:w-[90%] pt-[110px] md:pt-[70px] mx-auto min-h-[110vh] flex justify-center items-center">
-      <div className="w-[95%] md:w-[50%] py-8 min-h-[70vh] bg-white rounded-md flex flex-col shadow-lg items-center">
-        <p className='md:text-3xl text-xl py-3 text-emerald-700 font-semibold'>Register</p>
-        <form onSubmit={handleSubmit} className=" w-[95%] md:w-[55%] mt-5 mx-auto flex flex-col gap-2 md:gap-3">
-          <div>
-            {/* <label className="mb-2 text-md font-semibold">Full Name</label> */}
+    <div className="w-[100%] md:w-[90%] mx-auto py-6 text-[#060109] flex justify-center">
+      <div className="w-[95%] dark:bg-[#171517] bg-[#f2e4fb] md:w-[50%] py-8 rounded-md flex flex-col shadow-lg items-center">
+        <p className='md:text-3xl text-xl text-[#4f1179] font-semibold'>Register</p>
+        <form onSubmit={handleSubmit} className=" w-[95%] md:w-[65%] mt-2 mx-auto flex flex-col gap-2 md:gap-3">
+          <div className='flex flex-col gap-2'>
+            <label className="text-[#4f1179] text-md font-semibold">Full Name</label>
             <input
               type="text"
               name="fullname"
               value={formData.fullname}
               onChange={handleChange}
               placeholder="Full Name"
-              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-700"
+              className="w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#4f1179]"
             />
           </div>
-          <div className="">
-            {/* <label className="mb-2 text-md font-semibold">email</label> */}
+          <div className="flex flex-col gap-2">
+            <label className="text-[#4f1179] text-md font-semibold">Email</label>
             <input
               type="text"
-              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-700"
+              className="w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#4f1179]"
               name="email"
               value={formData.email}
               placeholder="Email"
               onChange={handleChange}
             />
           </div>
-          <div className="">
-            {/* <label className="mb-2 text-md font-semibold">username</label> */}
+          <div className="flex flex-col gap-2">
+            <label className="text-[#4f1179] text-md font-semibold">Username</label>
             <input
               type="text"
-              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-700"
+              className="w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#4f1179]"
               name="username"
               placeholder="Username"
               value={formData.username}
               onChange={handleChange}
             />
           </div>
-          <div className="">
-            {/* <label className="mb-2 text-md font-semibold">Gender</label> */}
+          <div className="flex flex-col gap-2">
+            <label className="text-[#4f1179] text-md font-semibold">Gender</label>
             <select
-              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-700"
+              className="w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 bg-white focus:ring-[#4f1179]"
               name="gender"
               value={formData.gender}
               onChange={handleChange}
@@ -103,22 +104,22 @@ const Register = () => {
               <option value="female">Female</option>
             </select>
           </div>
-          <div className="">
-            {/* <label className="mb-2 text-md font-semibold">password</label> */}
+          <div className="flex flex-col gap-2">
+            <label className="text-[#4f1179] text-md font-semibold">Password</label>
             <input
               type="password"
-              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-700"
+              className="w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#4f1179]"
               name="password"
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
             />
           </div>
-          <div className="">
-            {/* <label className="mb-2 text-md font-semibold">Password</label> */}
+          <div className="flex flex-col gap-2">
+            <label className="text-[#4f1179] text-md font-semibold">Confirm Password</label>
             <input
               type="password"
-              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-700"
+              className="w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#4f1179]"
               name="confirmPassword"
               placeholder="Confirm Password"
               value={formData.confirmPassword}
@@ -131,11 +132,23 @@ const Register = () => {
           }
           <button
             type="submit"
-            className="w-full bg-emerald-700 flex items-center justify-center gap-1 text-white py-2 px-4 rounded-md hover:bg-emerald-700 focus:outline-none"
-          >Register{loading ? <span><CircularProgress size={15} /> </span> : "" } </button>
+            className="w-full bg-[#4f1179] flex items-center justify-center gap-1 text-white py-2 px-4 rounded-md hover:bg-[#4f1179] focus:outline-none"
+          >{loading ? <span className='flex items-center justify-center'>
+            <ThreeDots 
+            height="20" 
+            width="20" 
+            radius="9"
+            color="gray" 
+            ariaLabel="three-dots-loading"
+            wrapperStyle={{}}
+            wrapperClassName=""
+            visible={true}
+            />
+          </span> : "Login" }
+        </button>
           <div className="flex justify-between w-[80%] mx-auto text-sm items-center">
             <span className="text-sm text-gray-700">Already have an account?</span>
-            <Link to="/login" className="text-emerald-700">Login</Link>
+            <Link to="/login" className="text-[#4f1179]">Login</Link>
           </div>
         </form>
       </div>

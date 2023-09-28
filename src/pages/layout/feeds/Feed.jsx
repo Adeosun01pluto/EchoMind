@@ -140,7 +140,7 @@ function Feed({post, refetch}) {
           {/*  */}
 
           {/* Post Content */}
-          <div className="dark:text-[#f2e4fb] text-[#060109] text-lg py-1 px-2">{post?.content}</div>
+          <div className="dark:text-[#f2e4fb] text-[#060109] text-sm font-semibold md:text-lg py-1 px-2">{post?.content}</div>
           {/*  */}
 
           {/* Post Actions */}

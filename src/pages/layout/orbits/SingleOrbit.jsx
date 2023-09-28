@@ -224,8 +224,8 @@ function SingleOrbit() {
           </div>
           <p className="text-gray-100">description</p>
         </div>
-      </div>
     </div>
+      </div>
     <div className='mx-auto p-1 sm:p-2 w-[100%] md:w-[95%] gap-2 md:gap-4 grid grid-cols-12'>
       <div className="col-span-12 md:col-span-8 w-[100%] min-h-[600px]">
       {/* Tabs */}
@@ -260,7 +260,7 @@ function SingleOrbit() {
         <div className='w-[100%] p-1 md:p-3 my-2 flex gap-1 md:gap-3 items-center justify-around h-[70px] dark:bg-[#171517] bg-[#f2e4fb] rounded-md'>
           <Avatar size={30} />
           <input type="text" onClick={handleClickOpen}  placeholder={`Post in ${orbit?.name} Orbit`} className=' flex-1 rounded-full p-3 sm:p-2 text-sm border-none outline-none' />
-          <button className="space-inboxBtn p-1 sm:p-2 rounded-full bg-emerald-700 text-white text-xs sm:text-sm" onClick={handleClickOpen}  >Inbox</button>
+          {/* <button className="space-inboxBtn p-1 sm:p-2 rounded-full bg-emerald-700 text-white text-xs sm:text-sm" onClick={handleClickOpen}  >Inbox</button> */}
         </div> 
           {/* Render the selected tab content */}
           {/*  */}
