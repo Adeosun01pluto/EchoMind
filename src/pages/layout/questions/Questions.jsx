@@ -7,7 +7,9 @@ import { fetchQuestions } from "../../../api/question/question";
 import "../../../App.css"
 import RightBar from "../../common/RightBar";
 function Questions() {
-  const { data: questions, isLoading:questionStatus, refetch:refetchQuestion} = useQuery('questions', fetchQuestions);
+  const { data: questions, isLoading:questionStatus, refetch:refetchQuestion} = useQuery('questions', fetchQuestions, {
+    onLoad : true
+  });
   if (questionStatus) {
     return (
       <div className="w-full items-center justify-center flex">

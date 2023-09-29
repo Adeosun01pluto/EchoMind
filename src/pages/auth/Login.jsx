@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useMutation } from 'react-query';
 import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../../constants/constant';
 import { ThreeDots } from 'react-loader-spinner';
 const Login = () => {
@@ -25,7 +25,9 @@ const Login = () => {
     axios.post(`${BASE_URL}/auth/login`, formData)
   );
   const [loading, setLoading] = useState(false)
-
+  const location = useLocation()
+  const from = location.state?.from?.pathname || "/"
+  console.log(location)
   const handleSubmit = async (e) => {
     setLoading(true)
     e.preventDefault();
@@ -40,7 +42,7 @@ const Login = () => {
         // Check if both token and userId are available
         if (localStorage.getItem('token') && localStorage.getItem('userId')) {
           // Navigate to feeds
-          navigate('/');
+          navigate(from ,  {replace: true});
         }
       }
     } catch (error) {

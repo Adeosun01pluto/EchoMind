@@ -1,7 +1,7 @@
 import './App.css'
 import Login from './pages/auth/Login'
 import Register from './pages/auth/Register'
-import {Navigate, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Feeds from './pages/layout/feeds/Feeds';
 import Navbar from './components/navbar/Navbar';
 import Profile from './pages/profile/Profile';
@@ -17,6 +17,7 @@ import P_Screen from './pages/layout/practice/P_Screen';
 import NotFound from './pages/layout/nofound/NotFound';
 import Level from './pages/layout/practice/Level';
 import { getUserId } from './api/api';
+import RequireAuth from './pages/RequireAuth';
 // import ChatArea from './pages/layout/Chat/ChatArea';
 // import { getUserId } from './api/api';
 
@@ -51,11 +52,13 @@ function App() {
       <Routes>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={ token ?  <Feeds/> : <Navigate to="/login" />}  />
-        <Route path="/profile/:userId" element={token ? <Profile /> : <Navigate to="/login" />} />
-        <Route path="/questions" element={token? <Questions /> : <Navigate to="/login" />} />
-        <Route path="/followings" element={token ? <Followings /> : <Navigate to="/login" />} />
-        <Route path="/orbits" element={token ? <Orbits /> : <Navigate to="/login" />} />
+        <Route path='/' element={<RequireAuth />}>
+          <Route path="/" element={  <Feeds/> }  />
+          <Route path="/questions" element={<Questions /> } />
+          <Route path="/followings" element={<Followings /> } />
+        </Route>
+        <Route path="/profile/:userId" element={<Profile /> } />
+        <Route path="/orbits" element={<Orbits /> } />
         <Route path="/orbit/:orbitId" element={<SingleOrbit />} />
         <Route path="/gp" element={<Gp />} />
         <Route path="/practice" element={<Practice />}>

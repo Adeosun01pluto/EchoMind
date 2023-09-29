@@ -18,7 +18,9 @@ const Feeds = () => {
   const { refetch:refetchQuestion} = useQuery('questions', fetchQuestions, {
     onLoad: true, 
   });
-  const { data: posts, isLoading, refetch, isError} = useQuery('posts', fetchPosts,
+  const { data: posts, isLoading, refetch, isError} = useQuery('posts', fetchPosts, {
+    onLoad : true
+  }
   );
   const createQuestionMutation = useMutation((newQuestion) =>
   axios.post(`${BASE_URL}/question/add_question`, newQuestion, {
