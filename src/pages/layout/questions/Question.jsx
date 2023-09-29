@@ -1,6 +1,6 @@
 import { Button, Dialog, DialogContent, DialogTitle } from '@mui/material'
 import {  useState } from 'react';
-import { BsFillArrowDownSquareFill } from 'react-icons/bs'
+import { BsFillArrowDownSquareFill, BsFillArrowUpSquareFill } from 'react-icons/bs'
 import { RiQuestionAnswerLine } from 'react-icons/ri'
 import { useMutation, useQuery } from 'react-query';
 import { BASE_URL } from '../../../constants/constant';
@@ -46,7 +46,7 @@ function Question({refetchQuestion, question}) {
 
 
   return (
-    <div className=" my-1 rounded-md dark:bg-[#171517] bg-[#f2e4fb] p-3">
+    <div className=" my-1 rounded-md dark:bg-[#171517] bg-[#f2e4fb] p-2 md:p-3">
       {/*  */}
       <div className="font-semibold hover:underline cursor-pointer sm:text-lg">{question?.question}</div>
       {/*  */}
@@ -68,13 +68,28 @@ function Question({refetchQuestion, question}) {
       }
       {/*  */}
       <div className='flex items-center gap-2 '>
-        <div onClick={handleClickOpen} className='cursor-pointer flex items-center gap-2 py-1 px-2  border-2 rounded-full'>
+        <div onClick={handleClickOpen} className='bg-white cursor-pointer flex items-center gap-2 py-1 px-2  border-2 rounded-full'>
           <RiQuestionAnswerLine />
           <span className='text-sm'>Answer</span>
         </div>
-        <div className='flex items-center gap-2 border-2 py-1 px-2 rounded-full'>
-          <BsFillArrowDownSquareFill />
-          <span className='text-sm'>Downvote</span>
+
+        {/* Post Actions */}
+        <div className="flex items-center gap-2 border-2 bg-white rounded-full">
+          {/* Render like/unlike button based on liked status */}
+          <div className="flex items-center border-2 rounded-full">
+            <button
+              className="p-1 px-2 border-r-2 rounded-t-r-full flex items-center gap-2"
+            >
+              <BsFillArrowUpSquareFill size={13} color="#4f1179" /> 
+              <span className='text-sm'>{2}</span>
+            </button>
+            <button
+              className="p-1 px-2 rounded flex items-center gap-2 "
+            >
+              <BsFillArrowDownSquareFill size={13} color="gray" />
+              <span className='text-sm'>{1}</span>
+            </button>
+          </div>
         </div>
       </div>
 

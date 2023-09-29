@@ -77,7 +77,7 @@ function Reply({ reply, commentId, getReplies }) {
   };
 
   return (
-    <div className="text-black flex border-gray-200 pb-3 border-b-[1px]  gap-3 my-1 ">
+    <div className="text-black flex pb-3 gap-3 my-1 ">
       <Link to={`/profile/${reply.userId}`}>
         <div className='w-8 h-8 rounded-full bg-black'>
           <img className="rounded-full w-full h-full object-cover" src={`${BASE_URL}/images/${profile?.profileImage}`} alt="" />
@@ -86,7 +86,7 @@ function Reply({ reply, commentId, getReplies }) {
       <div className="flex flex-col gap-1 ">
         <div className="flex gap-1 items-center">
           <span className="text-sm font-bold">{profile?.username}</span>
-          <span className="text-red text-xs text-blue-500">Follow</span>
+          <span className="text-red text-xs text-[#4f1179]">Follow</span>
           <span className="hover:underline text-sm">{formatDistanceToNow(Date.parse(reply.createdAt))}</span>
         </div>
         <div className="">
@@ -102,8 +102,8 @@ function Reply({ reply, commentId, getReplies }) {
             >
               {
                 reply?.upvotes.includes(userId) ?
-                  <BsFillArrowUpSquareFill size={15} color="green" /> :
-                  <BsFillArrowUpSquareFill size={15} color="blue" />
+                  <BsFillArrowUpSquareFill size={15} color="#4f1179" /> :
+                  <BsFillArrowUpSquareFill size={15} color="gray" />
               }
               <span className='text-sm'>{reply.upvotes.length}</span>
             </button>
@@ -111,7 +111,11 @@ function Reply({ reply, commentId, getReplies }) {
               onClick={() => handleUnlike(reply?._id)}
               className="p-1 px-2 rounded flex items-center gap-2 "
             >
-              <BsFillArrowDownSquareFill size={15} color="black" />
+              {
+                reply?.downvotes.includes(userId) ?
+                <BsFillArrowDownSquareFill size={15} color="#4f1179" /> :
+                <BsFillArrowDownSquareFill size={15} color="gray" />
+              }
               <span className='text-sm'>{reply.downvotes.length}</span>
             </button>
           </div>

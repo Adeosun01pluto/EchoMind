@@ -5,6 +5,7 @@ import SideBar from "../../common/SideBar";
 import { fetchQuestions } from "../../../api/question/question";
 // import CreateQuestionForm from "./CreateQuestionForm";
 import "../../../App.css"
+import RightBar from "../../common/RightBar";
 function Questions() {
   const { data: questions, isLoading:questionStatus, refetch:refetchQuestion} = useQuery('questions', fetchQuestions);
   if (questionStatus) {
@@ -25,11 +26,12 @@ function Questions() {
   }
 
   return (
-    <div className="w-full grid grid-cols-12 gap-4 mx-auto p-2 md:p-4">
-      <div className='sm:col-span-4 md:col-span-3'>
+    <div className="w-full dark:text-[#f2e4fb] text-[#060109] gap-2 md:gap-4  mx-auto p-2 md:p-4 flex flex-col md:flex-row">
+      {/* <SideBar /> */}
+      <div className="md:w-2/12 fixed hidden md:block"> {/* Sidebar */}
         <SideBar />
       </div>
-      <div className="col-span-12 sm:col-span-8 md:col-span-6 lg:col-span-5">
+      <div className="main_bar md:w-6/12 w-full">
         {/* CreatePostForm component for creating a new post */}
         {/* <CreateQuestionForm onCreateQuestion={handleCreateQuestion} refetchQuestion={refetchQuestion} /> */}
         <h2 className="p-2 font-light">Questions for you</h2>
@@ -41,7 +43,10 @@ function Questions() {
       </div>
 
 
-      <div className='md:col-span-3 lg:col-span-4 bg-black'></div>
+      <div className="md:w-4/12 hidden md:block"> {/* Right Sidebar */}
+        <RightBar />
+      </div>
+      {/* <RightBar /> */}
 
 
     </div>

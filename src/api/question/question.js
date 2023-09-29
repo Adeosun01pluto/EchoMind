@@ -14,7 +14,7 @@ export const fetchAnswers = async (questionId) => {
       });
       return response.data;
     } catch (error) {
-      console.log(error.message);
+      throw Error (error.message);
     }
 };
 
@@ -27,7 +27,7 @@ export const fetchQuestions = async () => {
     });
     return response.data;
   } catch (error) {
-    console.log(error.message);
+    throw Error (error.message);
   }
 };
 
@@ -40,6 +40,6 @@ export const fetchQuestionsById = async (userId) => {
     });
     return response.data;
   } catch (error) {
-    console.log(error.message);
+    throw Error (error.message);
   }
 };

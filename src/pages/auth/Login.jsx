@@ -7,7 +7,6 @@ import { BASE_URL } from '../../constants/constant';
 import { ThreeDots } from 'react-loader-spinner';
 const Login = () => {
   const navigate = useNavigate(); // Initialize useHistory
-
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -38,6 +37,11 @@ const Login = () => {
         localStorage.setItem('userId', response.data.userId);
         setLoading(false)
         navigate('/');
+        // Check if both token and userId are available
+        if (localStorage.getItem('token') && localStorage.getItem('userId')) {
+          // Navigate to feeds
+          navigate('/');
+        }
       }
     } catch (error) {
       setLoading(false)
@@ -80,7 +84,7 @@ const Login = () => {
             height="20" 
             width="20" 
             radius="9"
-            color="gray" 
+            color="white" 
             ariaLabel="three-dots-loading"
             wrapperStyle={{}}
             wrapperClassName=""

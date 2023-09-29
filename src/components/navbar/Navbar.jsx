@@ -1,4 +1,5 @@
-import { Avatar,  Button, Dialog, DialogContent,Divider, IconButton, ListItemIcon, Menu, MenuItem, Tab, Tabs, Tooltip } from '@mui/material';
+import { Avatar,  Button, Dialog, DialogContent,Divider, IconButton, ListItemIcon, Menu, MenuItem, Tab, Tabs, Tooltip, useMediaQuery } from '@mui/material';
+import TextareaAutosize from 'react-textarea-autosize';
 import { useEffect, useState } from 'react';
 import { AiOutlineHome, AiOutlineLogout} from 'react-icons/ai'
 import { BsCalculator, BsCloudMoonFill, BsFillSunFill, BsPeopleFill } from 'react-icons/bs';
@@ -6,7 +7,7 @@ import {  NavLink, useNavigate,  } from 'react-router-dom';
 import { BiMessageEdit } from 'react-icons/bi'
 import { GiMoonOrbit } from 'react-icons/gi'
 import { FiSettings } from 'react-icons/fi'
-import "./Navbar.css"
+import "../../App.css"
 import { RiCalculatorFill, RiChat1Fill,} from 'react-icons/ri';
 import { BASE_URL } from '../../constants/constant';
 import { useMutation, useQuery } from 'react-query';
@@ -15,6 +16,7 @@ import { fetchPosts } from '../../api/post/post';
 import { fetchQuestions } from '../../api/question/question';
 import { getUserId } from '../../api/api';
 const Navbar = () => {
+  const isLargeScreen = useMediaQuery('(min-width: 800px)'); // Define your breakpoint here
   const navigate = useNavigate()
   // const location = useLocation();
   const userId = getUserId()
@@ -117,6 +119,7 @@ const Navbar = () => {
       // Refetch the list of posts after creating a new one
       refetch()
       setOpen(false);
+      setContent("")
     } catch (error) {
       console.error(error);
     }
@@ -141,7 +144,7 @@ const Navbar = () => {
     setTheme(theme === "dark"? "light" : "dark")
   }
   return (
-    <nav className="w-full min-h-16 bg-transparent p-2">
+    <nav className="w-full min-h-16 bg-white fixed md:p-2">
       <div className='container mx-auto flex justify-between items-center'>
       <div className='text-2xl md:text-3xl dark:text-[#f2e4fb] text-[#060109] font-extrabold'>Demo</div>
             {/* Desktop Nav Menu */}
@@ -290,42 +293,60 @@ const Navbar = () => {
 
       {/*  */}
       <ul className='w-[100%] mobileNavMenu items-center justify-between'>
-              <NavLink to="/" className='p-1 sm:p-3 border-gray-200 flex items-center justify-center flex-1'><AiOutlineHome size={26} color="#4f1179"/></NavLink>
-              <NavLink to="/orbits" className='p-1 sm:p-3 border-gray-200 flex items-center justify-center flex-1'><GiMoonOrbit size={26} color="#4f1179"/></NavLink>
-              <NavLink to="/followings" className='p-1 sm:p-3 border-gray-200 flex items-center justify-center flex-1'><BsPeopleFill size={26} color="#4f1179"/></NavLink>
-              <NavLink to="/questions" className='p-1 sm:p-3 border-gray-200 flex items-center justify-center flex-1'><BiMessageEdit size={26} color="#4f1179"/></NavLink>
-              <NavLink to="/gp" className='p-1 sm:p-3 border-gray-200 flex items-center justify-center flex-1'>
+              <NavLink to="/" className='p-1 border-gray-200 flex items-center justify-center flex-1'><AiOutlineHome size={26} color="#4f1179"/></NavLink>
+              <NavLink to="/orbits" className='p-1 border-gray-200 flex items-center justify-center flex-1'><GiMoonOrbit size={26} color="#4f1179"/></NavLink>
+              <NavLink to="/followings" className='p-1 border-gray-200 flex items-center justify-center flex-1'><BsPeopleFill size={26} color="#4f1179"/></NavLink>
+              <NavLink to="/questions" className='p-1 border-gray-200 flex items-center justify-center flex-1'><BiMessageEdit size={26} color="#4f1179"/></NavLink>
+              <NavLink to="/gp" className='p-1 border-gray-200 flex items-center justify-center flex-1'>
                 <BsCalculator color='#4f1179' size={22} />
               </NavLink>
       </ul>
 
       {/* Dialog */}
-      <Dialog open={open} sx={{color:"#060109", minHeight:400}} onClose={handleClose} maxWidth="lg" fullWidth={true}>
-        <div className='w-full flex'>
+      <Dialog open={open} sx={{color:"#060109", minHeight:400}} onClose={handleClose} maxWidth={isLargeScreen ? 'sm' : 'lg'} fullWidth={true}>
+        <div className='w-full flex '>
           <button onClick={handleClose} className='px-2 py-1 font-bold'>X</button>
         </div>  
         <div>
           <div className="flex justify-between border-b-2 border-[#8a1dd3]">
-            <Tabs value={tabValue}  onChange={(e, newValue) => setTabValue(newValue)}>
-              <Tab label="Add Question" sx={{color:"#060109"}}/>
-              <Tab label="Create Post" sx={{color:"#060109"}}/>
+            <Tabs value={tabValue}  onChange={(e, newValue) => setTabValue(newValue)} sx={{
+              "& .MuiTabs-indicator": {
+                backgroundColor: "#4f1179 !important",
+              },
+            }}>
+              <Tab label="Add Question" sx={{
+                color: tabValue === 0 ? "#4f1179 !important" : "inherit",
+                "&.Mui-selected": {
+                  color: "#4f1179 !important",
+                },
+              }} />
+              <Tab label="Create Post" sx={{
+                color: tabValue === 0 ? "#4f1179 !important" : "inherit",
+                "&.Mui-selected": {
+                  color: "#4f1179 !important",
+                },
+              }} />
             </Tabs>
           </div>
         </div>
-        <DialogContent sx={{height:300}}>
+        <DialogContent sx={{minHeight:300}}>
           {tabValue === 0 ? (
             <div className='w-full h-full flex flex-col'>
-              <div className="mb-4 flex flex-col h-[90%]">
+              <div className="mb-4 flex flex-col min-h-[300px]">
                 <label htmlFor="question" className="block text-gray-600 font-semibold mb-2">
                   Question
                 </label>
-                <textarea
-                  id="question"
-                  className="w-full p-2 flex-1 outline-none"
-                  placeholder="Start your question with 'What' 'how' etc"
-                  value={question}
-                  onChange={(e) => setQuestion(e.target.value)}
-                  required
+                <TextareaAutosize 
+                    required
+                    type="text"
+                    id="question"
+                    placeholder="Start your question with 'What' 'how' etc"
+                    value={question}
+                    onChange={(e) => setQuestion(e.target.value)}
+                    className="h-4 flex-grow p-2 rounded-md bg-white text-sm outline-none"
+                    cacheMeasurements={true}
+                    autoFocus
+                    style={{ resize: 'none' }} // Add this line to hide the resize handle
                 />
               </div>
               <Button type="submit" 
@@ -347,15 +368,19 @@ const Navbar = () => {
             </div>
           ) : (
             <div className='w-full h-full flex flex-col'>
-              <div className="mb-4 flex flex-col h-[90%]">
-                <textarea
-                  id="content"
-                  className="w-full p-2 flex-1 outline-none"
-                  placeholder="Say Something"
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  required
-                />
+              <div className="mb-4 flex flex-col min-h-[300px]">
+                <TextareaAutosize 
+                    required
+                    id="content"
+                    type="text"
+                    placeholder="Say Something"
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    className="h-4 flex-grow p-2 rounded-md bg-white text-sm outline-none"
+                    cacheMeasurements={true}
+                    autoFocus
+                    style={{ resize: 'none' }} // Add this line to hide the resize handle
+                  />
               </div>
               <Button type="submit" sx={{
                 background:"#4f1179",

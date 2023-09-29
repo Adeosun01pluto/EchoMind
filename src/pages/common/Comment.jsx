@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 import Reply from "./Reply";
 import { getUserProfile } from "../../api/api";
 import { BASE_URL } from "../../constants/constant";
+import { Divider } from "@mui/material";
+import TextareaAutosize from "react-textarea-autosize";
 
 function Comment({comment, getComment, postId}) {
     const userId = localStorage.getItem('userId');
@@ -72,7 +74,6 @@ function Comment({comment, getComment, postId}) {
     try {
       await unlikePost(commentId);
       // Update the liked status for the post
-
     } catch (error) {
       console.error(error);
     }
@@ -118,11 +119,11 @@ function Comment({comment, getComment, postId}) {
       }
   };
   return (
-    <div className="border-b-2 border-gray-200 py-2">
+    <div className="">
         {/* Comment Header */}
-        <div className="w-[100%] flex gap-2 md:gap-3 ">
+        <div className="p-1 md:p-2 w-[100%] flex gap-2 md:gap-3 ">
             <Link to={`/profile/${comment.userId}`}> 
-              <div className='w-10 h-10 rounded-full bg-black'>
+              <div className='w-10 h-10 rounded-full dark:text-[#f2e4fb] text-[#060109]'>
                 <img className="rounded-full w-full h-full object-cover" src={`${BASE_URL}/images/${profile?.profileImage}`} alt="" />
               </div>
             </Link>
@@ -130,24 +131,24 @@ function Comment({comment, getComment, postId}) {
                 <div className="flex flex-col gap-2 ">
                     <div className="flex gap-2 items-center">
                         <span className="text-sm font-bold">{profile?.username}</span>
-                        <span className="text-red text-xs text-blue-500">Follow</span>
+                        <span className="text-red text-xs text-[#4f1179]">Follow</span>
                         <span className="hover:underline text-sm">{formatDistanceToNow(Date.parse(comment.createdAt))}</span>
                     </div>
                     <div className="flex gap-2 items-center">
                         {comment.text}
                     </div>
                     {/* Post Actions */}
-                    <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-6 ">
                         {/* Render like/unlike button based on liked status */}
-                        <div className="flex items-center bg-gray-100 border-2 border-gray-200 rounded-full">
+                        <div className="flex items-center border-[1px] bg-gray-50 rounded-full">
                         <button
                             onClick={() => handleLike(comment?._id)}
-                            className="p-1 px-2 border-r-2 border-gray-200 rounded-t-r-full flex items-center gap-2"
+                            className="p-1 px-2 border-r-[1px] rounded-t-r-full flex items-center gap-2"
                         >
                             {
                             comment?.upvotes.includes(userId) ?
-                            <BsFillArrowUpSquareFill size={15} color="green" /> : 
-                            <BsFillArrowUpSquareFill size={15} color="blue" />
+                            <BsFillArrowUpSquareFill size={15} color="#4f1179" /> : 
+                            <BsFillArrowUpSquareFill size={15} color="gray" />
                             }
                             <span className='text-sm'>{comment.upvotes.length}</span>
                         </button>
@@ -155,7 +156,11 @@ function Comment({comment, getComment, postId}) {
                             onClick={() => handleUnlike(comment?._id)}
                             className="p-1 px-2 rounded flex items-center gap-2 "
                         >
-                            <BsFillArrowDownSquareFill size={15} color="black" />
+                          {
+                            comment?.downvotes.includes(userId) ?
+                            <BsFillArrowDownSquareFill size={15} color="#4f1179" /> :
+                            <BsFillArrowDownSquareFill size={15} color="gray" /> 
+                          }
                             <span className='text-sm'>{comment.downvotes.length}</span>
                         </button>
                         </div>
@@ -166,9 +171,18 @@ function Comment({comment, getComment, postId}) {
                     </div>
                     {
                         !open? null : 
-                        <div className="w-full flex gap-1 h-8">
-                            <input type="text" value={reply} onChange={(e)=>setReply(e.target.value)} className="w-full text-sm rounded-full border-[1px] px-3 border-gray-300 p-1 " placeholder="Add a reply" />
-                            <button onClick={()=>handleReply(comment._id)} className="bg-blue-400 py-1 px-3 text-sm rounded-full text-white">Reply</button>
+                        <div className="w-full flex gap-1 min-h-8 items-center">
+                          <TextareaAutosize
+                            type="text"
+                            value={reply} onChange={(e)=>setReply(e.target.value)}
+                            className="h-4 flex-grow p-2 rounded-md bg-white border-[1px] text-sm outline-none"
+                            placeholder="Add a reply"
+                            cacheMeasurements={true}
+                            autoFocus
+                            style={{ resize: 'none' }} // Add this line to hide the resize handle
+                          />
+                            {/* <input type="text" value={reply} onChange={(e)=>setReply(e.target.value)} className="w-full text-sm rounded-full border-[1px] px-3 border-gray-300 p-1 " placeholder="Add a reply" /> */}
+                            <button onClick={()=>handleReply(comment._id)} className="bg-[#4f1179] py-1 px-3 text-sm rounded-full text-white">Reply</button>
                         </div>
                     }
 
@@ -181,6 +195,7 @@ function Comment({comment, getComment, postId}) {
               </div>
         </div>
         </div>
+        <Divider />
     </div>
   )
 }

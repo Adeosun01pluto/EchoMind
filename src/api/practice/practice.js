@@ -16,7 +16,7 @@ export const fetchP_Questions = async ( level, faculty, course) => {
       });
       return response.data.data;
     } catch (error) {
-      console.log(error.message);
+      throw Error (error.message);
     }
 };
 
@@ -33,6 +33,6 @@ export const fetchP_Quiz = async ( level, faculty, course,limit) => {
       });
       return response.data.data;
     } catch (error) {
-      console.log(error.message);
+      throw Error (error.message);
     }
 };

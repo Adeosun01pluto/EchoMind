@@ -1,7 +1,7 @@
 import './App.css'
 import Login from './pages/auth/Login'
 import Register from './pages/auth/Register'
-import {Route, Routes, useNavigate } from 'react-router-dom';
+import {Navigate, Route, Routes } from 'react-router-dom';
 import Feeds from './pages/layout/feeds/Feeds';
 import Navbar from './components/navbar/Navbar';
 import Profile from './pages/profile/Profile';
@@ -40,21 +40,22 @@ import { getUserId } from './api/api';
 // accent : #cd98f1 
 
 function App() {
-  const navigate = useNavigate()
   const token = localStorage.getItem('token');
   const userId = getUserId()
   console.log(token , userId)
   return (
     <div className='w-full min-h-screen dark:text-[#f2e4fb] text-[#060109] dark:bg-[#060109] bg-[#f3f3f3] '>
       <Navbar/>
+      <div className='pt-[80px] lg:pt-[60px]'>
+
       <Routes>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={ token ?  <Feeds/> : <Login />} />
-        <Route path="/profile/:userId" element={<Profile />} />
-        <Route path="/questions" element={<Questions />} />
-        <Route path="/followings" element={<Followings />} />
-        <Route path="/orbits" element={<Orbits />} />
+        <Route path="/" element={ token ?  <Feeds/> : <Navigate to="/login" />}  />
+        <Route path="/profile/:userId" element={token ? <Profile /> : <Navigate to="/login" />} />
+        <Route path="/questions" element={token? <Questions /> : <Navigate to="/login" />} />
+        <Route path="/followings" element={token ? <Followings /> : <Navigate to="/login" />} />
+        <Route path="/orbits" element={token ? <Orbits /> : <Navigate to="/login" />} />
         <Route path="/orbit/:orbitId" element={<SingleOrbit />} />
         <Route path="/gp" element={<Gp />} />
         <Route path="/practice" element={<Practice />}>
@@ -68,6 +69,7 @@ function App() {
         <Route path="/*" element={<NotFound />} />
 
       </Routes>
+      </div>
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogContent, DialogTitle, TextField } from "@mui/material";
+import { Button, Dialog, DialogContent, DialogTitle, TextField, useMediaQuery } from "@mui/material";
 import { useState } from "react";
 import {  useQuery } from 'react-query';
 import axios from 'axios';
@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { ThreeDots } from "react-loader-spinner";
 import SideBar from "../../common/SideBar";
 import { BASE_URL } from "../../../constants/constant";
+import RightBar from "../../common/RightBar";
 
 function getRandomNumber() {
   return Math.floor(Math.random() * 36) + 1;
@@ -22,6 +23,7 @@ function getRandomHexColor() {
 }
 
 function Orbits() {
+  const isLargeScreen = useMediaQuery('(min-width: 800px)'); // Define your breakpoint here
   const [open, setOpen] = useState(false);
   const [name, setName] = useState(false);
   const [description, setDescription] = useState(false);
@@ -87,11 +89,11 @@ function Orbits() {
     </div>
   )
   return (
-    <div className="w-full grid grid-cols-12 gap-4 mx-auto p-2 md:p-4">
-      <div className='sm:col-span-4 md:col-span-3'>
+    <div className="w-full dark:text-[#f2e4fb] text-[#060109] gap-2 md:gap-4  mx-auto p-2 md:p-4 flex flex-col md:flex-row">
+      <div className="md:w-2/12 fixed hidden md:block"> {/* Sidebar */}
         <SideBar />
       </div>
-      <div className="col-span-12 sm:col-span-8 md:col-span-6 lg:col-span-5">
+      <div className="main_bar md:w-6/12 w-full">
         <div className="">
           {/* Top Spaces */}
           <div className='w-[100%] p-2 dark:bg-[#171517] bg-[#f2e4fb] rounded-sm'>
@@ -105,7 +107,7 @@ function Orbits() {
           {/*  */}
           <p className='text-lg py-8'>Discover Spaces!</p>
           {/* Space sections */}
-          <div className='grid grid-cols-2 sm:grid-col-3 gap-3'>
+          <div className='grid grid-cols-2 xs:grid-cols-3 sm:grid-col-3 gap-3'>
           {data?.map((orbit, idx)=>(
             <Orbit orbit={orbit} key={idx}/>
           ))}
@@ -114,9 +116,11 @@ function Orbits() {
         </div>
       </div>
 
-      <div className='md:col-span-3 lg:col-span-4 bg-black'></div>
+      <div className="md:w-4/12 hidden md:block"> {/* Right Sidebar */}
+        <RightBar />
+      </div>
 
-      <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth={true}>
+      <Dialog open={open} onClose={handleClose} maxWidth={isLargeScreen ? 'sm' : 'lg'} fullWidth={true}>
         <DialogTitle>
           <div>
             <p>Create an Orbit</p>

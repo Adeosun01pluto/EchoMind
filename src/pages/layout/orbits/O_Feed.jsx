@@ -220,7 +220,7 @@ function O_Feed({post, refetch}) {
           {/*  */}
 
           {/* Post Content */}
-          <div className="dark:text-[#f2e4fb] text-[#060109] text-lg py-1 px-2">{post?.content}</div>
+          <div className="dark:text-[#f2e4fb] text-[#060109] text-sm font-semibold md:text-lg py-1 px-2">{post?.content}</div>
           {/*  */}
 
           {/* Post Actions */}
@@ -256,6 +256,9 @@ function O_Feed({post, refetch}) {
                 <FaRegComment onClick={()=>handleClickOpen(post._id)} />
                 <span className='text-xs md:text-sm'>{post.comments.length}</span>
               </button>
+              {
+                post.userId === userId ? 
+                  null :
               <button className='flex items-center gap-2'>
                 {
                   post?.tweets.includes(userId) ? 
@@ -265,6 +268,7 @@ function O_Feed({post, refetch}) {
                 }
                 <span className='text-xs md:text-sm'>{post.tweets.length}</span>
               </button>
+              }
             </div>
           </div>
           {/*  */}

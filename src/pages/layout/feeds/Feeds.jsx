@@ -11,15 +11,15 @@ import { fetchPosts} from '../../../api/post/post';
 import { useNavigate } from 'react-router-dom';
 import SideBar from '../../common/SideBar';
 import { fetchQuestions } from '../../../api/question/question';
+import RightBar from '../../common/RightBar';
 
 const Feeds = () => {
   const navigate = useNavigate()
   const { refetch:refetchQuestion} = useQuery('questions', fetchQuestions, {
     onLoad: true, 
   });
-  const { data: posts, isLoading, refetch, isError} = useQuery('posts', fetchPosts, {
-    onLoad: true, 
-  });
+  const { data: posts, isLoading, refetch, isError} = useQuery('posts', fetchPosts,
+  );
   const createQuestionMutation = useMutation((newQuestion) =>
   axios.post(`${BASE_URL}/question/add_question`, newQuestion, {
     headers: {
@@ -78,18 +78,22 @@ const Feeds = () => {
     )
   }
   return (
-    <div className="w-full grid dark:text-[#f2e4fb] text-[#060109] grid-cols-12 gap-2 md:gap-4  mx-auto p-2 md:p-4">
-      <div className='sm:col-span-3 md:col-span-2'>
+    <div className="w-full dark:text-[#f2e4fb] text-[#060109] gap-2 md:gap-4  mx-auto p-2 md:p-4 flex flex-col md:flex-row">
+      {/* <SideBar /> */}
+      <div className="md:w-2/12 fixed hidden md:block"> {/* Sidebar */}
         <SideBar />
       </div>
-      <div className='col-span-12 sm:col-span-9 md:col-span-7 lg:col-span-6 '>
+      <div className='main_bar md:w-6/12 w-full'>
         {/* CreatePostForm component for creating a new post */}
         <CreatePostForm onCreatePost={handleCreatePost} onCreateQuestion={handleCreateQuestion} refetch={refetch} />
         {posts?.map((post, idx) => (
           <Feed key={idx} post={post} refetch={refetch}/>
         ))}
       </div>
-      <div className='md:col-span-3 lg:col-span-4 bg-black'></div>
+      <div className="md:w-4/12 hidden md:block"> {/* Right Sidebar */}
+        <RightBar />
+      </div>
+      {/* <RightBar /> */}
     </div>
   );
 };

@@ -44,7 +44,7 @@ export const followOrbit = async (orbitId, refetchOrbit) => {
       refetchOrbit()
       return response.data;
     } catch (error) {
-      console.log(error)
+      throw Error (error.message)
     }
 };
 
@@ -62,7 +62,7 @@ export const unFollowOrbit = async (orbitId, refetchOrbit) => {
       refetchOrbit()
       return response.data;
     } catch (error) {
-      console.log(error)
+      throw Error (error.message)
     }
 };
 
@@ -79,6 +79,6 @@ export const fetchFollowingOrbits = async (orbitIds) => {
       );
       return response.data;
     } catch (error) {
-      console.log(error)
+      throw Error (error.message)
     }
 };

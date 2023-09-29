@@ -4,6 +4,7 @@ import { fetchFollowingOrbits } from "../../../api/orbit/orbit";
 import Following from "./Following";
 import SideBar from "../../common/SideBar";
 import { ThreeDots } from "react-loader-spinner";
+import RightBar from "../../common/RightBar";
 
 function Followings() {
   const userId = getUserId()
@@ -42,18 +43,22 @@ function Followings() {
     )
   }
   return (
-    <div className="w-full grid grid-cols-12 gap-4 mx-auto p-2 md:p-4">
-      <div className='sm:col-span-4 md:col-span-3'>
+    <div className="w-full dark:text-[#f2e4fb] text-[#060109] gap-2 md:gap-4  mx-auto p-2 md:p-4 flex flex-col md:flex-row">
+      {/* <SideBar /> */}
+      <div className="md:w-2/12 fixed hidden md:block"> {/* Sidebar */}
         <SideBar />
       </div>
 
-      <div className=" col-span-12 sm:col-span-8 md:col-span-6 lg:col-span-5 ">
+      <div className="main_bar md:w-6/12 w-full">
         {data?.map((following, idx)=> (
           <Following key={idx} following={following} />
         ))}
       </div>
-      <div className='md:col-span-3 lg:col-span-4 bg-black'></div>
-
+      
+      <div className="md:w-4/12 hidden md:block"> {/* Right Sidebar */}
+        <RightBar />
+      </div>
+      {/* <RightBar /> */}
     </div>
   )
 }

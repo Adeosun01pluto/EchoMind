@@ -138,7 +138,7 @@ const Register = () => {
             height="20" 
             width="20" 
             radius="9"
-            color="gray" 
+            color="white" 
             ariaLabel="three-dots-loading"
             wrapperStyle={{}}
             wrapperClassName=""

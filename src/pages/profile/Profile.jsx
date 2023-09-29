@@ -235,7 +235,7 @@ function Profile() {
                                     (followings?.map((followings, idx)=>(
                                         <div key={idx} className="">
                                             <div className="w-[100%] items-center flex gap-2 py-2 md:gap-3 ">
-                                                <Link to={`/profile/${followings.userId}`}> 
+                                                <Link to={`/profile/${followings._id}`}> 
                                                     <div className='w-8 h-8 rounded-full bg-black'>
                                                         <img className="rounded-full w-full h-full object-cover" src={`${BASE_URL}/images/${followings?.profileImage}`} alt="" />
                                                     </div>
@@ -275,7 +275,7 @@ function Profile() {
                                 (followers?.map((followers, idx)=>(
                                     <div key={idx} className="">
                                         <div className="w-[100%] items-center flex gap-2 py-2 md:gap-3 ">
-                                            <Link to={`/profile/${followers.userId}`}> 
+                                            <Link to={`/profile/${followers._id}`}> 
                                                 <div className='w-8 h-8 rounded-full bg-black'>
                                                     <img className="rounded-full w-full h-full object-cover" src={`${BASE_URL}/images/${followers?.profileImage}`} alt="" />
                                                 </div>
