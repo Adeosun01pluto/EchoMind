@@ -10,8 +10,10 @@ import { BASE_URL } from '../../../constants/constant';
 import Comment from '../../common/Comment';
 import { downVote, tweetPost, untweetPost, upVote } from '../../../api/post/post';
 import { ThreeDots } from 'react-loader-spinner';
+import { fetchOrbitName } from '../../../api/orbit/orbit';
 
 function Feed({post, refetch}) {
+  const orbitId = post?.orbitId
   const loggedInUserId = getUserId()
   const [loading, setLoading] = useState(false); // Initialize with an empty string
   const [profile, setProfile] = useState(null); // Initialize with an empty string
@@ -19,6 +21,7 @@ function Feed({post, refetch}) {
   const [text, setText] = useState(''); // Initialize with an empty string
   const [open, setOpen] = useState(false);
   const [comments, setComments] = useState([]);  
+  const [orbitData, setOrbitData] = useState(null);  
   const handleClickOpen = (postId) => {
     getComment(postId)
     setOpen(!open);
@@ -81,6 +84,16 @@ function Feed({post, refetch}) {
       console.log(error)
       }
   };
+  const fetchOrbitNameByID = async(orbitId) =>{
+    try {
+      if(orbitId){
+        const response = await fetchOrbitName(orbitId)
+        setOrbitData(response)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
   const getUserProfileHandler = async(userId) =>{
     try {
       const response = await getUserProfile(userId)
@@ -109,6 +122,10 @@ function Feed({post, refetch}) {
   //   }
   // };
 
+  // Fetch and set the orbitName when the component mounts
+  useEffect(() => {
+    fetchOrbitNameByID(orbitId)
+  }, [orbitId]);
   // Fetch and set the username when the component mounts
   useEffect(() => {
       getUserProfileHandler(post.userId)
@@ -117,35 +134,60 @@ function Feed({post, refetch}) {
     <div>
       <div  className="dark:bg-[#171517] bg-[white] shadow-md sm:rounded-sm my-2">
           {/* Post Header */}
-          <div className="w-[100%] flex gap-2 py-1 md:gap-3 p-1 md:p-2 ">
-              <Link to={`/profile/${post.userId}`}> 
-              <div className='w-10 h-10 rounded-full bg-black'>
-                {profile?.profileImage ? 
-                <img className="rounded-full w-full h-full object-cover" src={`${BASE_URL}/images/${profile?.profileImage}`} alt="" />
-                :
-                <img className="rounded-full w-full h-full object-cover" src={profile?.avatarData} alt />
-                }
-              </div>
-              </Link>
-              <div>
-                  <div className="flex gap-2 items-center">
-                    <div className='flex gap-1 items-center'>
-                      <span className="text-sm font-bold">{profile?.fullname}</span>
-                      <Link to={`/profile/${post.userId}`} className="text-xs hover:underline dark:text-gray-300 text-gray-600 font-bold">@{profile?.username}</Link>
+          
+          {
+            orbitData?._id? 
+             (
+                <div className="w-[100%] flex gap-2 py-1 md:gap-3 p-1 md:p-2 ">
+                    <Link to={`/orbit/${orbitData._id}`}> 
+                    <div className='w-10 h-10 rounded-xl bg-black'>
+                      <img className="rounded-xl w-full h-full object-cover" src={orbitData?.coverPhoto ? `${BASE_URL}/images/${orbitData?.coverPhoto} ` :  `/${orbitData?.tempCoverImage}.avif`} alt="" />
                     </div>
-                      {/* {userId === post.userId ? null : 
-                      ( !profile?.followings.includes(userId) ? 
-                      <span onClick={()=>handleFollow(post.userId)} className="dark:text-[#f2e4fb] text-[#8a1dd3] cursor-pointer text-xs">Follow</span>:
-                      <span onClick={()=>handleUnFollow(post.userId)} className="dark:text-[#f2e4fb] text-[#8a1dd3] cursor-pointer text-xs">unfollow</span>
-                      )
-                      } */}
-                  </div>
-                  <div className="flex gap-2 items-center">
-                      <span className='text-xs text-gray-500'>{formatDistanceToNow(Date.parse(post.createdAt))} ago</span>
-                  </div>
-              </div>
-          </div>
-          {/*  */}
+                    </Link>
+                    <div>
+                        <div className="flex gap-2 items-center">
+                          <span className="text-sm font-bold  hover:underline">{orbitData?.name} |</span>
+                          <span className='text-xs'>Follow</span>
+                        </div>
+                        <div className="flex gap-2 items-center">
+                            <Link to={`/profile/${post.userId}`} className="text-sm dark:text-gray-300 text-gray-600">Posted by {profile?.fullname}</Link>
+                            <span className='text-xs text-gray-500'>{formatDistanceToNow(Date.parse(post.createdAt))} ago</span>
+                        </div>
+                    </div>
+                </div>
+             ) 
+             : (
+                <div className="w-[100%] flex gap-2 py-1 md:gap-3 p-1 md:p-2 ">
+                    <Link to={`/profile/${post.userId}`}> 
+                    <div className='w-10 h-10 rounded-full bg-black'>
+                      {profile?.profileImage ? 
+                      <img className="rounded-full w-full h-full object-cover" src={`${BASE_URL}/images/${profile?.profileImage}`} alt="" />
+                      :
+                      <img className="rounded-full w-full h-full object-cover" src={profile?.avatarData} alt />
+                      }
+                    </div>
+                    </Link>
+                    <div>
+                        <div className="flex gap-2 items-center">
+                          <div className='flex gap-1 items-center'>
+                            <span className="text-sm font-bold">{profile?.fullname}</span>
+                            <Link to={`/profile/${post.userId}`} className="text-xs hover:underline dark:text-gray-300 text-gray-600 font-bold">@{profile?.username}</Link>
+                          </div>
+                            {/* {userId === post.userId ? null : 
+                            ( !profile?.followings.includes(userId) ? 
+                            <span onClick={()=>handleFollow(post.userId)} className="dark:text-[#f2e4fb] text-[#8a1dd3] cursor-pointer text-xs">Follow</span>:
+                            <span onClick={()=>handleUnFollow(post.userId)} className="dark:text-[#f2e4fb] text-[#8a1dd3] cursor-pointer text-xs">unfollow</span>
+                            )
+                            } */}
+                        </div>
+                        <div className="flex gap-2 items-center">
+                            <span className='text-xs text-gray-500'>{formatDistanceToNow(Date.parse(post.createdAt))} ago</span>
+                        </div>
+                    </div>
+                </div>
+             )
+          }
+          
           {/* Post Content */}
           <div className="p-1 md:p-2 dark:text-[#f2e4fb] text-[#060109] text-sm font-semibold md:text-lg py-1 px-2">{post?.content}</div>
           {/*  */}

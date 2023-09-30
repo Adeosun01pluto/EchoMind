@@ -5,6 +5,18 @@ import { BASE_URL } from "../../constants/constant";
 const token = localStorage.getItem('token');
 
 
+export const fetchOrbitName = async (orbitId) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/orbit/get_orbitNameById/${orbitId}`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.log(error.message);
+    }
+};
 export const fetchO_Questions = async (orbitId) => {
     try {
       const response = await axios.get(`${BASE_URL}/orbit/get_questions/${orbitId}`, {

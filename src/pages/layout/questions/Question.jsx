@@ -1,6 +1,6 @@
 import { Button, Dialog, DialogContent} from '@mui/material'
 import TextareaAutosize from 'react-textarea-autosize';
-import {  useState } from 'react';
+import {  useEffect, useState } from 'react';
 import { BsFillArrowDownSquareFill} from 'react-icons/bs'
 import { RiQuestionAnswerLine } from 'react-icons/ri'
 import { useMutation, useQuery } from 'react-query';
@@ -10,9 +10,12 @@ import { downVote, fetchAnswers } from '../../../api/question/question';
 import { ThreeDots } from 'react-loader-spinner';
 import Answer from './Answer';
 import { getUserId } from '../../../api/api';
+import { fetchO_Answers, fetchOrbitName } from '../../../api/orbit/orbit';
 
 function Question({refetchQuestion, question}) {
+  const orbitId = question?.orbitId
   const userId = getUserId()
+  const [orbitData, setOrbitData] = useState(null);  
   const [open, setOpen] = useState(false);
   const [openAnswer, setOpenAnswer] = useState(false);
   const [answer, setAnswer] = useState('');
@@ -33,7 +36,7 @@ function Question({refetchQuestion, question}) {
   })
   );
   const { data: answers, isLoading: statusAnswer, refetch:refetchAnswers} = useQuery(['answers', question._id], ()=>fetchAnswers(question._id));
-  // fetchAnswers
+  const { data: o_answers} = useQuery(['o_answers', question._id], ()=>fetchO_Answers(question._id));
   const handleAddAnswer = async () => {
     try {
       // Use the createAnswerMutation to create a new post
@@ -54,6 +57,21 @@ function Question({refetchQuestion, question}) {
       console.error(error);
     }
   };
+  const fetchOrbitNameByID = async(orbitId) =>{
+    try {
+      if(orbitId){
+        const response = await fetchOrbitName(orbitId)
+        setOrbitData(response)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  // Fetch and set the orbitName when the component mounts
+  useEffect(() => {
+    fetchOrbitNameByID(orbitId)
+  }, [orbitId]);
+  console.log(orbitData)
   return (
     <div className=" my-1 rounded-md dark:bg-[#171517] bg-[#f2e4fb] pt-2 md:pt-3">
       {/*  */}
@@ -70,22 +88,32 @@ function Question({refetchQuestion, question}) {
       wrapperClassName=""
       visible={true}
       />
-      : 
-      <div className="px-2">
-        <span onClick={handleClickOpenAnswer} className="hover:underline font-semibold text-gray-500 text-sm cursor-pointer">{answers?.length} answers</span>
-      </div>
+      :
+      (
+        orbitId ? (
+          <div className="px-2">
+            <span onClick={handleClickOpenAnswer} className="hover:underline font-semibold text-gray-500 text-sm cursor-pointer"> {o_answers?.length} answers</span>
+          </div>
+        ) : (
+          <div className="px-2">
+            <span onClick={handleClickOpenAnswer} className="hover:underline font-semibold text-gray-500 text-sm cursor-pointer"> {answers?.length} answers</span>
+          </div>
+        )
+      )
       }
       {/*  */}
-      <div className='flex items-center px-2 py-1 gap-2 text-black'>
-        <div onClick={handleClickOpen} className='bg-white cursor-pointer flex items-center gap-2 py-1 px-2  border-2 rounded-full'>
-          <RiQuestionAnswerLine />
-          <span className='text-sm'>Answer</span>
-        </div>
+      
+      {/*  */}
+      {/* Post Actions */}
+      <div className='flex items-center justify-between px-2 py-1 gap-2 text-black'>
+        <div className="flex items-center gap-2  rounded-full">
+          <div onClick={handleClickOpen} className='bg-white cursor-pointer flex items-center gap-2 py-1 px-2  border-2 rounded-full'>
+            <RiQuestionAnswerLine />
+            <span className='text-sm'>Answer</span>
+          </div>
 
-        {/* Post Actions */}
-        <div className="flex items-center gap-2 border-2 bg-white rounded-full">
           {/* Render like/unlike button based on liked status */}
-          <div className="flex items-center border-2 rounded-full">
+          <div className="flex items-center bg-white border-2 rounded-full">
             <button
               onClick={() => handleUnlike(question?._id)}
               className="p-1 px-2 rounded flex items-center gap-2 "
@@ -96,9 +124,19 @@ function Question({refetchQuestion, question}) {
                 <BsFillArrowDownSquareFill size={13} color="gray" /> 
               }
               <span className='text-xs md:text-sm'>{question?.downvotes.length}</span>
-            </button>
+            </button  >
           </div>
         </div>
+        {orbitId ? 
+          (
+            <div className='rounded-md flex gap-2 items-center  bg-white text-black p-1'>
+              <img className="w-5 h-5 rounded-sm object-cover" src={orbitData?.iconImage ? `${BASE_URL}/images/${orbitData?.iconImage}` :  `/${orbitData?.tempIconImage}.avif`} alt="" />
+              <span className='text-xs'>{orbitData?.name}</span>   
+            </div>
+          )
+          :
+          null
+        }
       </div>
 
       {/* Answers */}
@@ -121,9 +159,18 @@ function Question({refetchQuestion, question}) {
               (answers?.length === 0 ? 
                 <span className='px-2'> No answer yet</span>
                 :
-                (answers?.map((answer, idx) =>(
-                  <Answer answer={answer} key={idx}/>
-                  ))
+                ( 
+                  orbitId ? (
+                    o_answers?.map((answer, idx) =>(
+                      <Answer answer={answer} key={idx}/>
+                      ))
+                  ) 
+                  : (
+                    answers?.map((answer, idx) =>(
+                    <Answer answer={answer} key={idx}/>
+                    ))
+
+                  )
                 ) 
               )
             }

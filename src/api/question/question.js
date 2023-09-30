@@ -17,6 +17,18 @@ export const fetchAnswers = async (questionId) => {
       throw Error (error.message);
     }
 };
+export const fetchO_Answers = async (questionId) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/orbit/read_answers/${questionId}`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw Error (error.message);
+    }
+};
 
 export const fetchQuestions = async () => {
   try {

@@ -167,6 +167,8 @@ function Profile() {
                     </div>
                 </div>
                 <div className="text-sm text-gray-500 hover:underline cursor-pointer">Write a description about yourself</div>
+                
+                {/* Tabs */}
                 <div>
                     <div className="flex justify-between border-b-[1px]  border-gray-300">
                         <Tabs value={tabValue} onChange={(e, newValue) => setTabValue(newValue)} sx={{
@@ -201,6 +203,8 @@ function Profile() {
                         </Tabs>
                     </div>
                 </div>
+
+                {/* Tab content */}
                 <div className="w-full min-h-36">
                     {tabValue === 0 ? (
                         <div className='w-full h-full md:p-3'>
@@ -218,7 +222,7 @@ function Profile() {
                                 />
                             </div>
                             :
-                            (posts?.map((post, idx)=>(
+                            (posts?.posts?.map((post, idx)=>(
                                 <Feed key={idx} post={post} refetch={refetch} idx={idx} />
                             )))
                             }
