@@ -73,7 +73,7 @@ const CreatePostForm = ({ onCreatePost, refetch, onCreateQuestion}) => {
                     }
               </div>
             </Link>
-            <input type="text" className="rounded-md w-[100%] p-2 bg-gray-100 border-[1px] border-gray-400 text-sm outline-none " placeholder="What do you wanna ask or share?"/>
+            <input type="text" className="rounded-md w-[100%] p-2 bg-gray-100 border-[1px] border-gray-400 focus:text-sm text-sm outline-none " placeholder="What do you wanna ask or share?"/>
           </div>
         </div>
       </div>

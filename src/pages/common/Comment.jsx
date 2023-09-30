@@ -175,7 +175,7 @@ function Comment({comment, getComment, postId}) {
                           <TextareaAutosize
                             type="text"
                             value={reply} onChange={(e)=>setReply(e.target.value)}
-                            className="h-4 flex-grow p-2 rounded-md bg-white border-[1px] text-sm outline-none"
+                            className="h-4 flex-grow p-2 rounded-md bg-white border-[1px]  text-sm focus:text-sm outline-none"
                             placeholder="Add a reply"
                             cacheMeasurements={true}
                             autoFocus

@@ -215,7 +215,7 @@ function Feed({post, refetch}) {
                     type="text"
                     value={text}
                     onChange={(e) => setText(e.target.value)}
-                    className="h-4 flex-grow p-2 rounded-md bg-white text-sm outline-none"
+                    className="h-4 flex-grow p-2 rounded-md bg-white  text-sm focus:text-sm outline-none"
                     placeholder="Add comment"
                     cacheMeasurements={true}
                     autoFocus
