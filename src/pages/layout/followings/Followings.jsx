@@ -5,28 +5,34 @@ import Following from "./Following";
 import SideBar from "../../common/SideBar";
 import { ThreeDots } from "react-loader-spinner";
 import RightBar from "../../common/RightBar";
+import { useQuery } from "react-query";
+import { Link } from "react-router-dom";
 
 function Followings() {
   const userId = getUserId()
-  const [data, setData] = useState(null); // Initialize with an empty string
-  const [loading, setLoading] = useState(false); // Initialize with an empty string
+  const [followingsId, setFollowingsId] = useState(false); // Initialize with an empty string
+
   const getUserProfileHandler = async() =>{
-    setLoading(true)
     try {
       const response = await getUserProfile(userId)
       const orbitIds = response?.orbitFollowings
-      const res = await fetchFollowingOrbits(orbitIds)
-      setData(res)
-      setLoading(false)
+      setFollowingsId(orbitIds)
     } catch (error) {
       console.log(error)
     }
   }
-    // Fetch and set the username when the component mounts
+  const {data, error, isError, isLoading} = useQuery(['followings', followingsId], ()=>fetchFollowingOrbits(followingsId),
+  {
+    enabled: !!followingsId, // Only enable the query when followingsId is available
+    onLoad:true
+  }
+  )
+  // Fetch and set the username when the component mounts
   useEffect(() => {
       getUserProfileHandler(userId)
   }, [userId]);
-  if (loading) {
+  console.log(error)
+  if (isLoading) {
     return (
       <div className="w-full items-center justify-center flex">
         <ThreeDots 
@@ -39,6 +45,20 @@ function Followings() {
           wrapperClassName=""
           visible={true}
           />
+      </div>
+    )
+  }
+  if (isError) {
+    return (
+      <div className="w-full items-center justify-center flex">
+        An Error Occurred
+      </div>
+    )
+  }
+  if(error?.message){
+    return (
+      <div className="w-full items-center justify-center flex">
+        <Link to="/login" >Unauthorized Login</Link>
       </div>
     )
   }

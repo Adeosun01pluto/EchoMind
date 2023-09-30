@@ -123,7 +123,7 @@ function Comment({comment, getComment, postId}) {
         {/* Comment Header */}
         <div className="p-1 md:p-2 w-[100%] flex gap-2 md:gap-3 ">
             <Link to={`/profile/${comment.userId}`}> 
-              <div className='w-10 h-10 rounded-full dark:text-[#f2e4fb] text-[#060109]'>
+              <div className='w-8 h-8 rounded-full dark:text-[#f2e4fb] text-[#060109]'>
                 {profile?.profileImage ? 
                     <img className="rounded-full w-full h-full object-cover" src={`${BASE_URL}/images/${profile?.profileImage}`} alt="" />
                     :

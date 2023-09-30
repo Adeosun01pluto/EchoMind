@@ -6,13 +6,27 @@ import { fetchQuestions } from "../../../api/question/question";
 // import CreateQuestionForm from "./CreateQuestionForm";
 import "../../../App.css"
 import RightBar from "../../common/RightBar";
+import { Link } from "react-router-dom";
 function Questions() {
-  const { data: questions, isLoading:questionStatus, refetch:refetchQuestion} = useQuery(['questions'], fetchQuestions, 
+  const { data: questions, isLoading:questionStatus, refetch:refetchQuestion, error, isError} = useQuery(['questions'], fetchQuestions, 
   {
     onLoad : true
   },
   );
-
+  if(error?.message){
+    return (
+      <div className="w-full items-center justify-center flex">
+        <Link to="/login" >Unauthorized Login</Link>
+      </div>
+    )
+  }
+  if (isError) {
+    return (
+      <div className="w-full items-center justify-center flex">
+        An Error Occurred
+      </div>
+    )
+  }
   if (questionStatus) {
     return (
       <div className="w-full items-center justify-center flex">

@@ -248,7 +248,7 @@ function Feed({post, refetch}) {
               <div className='mt-2 w-full min-h-16'>
                 <div className="mx-auto flex p-2 items-center dark:bg-[#060109] dark:mx-1 bg-[#f2e4fb] gap-2">
                   <Link to={`/profile/${post.userId}`}> 
-                  <div className='w-10 h-10 rounded-full bg-black'>
+                  <div className='w-8 h-8 rounded-full bg-black'>
                     {profilePic?.profileImage ? 
                     <img className="rounded-full w-full h-full object-cover" src={`${BASE_URL}/images/${profilePic?.profileImage}`} alt="" />
                     :

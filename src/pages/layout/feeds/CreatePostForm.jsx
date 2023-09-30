@@ -62,10 +62,10 @@ const CreatePostForm = ({ onCreatePost, refetch, onCreateQuestion}) => {
   return (
     <div>
       <div>
-        <div onClick={handleClickOpen} className=" border-2 border-gray-300 mx-auto shadow-lg bg-white rounded-sm p-2 py-6 md:p-3 mb-2">
+        <div onClick={handleClickOpen} className=" dark:border-0 border-2  mx-auto shadow-lg dark:bg-[#171517] bg-[#f3f3f3] rounded-sm p-2 mb-2">
           <div className="flex gap-2">
             <Link to={`/profile/${loggedInUserId}`}> 
-              <div className='w-10 h-10 rounded-full bg-black'>
+              <div className='w-9 h-9 rounded-full bg-black'>
                     {profilePic?.profileImage ? 
                     <img className="rounded-full w-full h-full object-cover" src={`${BASE_URL}/images/${profilePic?.profileImage}`} alt="" />
                     :
@@ -73,7 +73,7 @@ const CreatePostForm = ({ onCreatePost, refetch, onCreateQuestion}) => {
                     }
               </div>
             </Link>
-            <input type="text" className="rounded-md w-[100%] p-2 bg-gray-100 border-[1px] border-gray-400 focus:text-sm text-sm outline-none " placeholder="What do you wanna ask or share?"/>
+            <input type="text" className="rounded-md w-[100%] p-2 dark:bg-[#171517] bg-[#f3f3f3] focus:text-md text-md outline-none " placeholder="What do you wanna ask or share?"/>
           </div>
         </div>
       </div>

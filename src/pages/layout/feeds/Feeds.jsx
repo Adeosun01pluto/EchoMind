@@ -8,7 +8,7 @@ import Feed from './Feed';
 import { ThreeDots } from 'react-loader-spinner';
 import { BASE_URL } from '../../../constants/constant';
 import { fetchPosts} from '../../../api/post/post';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import SideBar from '../../common/SideBar';
 import { fetchQuestions } from '../../../api/question/question';
 import RightBar from '../../common/RightBar';
@@ -18,7 +18,7 @@ const Feeds = () => {
   const { refetch:refetchQuestion} = useQuery('questions', fetchQuestions, {
     onLoad: true, 
   });
-  const { data: posts, isLoading, refetch, isError} = useQuery('posts', fetchPosts, {
+  const { data: posts, isLoading, refetch, isError, error} = useQuery('posts', fetchPosts, {
     onLoad : true
   }
   );
@@ -69,6 +69,13 @@ const Feeds = () => {
           wrapperClassName=""
           visible={true}
           />
+      </div>
+    )
+  }
+  if(error?.message){
+    return (
+      <div className="w-full items-center justify-center flex">
+        <Link to="/login" >Unauthorized Login</Link>
       </div>
     )
   }

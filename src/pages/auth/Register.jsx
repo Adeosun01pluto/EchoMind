@@ -55,26 +55,26 @@ const Register = () => {
   };
   
   return (
-    <div className="w-[100%] md:w-[90%] mx-auto py-6 text-[#060109] flex justify-center">
-      <div className="w-[95%] dark:bg-[#171517] bg-[white] md:w-[50%] py-8 rounded-md flex flex-col shadow-lg items-center">
-        <p className='md:text-3xl text-xl text-[#4f1179] font-semibold'>Register</p>
-        <form onSubmit={handleSubmit} className=" w-[95%] md:w-[65%] mt-2 mx-auto flex flex-col gap-2 md:gap-3">
-          <div className='flex flex-col gap-2'>
-            <label className="text-[#4f1179] text-md font-semibold">Full Name</label>
+    <div className="w-[100%] md:w-[90%] mx-auto py-4 text-[#060109] flex justify-center">
+      <div className="w-[95%] dark:bg-[#171517] bg-[white] md:w-[50%] py-4 rounded-md flex flex-col shadow-lg items-center">
+        <p className='md:text-3xl text-xl dark:text-white text-[#4f1179] font-semibold'>Register</p>
+        <form onSubmit={handleSubmit} className=" w-[95%] md:w-[65%] mt-2 mx-auto flex flex-col gap-1 md:gap-3">
+          <div className='flex flex-col gap-1'>
+            <label className="dark:text-white text-[#4f1179] text-md font-semibold">Full Name</label>
             <input
               type="text"
               name="fullname"
               value={formData.fullname}
               onChange={handleChange}
               placeholder="Full Name"
-              className="w-full px-4 py-2 rounded-md text-md focus:text-md focus:outline-none border border-gray-300 focus:ring-2 focus:ring-[#4f1179]"
+              className="w-full dark:border-0 border-2 px-4 py-2 rounded-md text-md focus:text-md focus:outline-none dark:bg-[#000] dark:text-white bg-[white] focus:ring-2 focus:ring-[#4f1179]"
             />
           </div>
-          <div className="flex flex-col gap-2">
-            <label className="text-[#4f1179] text-md font-semibold">Email</label>
+          <div className="flex flex-col gap-1">
+            <label className="dark:text-white text-[#4f1179] text-md font-semibold">Email</label>
             <input
               type="text"
-              className="w-full px-4 py-2 rounded-md text-md focus:text-md focus:outline-none border border-gray-300 focus:ring-2 focus:ring-[#4f1179]"
+              className="w-full dark:border-0 border-2 px-4 py-2 rounded-md text-md focus:text-md focus:outline-none dark:bg-[#000] dark:text-white bg-[white] focus:ring-2 focus:ring-[#4f1179]"
               name="email"
               value={formData.email}
               placeholder="Email"
@@ -82,20 +82,20 @@ const Register = () => {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <label className="text-[#4f1179] text-md font-semibold">Username</label>
+            <label className="dark:text-white text-[#4f1179] text-md font-semibold">Username</label>
             <input
               type="text"
-              className="w-full px-4 py-2 rounded-md text-md focus:text-md focus:outline-none border border-gray-300 focus:ring-2 focus:ring-[#4f1179]"
+              className="w-full dark:border-0 border-2 px-4 py-2 rounded-md text-md focus:text-md focus:outline-none dark:bg-[#000] dark:text-white bg-[white] focus:ring-2 focus:ring-[#4f1179]"
               name="username"
               placeholder="Username"
               value={formData.username}
               onChange={handleChange}
             />
           </div>
-          <div className="flex flex-col gap-2">
-            <label className="text-[#4f1179] text-md font-semibold">Gender</label>
+          <div className="flex flex-col gap-1">
+            <label className="dark:text-white text-[#4f1179] text-md font-semibold">Gender</label>
             <select
-              className="w-full px-4 py-2 rounded-md focus:outline-none border border-gray-300 focus:ring-2 bg-white focus:ring-[#4f1179]"
+              className="w-full px-4 py-2 dark:border-0 border-2 rounded-md focus:outline-none dark:bg-[#000] dark:text-white bg-[white] focus:ring-2  focus:ring-[#4f1179]"
               name="gender"
               value={formData.gender}
               onChange={handleChange}
@@ -105,22 +105,22 @@ const Register = () => {
               <option value="female">Female</option>
             </select>
           </div>
-          <div className="flex flex-col gap-2">
-            <label className="text-[#4f1179] text-md font-semibold">Password</label>
+          <div className="flex flex-col gap-1">
+            <label className="dark:text-white text-[#4f1179] text-md font-semibold">Password</label>
             <input
               type="password"
-              className="w-full px-4 py-2 rounded-md text-md focus:text-md focus:outline-none border border-gray-300 focus:ring-2 focus:ring-[#4f1179]"
+              className="w-full dark:border-0 border-2 px-4 py-2 rounded-md text-md focus:text-md focus:outline-none dark:bg-[#000] dark:text-white bg-[white] focus:ring-2 focus:ring-[#4f1179]"
               name="password"
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
             />
           </div>
-          <div className="flex flex-col gap-2">
-            <label className="text-[#4f1179] text-md font-semibold">Confirm Password</label>
+          <div className="flex flex-col gap-1">
+            <label className="dark:text-white text-[#4f1179] text-md font-semibold">Confirm Password</label>
             <input
               type="password"
-              className="w-full px-4 py-2 rounded-md text-md focus:text-md focus:outline-none border border-gray-300 focus:ring-2 focus:ring-[#4f1179]"
+              className="w-full dark:border-0 border-2 px-4 py-2 rounded-md text-md focus:text-md focus:outline-none dark:bg-[#000] dark:text-white bg-[white] focus:ring-2 focus:ring-[#4f1179]"
               name="confirmPassword"
               placeholder="Confirm Password"
               value={formData.confirmPassword}
@@ -133,7 +133,7 @@ const Register = () => {
           }
           <button
             type="submit"
-            className="w-full bg-[#4f1179] flex items-center justify-center gap-1 text-white py-2 px-4 rounded-md hover:bg-[#4f1179] focus:outline-none border border-gray-300"
+            className="w-full bg-[#4f1179] flex items-center justify-center gap-1 text-white py-2 px-4 rounded-md hover:bg-[#4f1179] focus:outline-none  dark:text-white"
           >{loading ? <span className='flex items-center justify-center'>
             <ThreeDots 
             height="20" 
@@ -145,11 +145,11 @@ const Register = () => {
             wrapperClassName=""
             visible={true}
             />
-          </span> : "Login" }
+          </span> : "Register" }
         </button>
           <div className="flex justify-between w-[80%] mx-auto text-sm items-center">
             <span className="text-sm text-gray-700">Already have an account?</span>
-            <Link to="/login" className="text-[#4f1179]">Login</Link>
+            <Link to="/login" className="dark:text-white text-[#4f1179]">Login</Link>
           </div>
         </form>
       </div>
