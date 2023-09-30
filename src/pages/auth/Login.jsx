@@ -53,7 +53,7 @@ const Login = () => {
   };
 
   return (
-    <div className="w-[100%] md:w-[90%] py-6 h-screen mx-auto text-[#060109] flex justify-center">
+    <div className="w-[100%] md:w-[90%] py-6 mx-auto text-[#060109] flex justify-center">
       <div className=" w-[95%] md:w-[50%] py-8 dark:bg-[#171517] bg-[white] rounded-md flex flex-col shadow-lg items-center">
         <p className='md:text-3xl text-xl py-3 text-[#4f1179] font-semibold'>Welcome Back</p>
         <form onSubmit={handleSubmit} className="w-[95%] md:w-[65%] mt-5 mx-auto flex flex-col gap-4">
@@ -65,7 +65,7 @@ const Login = () => {
               value={formData.username}
               onChange={handleChange}
               placeholder="Username"
-              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#4f1179]"
+              className="w-full px-4 focus:text-md text-md py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#4f1179]"
             />
           </div>
           <div className='flex flex-col gap-2'>
@@ -76,7 +76,7 @@ const Login = () => {
               value={formData.password}
               onChange={handleChange}
               placeholder="Password"
-              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#4f1179]"
+              className="w-full px-4 py-2 rounded-md focus:text-md text-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#4f1179]"
             />
           </div>
           <div className="error text-red-500">{error}</div>
