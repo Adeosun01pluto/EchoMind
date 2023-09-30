@@ -24,8 +24,10 @@ const Login = () => {
   const loginMutation = useMutation((formData) =>
     axios.post(`${BASE_URL}/auth/login`, formData)
   );
+
   const [loading, setLoading] = useState(false)
   const location = useLocation()
+
   const from = location.state?.from?.pathname || "/"
   const handleSubmit = async (e) => {
     setLoading(true)
@@ -49,9 +51,10 @@ const Login = () => {
       setError(error.response.data.message)
     }
   };
+
   return (
-    <div className="w-[100%] md:w-[90%] py-6 mx-auto text-[#060109] flex justify-center">
-      <div className=" w-[95%] md:w-[50%] py-8 dark:bg-[#171517] bg-[#f2e4fb] rounded-md flex flex-col shadow-lg items-center">
+    <div className="w-[100%] md:w-[90%] py-6 h-screen mx-auto text-[#060109] flex justify-center">
+      <div className=" w-[95%] md:w-[50%] py-8 dark:bg-[#171517] bg-[white] rounded-md flex flex-col shadow-lg items-center">
         <p className='md:text-3xl text-xl py-3 text-[#4f1179] font-semibold'>Welcome Back</p>
         <form onSubmit={handleSubmit} className="w-[95%] md:w-[65%] mt-5 mx-auto flex flex-col gap-4">
           <div className='flex flex-col gap-2'>

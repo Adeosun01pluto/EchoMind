@@ -31,27 +31,27 @@ const Navbar = () => {
   const menuList = [
     {
       to: '/',
-      icon: <AiOutlineHome color='white' size={22} />,
+      icon: <AiOutlineHome color='white' size={18} />,
       label: 'Home',
     },
     {
       to: '/orbits',
-      icon: <GiMoonOrbit color='white' size={22} />,
+      icon: <GiMoonOrbit color='white' size={18} />,
       label: 'Orbit',
     },
     {
       to: '/followings',
-      icon: <BsPeopleFill color='white' size={22} />,
+      icon: <BsPeopleFill color='white' size={18} />,
       label: 'Followings',
     },
     {
       to: '/questions',
-      icon: <BiMessageEdit color='white' size={22} />,
+      icon: <BiMessageEdit color='white' size={18} />,
       label: 'Question',
     },
     {
       to: '/gp',
-      icon:<BsCalculator color='white' size={22} />,
+      icon:<BsCalculator color='white' size={18} />,
       label: 'Gp',
     },
   ];
@@ -89,6 +89,7 @@ const Navbar = () => {
     },
   })
   )
+
   const handleCreateQuestion = async () => {
     try {
       await createQuestionMutation.mutateAsync(question);
@@ -104,6 +105,7 @@ const Navbar = () => {
       console.error(error);
     }
   };
+
   const createPostMutation = useMutation((content) =>
   axios.post(`${BASE_URL}/create_post`, content, {
     headers: {
@@ -111,6 +113,7 @@ const Navbar = () => {
     },
   })
   );
+
   const handleCreatePost = async () => {
     try {
       // Use the createPostMutation to create a new post
@@ -124,12 +127,15 @@ const Navbar = () => {
       console.error(error);
     }
   };
+
   const [theme, setTheme] = useState(null)
   useEffect(() => {
     if(window.matchMedia(("prefers-color-scheme : dark")).matches){
-      setTheme("dark")
+      const theme = localStorage.getItem('theme')
+      setTheme(theme)
     }else{
-      setTheme("light")
+      const theme = localStorage.getItem('theme')
+      setTheme(theme)
     }
   }, [])
   useEffect(() => {
@@ -141,10 +147,11 @@ const Navbar = () => {
     }
   }, [theme])
   const handleThemeSwitch = () =>{
+    setTheme(theme === "dark"? localStorage.setItem('theme', "light") : localStorage.setItem('theme', "dark"))
     setTheme(theme === "dark"? "light" : "dark")
   }
   return (
-    <nav className="w-full min-h-16 bg-white fixed md:p-2">
+    <nav className="w-full min-h-16 dark:bg-[#171517] bg-[white] fixed md:p-2">
       <div className='container mx-auto flex justify-between items-center'>
       <div className='text-2xl md:text-3xl dark:text-[#f2e4fb] text-[#060109] font-extrabold'>Demo</div>
             {/* Desktop Nav Menu */}
@@ -165,7 +172,7 @@ const Navbar = () => {
                 } px-3 py-1`}
               >
                 {menuItem.icon}
-                <span className='text-white text-sm'>{menuItem.label}</span>
+                <span className='text-white text-xs'>{menuItem.label}</span>
               </NavLink>
             ))}
             </ul>
