@@ -43,3 +43,24 @@ export const fetchQuestionsById = async (userId) => {
     throw Error (error.message);
   }
 };
+
+
+export const downVote = async (questionId, refetchQuestion) => {
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/question/${questionId}/downvote`,
+      {}, // Request body can be empty for liking
+      {
+        headers: {
+          "Authorization" : token,
+        },
+      }
+    );
+    console.log(response.data.question)
+    refetchQuestion()
+    return response.data;
+  } catch (error) {
+    console.log(error)
+    }
+};
+

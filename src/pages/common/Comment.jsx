@@ -124,21 +124,27 @@ function Comment({comment, getComment, postId}) {
         <div className="p-1 md:p-2 w-[100%] flex gap-2 md:gap-3 ">
             <Link to={`/profile/${comment.userId}`}> 
               <div className='w-10 h-10 rounded-full dark:text-[#f2e4fb] text-[#060109]'>
-                <img className="rounded-full w-full h-full object-cover" src={`${BASE_URL}/images/${profile?.profileImage}`} alt="" />
+                {profile?.profileImage ? 
+                    <img className="rounded-full w-full h-full object-cover" src={`${BASE_URL}/images/${profile?.profileImage}`} alt="" />
+                    :
+                    <img className="rounded-full w-full h-full object-cover" src={profile?.avatarData} alt />
+                }
               </div>
             </Link>
             <div className="w-full">
                 <div className="flex flex-col gap-2 ">
-                    <div className="flex gap-2 items-center">
-                        <span className="text-sm font-bold">{profile?.username}</span>
-                        <span className="text-red text-xs text-[#4f1179]">Follow</span>
-                        <span className="hover:underline text-sm">{formatDistanceToNow(Date.parse(comment.createdAt))}</span>
+                    <div className="flex flex-col">
+                      <div className='flex gap-1 items-center'>
+                        <span className="text-sm font-bold">{profile?.fullname}</span>
+                        <Link to={`/profile/${comment.userId}`} className="text-xs hover:underline dark:text-gray-300 text-gray-600 font-bold">@{profile?.username}</Link>
+                      </div>
+                      <span className="hover:underline text-xs text-gray-500">{formatDistanceToNow(Date.parse(comment.createdAt))}</span>
                     </div>
                     <div className="flex gap-2 items-center">
                         {comment.text}
                     </div>
                     {/* Post Actions */}
-                    <div className="flex items-center gap-6 ">
+                    <div className="flex items-center gap-6 text-[#060109]">
                         {/* Render like/unlike button based on liked status */}
                         <div className="flex items-center border-[1px] bg-gray-50 rounded-full">
                         <button
@@ -175,7 +181,7 @@ function Comment({comment, getComment, postId}) {
                           <TextareaAutosize
                             type="text"
                             value={reply} onChange={(e)=>setReply(e.target.value)}
-                            className="h-4 flex-grow p-2 rounded-md bg-white border-[1px]  text-sm focus:text-sm outline-none"
+                            className="h-4 flex-grow p-2 rounded-md bg-white text-[#060109] border-[1px]  text-sm focus:text-sm outline-none"
                             placeholder="Add a reply"
                             cacheMeasurements={true}
                             autoFocus

@@ -31,7 +31,11 @@ function Profile() {
         }
     };
     const { data, isLoading} = useQuery(['profile', userId], fetchProfile);
-    const { data: posts, isLoading: postStatus, refetch} = useQuery(['user_posts', userId], ()=>fetchPostsById(userId));
+    const { data: posts, isLoading: postStatus, refetch} = useQuery(['user_posts', userId], ()=>fetchPostsById(userId), 
+    {
+        onLoad: true
+    }
+    );
     const { data: questions, isLoading: questionStatus,refetch:refetchQuestion} = useQuery(['user_questions',userId], ()=>fetchQuestionsById(userId));
     const { data: followings, isLoading: followingsStatus} = useQuery(['followings', userId], ()=>getFollowings(userId));
     const { data: followers, isLoading: followersStatus} = useQuery(['followers', userId], ()=>getFollowers(userId));
@@ -165,11 +169,35 @@ function Profile() {
                 <div className="text-sm text-gray-500 hover:underline cursor-pointer">Write a description about yourself</div>
                 <div>
                     <div className="flex justify-between border-b-[1px]  border-gray-300">
-                        <Tabs value={tabValue} onChange={(e, newValue) => setTabValue(newValue)}>
-                            <Tab label="Posts" sx={{fontSize:12}} />
-                            <Tab label="Question" sx={{fontSize:12}} />
-                            <Tab label="Followings" sx={{fontSize:12}} />
-                            <Tab label="Followers" sx={{fontSize:12}} />
+                        <Tabs value={tabValue} onChange={(e, newValue) => setTabValue(newValue)} sx={{
+                        "& .MuiTabs-indicator": {
+                            backgroundColor: "#4f1179 !important",
+                        },
+                        }}>
+                            <Tab label="Posts" sx={{
+                                color: tabValue === 0 ? "#4f1179 !important" : "inherit",
+                                "&.Mui-selected": {
+                                color: "#4f1179 !important",
+                                },
+                            }} />
+                            <Tab label="Question" sx={{
+                                color: tabValue === 0 ? "#4f1179 !important" : "inherit",
+                                "&.Mui-selected": {
+                                color: "#4f1179 !important",
+                                },
+                            }} />
+                            <Tab label="Followings" sx={{
+                                color: tabValue === 0 ? "#4f1179 !important" : "inherit",
+                                "&.Mui-selected": {
+                                color: "#4f1179 !important",
+                                },
+                            }} />
+                            <Tab label="Followers" sx={{
+                                color: tabValue === 0 ? "#4f1179 !important" : "inherit",
+                                "&.Mui-selected": {
+                                color: "#4f1179 !important",
+                                },
+                            }} />
                         </Tabs>
                     </div>
                 </div>
@@ -319,7 +347,7 @@ function Profile() {
         </div>
         {/* Setting */}
         <Dialog open={openSetting} onClose={handleCloseSetting} fullWidth={true} maxWidth="sm" className="">
-                <DialogTitle className='p-2 text-lg text-blue-500'>Orbit Setting</DialogTitle>
+                <DialogTitle className='p-2 text-lg text-[#4f1179]'>Orbit Setting</DialogTitle>
                 <div className='w-full gap-2 flex'>
                     <div className='w-[95%] mx-auto flex flex-col gap-3'>
                         <div className="flex flex-col gap-2">
@@ -343,7 +371,7 @@ function Profile() {
                     </div>
                 </div>
                 <div className='flex justify-between items-center px-4 py-2'>
-                    <button onClick={handleSaveProfile} className='py-2 px-5 bg-emerald-700 text-white text-md rounded-lg'>Save</button>
+                    <button onClick={handleSaveProfile} className='py-2 px-5 bg-[#4f1179] text-white text-md rounded-lg'>Save</button>
                 </div>
         </Dialog>
     </div>

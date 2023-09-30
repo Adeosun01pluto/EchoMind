@@ -1,9 +1,10 @@
 import { useParams } from "react-router-dom"
+import TextareaAutosize from 'react-textarea-autosize';
 import { ThreeDots } from 'react-loader-spinner';
 import { AiFillAccountBook, AiFillDelete, AiFillSecurityScan, AiOutlineFileImage, } from 'react-icons/ai'
 import {  useMutation, useQuery } from 'react-query';
 import axios from 'axios';
-import {Avatar, Button, Dialog, DialogContent, DialogTitle, Tab, Tabs } from "@mui/material";
+import {Avatar, Button, Dialog, DialogContent, DialogTitle, Tab, Tabs, useMediaQuery } from "@mui/material";
 import { useEffect, useState } from "react";
 import { BsFillEmojiSmileFill, BsFillImageFill } from "react-icons/bs";
 import O_Feed from "./O_Feed";
@@ -54,9 +55,9 @@ function SingleOrbit() {
           console.log(error.message);
         }
     };
-    const { data: orbitPosts, refetch, isLoading: postsLoading} = useQuery(['orbit_posts', orbitId], ()=>fetchOrbitPosts(orbitId), 
+    const { data: orbitPosts, refetch, isLoading: postsLoading} = useQuery(['orbit_posts', orbitId], ()=>fetchOrbitPosts(orbitId),
     {
-      enabled:false
+      onLoad: true
     }
     );
     const handleCreateOrbitPost =async (e) =>{
@@ -161,6 +162,7 @@ function SingleOrbit() {
         console.error(error);
       }
     };
+    const isLargeScreen = useMediaQuery('(min-width: 800px)'); // Define your breakpoint here
     const handleUnFollow = async () => {
       try {
         await unFollowOrbit(orbitId, refetchOrbit);
@@ -183,13 +185,14 @@ function SingleOrbit() {
           />
       </div>
     )
+
   return (  
     <div className='w-[100%] min-h-[400vh]'>
     <div className={`w-[100%] pb-2 dark:bg-[#060109] bg-[#f2e4fb] flex flex-col md:gap-12`}>
       <div className='md:w-[90%] w-[95%] relative rounded-md h-[200px] md:h-[250px] mx-auto mb-6 md:mb-2'>
-        <img className="rounded-md w-full h-full object-cover" src={orbit.coverPhoto ? `${BASE_URL}/images/${orbit.coverPhoto} ` :  `/${orbit.tempCoverImage}.avif`} alt="" />
+        <img className="rounded-md w-full h-full object-cover" src={orbit?.coverPhoto ? `${BASE_URL}/images/${orbit?.coverPhoto} ` :  `/${orbit?.tempCoverImage}.avif`} alt="" />
         <div className="absolute bottom-[-20px] bg-white left-6 w-[130px]  rounded-md h-[100px] md:h-[130px]">
-          <img className="w-full rounded-xl h-full object-cover" src={orbit.iconImage ? `${BASE_URL}/images/${orbit.iconImage}` :  `/${orbit.tempIconImage}.avif`} alt="" />
+          <img className="w-full rounded-xl h-full object-cover" src={orbit?.iconImage ? `${BASE_URL}/images/${orbit?.iconImage}` :  `/${orbit?.tempIconImage}.avif`} alt="" />
         </div>
       </div>
       <div className='md:w-[90%] w-[95%] dark:bg-[#171517] bg-[#4f1179] mx-auto flex flex-col gap-2 my-2 rounded-md p-2 md:p-4'>
@@ -230,10 +233,30 @@ function SingleOrbit() {
       <div className="col-span-12 md:col-span-8 w-[100%] min-h-[600px]">
       {/* Tabs */}
         <div className="flex justify-between border-b-2 border-gray-300">
-          <Tabs value={tabValue} onChange={(e, newValue) => setTabValue(newValue)}>
-            <Tab label="Posts" onClick={refetch} sx={{fontSize:12}} />
-            <Tab label="About" sx={{fontSize:12}} />
-            <Tab label="Questions" sx={{fontSize:12}} />
+          <Tabs value={tabValue} onChange={(e, newValue) => setTabValue(newValue)} 
+          sx={{
+            "& .MuiTabs-indicator": {
+                backgroundColor: "#4f1179 !important",
+            },
+          }}>
+            <Tab label="Posts" onClick={refetch} sx={{
+              color: tabValue === 0 ? "#4f1179 !important" : "inherit",
+              "&.Mui-selected": {
+              color: "#4f1179 !important",
+              },
+            }} />
+            <Tab label="About" sx={{
+              color: tabValue === 0 ? "#4f1179 !important" : "inherit",
+              "&.Mui-selected": {
+              color: "#4f1179 !important",
+              },
+            }} />
+            <Tab label="Questions" sx={{
+              color: tabValue === 0 ? "#4f1179 !important" : "inherit",
+              "&.Mui-selected": {
+              color: "#4f1179 !important",
+              },
+            }} />
           </Tabs>
         </div>
         {userId === orbit?.admin ?
@@ -288,7 +311,7 @@ function SingleOrbit() {
             </div>      
           ) : null }
           {tabValue === 2 ?  (
-            <div className="bg-gray-50">
+            <div className="">
               {questions?.map((question, idx) => (
                 <O_Question key={idx} question={question} orbitId={orbitId} refetchQuestion={refetchQuestion}/>
               ))}
@@ -301,59 +324,103 @@ function SingleOrbit() {
       </div>
     </div>
     {/* Create Post or question */}
-    <Dialog open={open} onClose={handleClose} maxWidth="lg" fullWidth={true}>
-        <DialogTitle>
+    <Dialog open={open} onClose={handleClose} maxWidth={isLargeScreen ? 'sm' : 'lg'} fullWidth={true}> 
+        <div className='w-full flex'>
+          <button onClick={handleClose} className='px-2 py-1 font-bold'>X</button>
+        </div>
+        <div>
           <div className="flex justify-between border-b-2 border-gray-300">
-            <Tabs value={dialogTabValue} onChange={(e, newValue) => setDialogTabValue(newValue)}>
-              <Tab label="Add Question" />
-              <Tab label="Create Post" />
+            <Tabs value={dialogTabValue} onChange={(e, newValue) => setDialogTabValue(newValue)} sx={{
+              "& .MuiTabs-indicator": {
+                  backgroundColor: "#4f1179 !important",
+              },
+            }}>
+              <Tab label="Add Question" sx={{
+                color: tabValue === 0 ? "#4f1179 !important" : "inherit",
+                "&.Mui-selected": {
+                color: "#4f1179 !important",
+                },
+              }}  />
+              <Tab label="Create Post" sx={{
+                color: tabValue === 0 ? "#4f1179 !important" : "inherit",
+                "&.Mui-selected": {
+                color: "#4f1179 !important",
+                },
+              }}  />
             </Tabs>
           </div>
-        </DialogTitle>
+        </div>
         <DialogContent sx={{height:400}}>
           {dialogTabValue === 0 ? (
-            <div className='w-full h-full'>
+            <div className='w-full h-full flex flex-col'>
               <div className="mb-4 flex flex-col h-[90%]">
                 <label htmlFor="question" className="block text-gray-600 font-semibold mb-2">
                   Question
                 </label>
-                <textarea
-                  id="question"
-                  className="w-full p-2 flex-1 outline-none border-b-2 border-gray-300"
-                  placeholder="Start your question with 'What' 'how' etc"
-                  value={question}
-                  onChange={(e) => setQuestion(e.target.value)}
-                  required
+                <TextareaAutosize 
+                    required
+                    id="question"
+                    type="text"
+                    className="w-full p-2 flex-1 outline-none border-b-2 border-gray-300"
+                    placeholder="Start your question with 'What' 'how' etc"
+                    value={question}
+                    onChange={(e) => setQuestion(e.target.value)}
+                    cacheMeasurements={true}
+                    autoFocus
+                    style={{ resize: 'none' }} // Add this line to hide the resize handle
                 />
+
               </div>
-              <Button type="submit" onClick={handleCreateQuestion} variant="contained" color="primary">
+              <Button type="submit" onClick={handleCreateQuestion} variant="contained" color="primary" sx={{
+                background:"#4f1179",
+                  "&:hover": {
+                    backgroundColor: "#4f1179 !important",
+                    boxShadow: "none !important",
+                  },
+                  "&:active": {
+                    boxShadow: "none !important",
+                    backgroundColor: "#4f1179 !important",
+                  },
+                }}>
                 Add Question
               </Button>
-              <Button onClick={handleClose}>X</Button>
             </div>
           ) : (
-            <div className='w-full h-full'>
+            <div className='w-full h-full flex flex-col'>
               <div className="mb-4 flex flex-col h-[90%]">
-                <textarea
-                  id="content"
-                  className="w-full p-2 flex-1 outline-none border-b-2 border-gray-300"
-                  placeholder="Say Something"
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  required
+                <TextareaAutosize 
+                    required
+                    id="content"
+                    className="w-full p-2 flex-1 outline-none border-b-2 border-gray-300"
+                    placeholder="Say Something"
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    cacheMeasurements={true}
+                    autoFocus
+                    style={{ resize: 'none' }} // Add this line to hide the resize handle
                 />
+
               </div>
-              <Button type="submit" variant="contained" onClick={handleCreateOrbitPost} color="primary">
+              <Button type="submit" variant="contained" onClick={handleCreateOrbitPost} color="primary" sx={{
+                background:"#4f1179",
+                  "&:hover": {
+                    backgroundColor: "#4f1179 !important",
+                    boxShadow: "none !important",
+                  },
+                  "&:active": {
+                    boxShadow: "none !important",
+                    backgroundColor: "#4f1179 !important",
+                  },
+                }}>
                 Create Post
               </Button>
-              <Button onClick={handleClose}>X</Button>
             </div>
           )}
         </DialogContent>
     </Dialog>
 
     {/* Setting */}
-    <Dialog open={openSetting} onClose={handleCloseSetting} fullWidth={true} maxWidth="sm" className="">
+    <Dialog open={openSetting} onClose={handleCloseSetting} fullWidth={true} maxWidth={isLargeScreen ? 'sm' : 'lg'} className="">
             <DialogTitle className='p-2 text-lg text-blue-500'>Orbit Setting</DialogTitle>
             <div className='w-full gap-2 flex'>
                 <div className='w-[95%] mx-auto flex flex-col gap-3'>
@@ -401,7 +468,7 @@ function SingleOrbit() {
                     <input type="file" multiple id="image-upload" onChange={handleImageUpload} className="w-[0px]" />
                     <BsFillEmojiSmileFill size={25} color='gray' />
                 </div>
-                <button onClick={handleSaveSetting} className='py-2 px-5 bg-emerald-700 text-white text-md rounded-lg'>Save</button>
+                <button onClick={handleSaveSetting} className='py-2 px-5 bg-[#4f1179] text-white text-md rounded-lg'>Save</button>
             </div>
     </Dialog>
   </div>

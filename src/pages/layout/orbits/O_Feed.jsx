@@ -1,22 +1,24 @@
 import axios from 'axios';
+import TextareaAutosize from 'react-textarea-autosize';
 import { formatDistanceToNow } from 'date-fns'
 import { Link } from 'react-router-dom';
 import { BsFillArrowDownSquareFill, BsFillArrowUpSquareFill, BsSend} from 'react-icons/bs'
 import { FaRegComment, FaRetweet} from 'react-icons/fa'
 import { useEffect, useState } from 'react';
-import { Avatar } from '@mui/material';
-import { follow, getUserProfile, unfollow } from '../../../api/api';
+import {  getUserId, getUserProfile } from '../../../api/api';
 import Comment from '../../common/Comment';
 import { BASE_URL } from '../../../constants/constant';
 import { ThreeDots } from 'react-loader-spinner';
 
 function O_Feed({post, refetch}) {
+  const loggedInUserId = getUserId()
     const [profile, setProfile] = useState(''); // Initialize with an empty string
     const [text, setText] = useState(''); // Initialize with an empty string
     const [openComment, setOpenComment] = useState(false);
     const [comentStatus, setCommentStatus] = useState(false);
     const [comments, setComments] = useState([]);
-  
+    const [profilePic, setProfilePic] = useState(null); // Initialize with an empty string
+
   const handleClickOpen = (postId) => {
     getComment(postId)
     setOpenComment(!openComment);
@@ -157,39 +159,17 @@ function O_Feed({post, refetch}) {
   const getUserProfileHandler = async(userId) =>{
     try {
       const response = await getUserProfile(userId)
+      const res = await getUserProfile(loggedInUserId)
       setProfile(response) 
+      setProfilePic(res) 
     } catch (error) {
       console.log(error)
     }
   }
-  const handleFollow = async (followerId) => {
-    const postUserId = post.userId 
-    try {
-      await follow(followerId, getUserProfileHandler,  postUserId);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  
-  const handleUnFollow = async (followerId) => {
-    const postUserId = post.userId 
-
-    try {
-      await unfollow(followerId, getUserProfileHandler, postUserId);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
 //  fetch and set the username when the component mounts
   useEffect(() => {
-    getUserProfile(post.userId)
-      .then((result) => {
-        setProfile(result);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    getUserProfileHandler(post.userId)
   }, [post.userId]);
   
   return (
@@ -199,37 +179,36 @@ function O_Feed({post, refetch}) {
           <div className="w-[100%] flex gap-2 py-2 md:gap-3 ">
               <Link to={`/profile/${post.userId}`}> 
               <div className='w-10 h-10 rounded-full bg-black'>
-                <img className="rounded-full w-full h-full object-cover" src={`${BASE_URL}/images/${profile?.profileImage}`} alt="" />
+                {profile?.profileImage ? 
+                  <img className="rounded-full w-full h-full object-cover" src={`${BASE_URL}/images/${profile?.profileImage}`} alt="" />
+                  :
+                  <img className="rounded-full w-full h-full object-cover" src={profile?.avatarData} alt />
+                }
               </div>
               </Link>
               <div>
-                  <div className="flex gap-2 items-center">
-                      <span className="text-sm font-bold">{profile?.username}</span>
-                      {userId === post.userId ? null : 
-                      ( !profile?.followings?.includes(userId) ? 
-                      <span onClick={()=>handleFollow(post.userId)} className="dark:text-[#f2e4fb] text-[#8a1dd3] cursor-pointer text-xs">Follow</span>:
-                      <span onClick={()=>handleUnFollow(post.userId)} className="dark:text-[#f2e4fb] text-[#8a1dd3] cursor-pointer text-xs">unfollow</span>
-                      )
-                      }
+                  <div className='flex gap-1 items-center'>
+                      <span className="text-sm font-bold">{profile?.fullname}</span>
+                      <Link to={`/profile/${post.userId}`} className="text-xs hover:underline dark:text-gray-300 text-gray-600 font-bold">@{profile?.username}</Link>
                   </div>
                   <div className="flex gap-2 items-center">
-                      <span className='text-xs'>{formatDistanceToNow(Date.parse(post.createdAt))} ago</span>
-                  </div>
+                      <span className='text-xs text-gray-500'>{formatDistanceToNow(Date.parse(post.createdAt))} ago</span>
+                  </div>  
               </div>
           </div>
           {/*  */}
 
           {/* Post Content */}
-          <div className="dark:text-[#f2e4fb] text-[#060109] text-sm font-semibold md:text-lg py-1 px-2">{post?.content}</div>
+          <div className="p-1 md:p-2 dark:text-[#f2e4fb] text-[#060109] text-sm font-semibold md:text-lg py-1 px-2">{post?.content}</div>
           {/*  */}
 
           {/* Post Actions */}
           <div className="flex items-center gap-6">
             {/* Render like/unlike button based on liked status */}
-            <div className="flex items-center  bg-[#e3c5f7] text-[#060109] rounded-full">
+            <div className="flex items-center  bg-gray-50 text-[#060109] rounded-full">
               <button
                 onClick={() => handleLike(post?._id)}
-                className="p-1 px-2 border-r-2 border-gray-200 rounded-t-r-full flex items-center gap-2"
+                className="p-1 px-2 border-r-[1px] border-gray-200 rounded-t-r-full flex items-center gap-2"
               >
                 {
                   post?.upvotes.includes(userId) ?
@@ -252,8 +231,8 @@ function O_Feed({post, refetch}) {
             </div>
             {/* Render the tweet and untweet btn */}
             <div className='flex items-center gap-4'>
-              <button className='flex items-center gap-2'>
-                <FaRegComment onClick={()=>handleClickOpen(post._id)} />
+              <button onClick={()=>handleClickOpen(post._id)} className='flex items-center gap-2'>
+                <FaRegComment />
                 <span className='text-xs md:text-sm'>{post.comments.length}</span>
               </button>
               {
@@ -277,21 +256,33 @@ function O_Feed({post, refetch}) {
           {
             openComment? (
               <div className='mt-2 w-full min-h-16'>
-                <div className="mx-auto flex bg-gray-100   mb-2">
-                  <Avatar className='homeAvatar'/>
-                  <textarea
+                <div className="mx-auto flex p-2 items-center dark:bg-[#060109] dark:mx-1 bg-[#f2e4fb] gap-2">
+                  <Link to={`/profile/${post.userId}`}> 
+                    <div className='w-10 h-10 rounded-full bg-black'>
+                      {profilePic?.profileImage ? 
+                      <img className="rounded-full w-full h-full object-cover" src={`${BASE_URL}/images/${profilePic?.profileImage}`} alt="" />
+                      :
+                      <img className="rounded-full w-full h-full object-cover" src={profilePic?.avatarData} alt />
+                      }
+                    </div>
+                  </Link>
+                  <TextareaAutosize 
                     type="text"
                     value={text}
                     onChange={(e) => setText(e.target.value)}
-                    className="h-10 rounded-full w-[100%] p-2 bg-gray-100 text-sm outline-none"
+                    className="h-10 rounded-full w-[100%] p-2 text-[#060109] text-sm focus:text-sm outline-none"
                     placeholder="Add comment"
+                    cacheMeasurements={true}
+                    autoFocus
+                    style={{ resize: 'none' }} // Add this line to hide the resize handle
                   />
+
                   <BsSend
-                    className="text-blue-500 cursor-pointer"
+                    className="text-[#4f1179] cursor-pointer"
                     onClick={()=>createComment(post._id)}
                   />
                 </div>
-                <div className='bg-gray-100 p-2 rounded-md'>
+                <div className=''>
                   {comentStatus? 
                     <ThreeDots 
                     height="30" 

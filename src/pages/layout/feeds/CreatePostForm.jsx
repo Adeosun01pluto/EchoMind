@@ -111,14 +111,19 @@ const CreatePostForm = ({ onCreatePost, refetch, onCreateQuestion}) => {
                 <label htmlFor="question" className="block text-gray-600 font-semibold mb-2">
                   Question
                 </label>
-                <textarea
-                  id="question"
-                  className="w-full p-2 flex-1 outline-none"
-                  placeholder="Start your question with 'What' 'how' etc"
-                  value={question}
-                  onChange={(e) => setQuestion(e.target.value)}
-                  required
+                <TextareaAutosize 
+                    required
+                    id="question"
+                    type="text"
+                    placeholder="Start your question with 'What' 'how' etc"
+                    value={question}
+                    onChange={(e) => setQuestion(e.target.value)}
+                    className="w-full p-2 flex-1 outline-none"
+                    cacheMeasurements={true}
+                    autoFocus
+                    style={{ resize: 'none' }} // Add this line to hide the resize handle
                 />
+
               </div>
               <Button type="submit" sx={{
                 background:"#4f1179",

@@ -77,23 +77,29 @@ function Reply({ reply, commentId, getReplies }) {
   };
 
   return (
-    <div className="text-black flex pb-3 gap-3 my-1 ">
+    <div className="flex pb-3 gap-3 my-1 ">
       <Link to={`/profile/${reply.userId}`}>
         <div className='w-8 h-8 rounded-full bg-black'>
-          <img className="rounded-full w-full h-full object-cover" src={`${BASE_URL}/images/${profile?.profileImage}`} alt="" />
+        {profile?.profileImage ? 
+                    <img className="rounded-full w-full h-full object-cover" src={`${BASE_URL}/images/${profile?.profileImage}`} alt="" />
+                    :
+                    <img className="rounded-full w-full h-full object-cover" src={profile?.avatarData} alt />
+        }
         </div>
       </Link>
       <div className="flex flex-col gap-1 ">
-        <div className="flex gap-1 items-center">
-          <span className="text-sm font-bold">{profile?.username}</span>
-          <span className="text-red text-xs text-[#4f1179]">Follow</span>
-          <span className="hover:underline text-sm">{formatDistanceToNow(Date.parse(reply.createdAt))}</span>
+        <div className="flex flex-col">
+          <div className='flex gap-1 items-center'>
+                        <span className="text-sm font-bold">{profile?.fullname}</span>
+                        <Link to={`/profile/${reply.userId}`} className="text-xs hover:underline dark:text-gray-300 text-gray-600 font-bold">@{profile?.username}</Link>
+          </div>
+          <span className="hover:underline text-xs text-gray-500">{formatDistanceToNow(Date.parse(reply.createdAt))}</span>
         </div>
         <div className="">
           {reply.text}
         </div>
         {/* Post Actions */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-6 text-black">
           {/* Render like/unlike button based on liked status */}
           <div className="flex items-center bg-gray-100 border-2 border-gray-200 rounded-full">
             <button
