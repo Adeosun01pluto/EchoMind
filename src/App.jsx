@@ -56,10 +56,10 @@ function App() {
           <Route path="/" element={  <Feeds/> }  />
           <Route path="/questions" element={<Questions /> } />
           <Route path="/followings" element={<Followings /> } />
+          <Route path="/profile/:userId" element={<Profile /> } />
+          <Route path="/orbits" element={<Orbits /> } />
+          <Route path="/orbit/:orbitId" element={<SingleOrbit />} />
         </Route>
-        <Route path="/profile/:userId" element={<Profile /> } />
-        <Route path="/orbits" element={<Orbits /> } />
-        <Route path="/orbit/:orbitId" element={<SingleOrbit />} />
         <Route path="/gp" element={<Gp />} />
         <Route path="/practice" element={<Practice />}>
           <Route path="" element={<Level />} />

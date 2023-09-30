@@ -27,7 +27,6 @@ const Login = () => {
   const [loading, setLoading] = useState(false)
   const location = useLocation()
   const from = location.state?.from?.pathname || "/"
-  console.log(location)
   const handleSubmit = async (e) => {
     setLoading(true)
     e.preventDefault();

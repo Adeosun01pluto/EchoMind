@@ -7,8 +7,10 @@ import { fetchQuestions } from "../../../api/question/question";
 import "../../../App.css"
 import RightBar from "../../common/RightBar";
 function Questions() {
-  const { data: questions, isLoading:questionStatus, refetch:refetchQuestion} = useQuery('questions', fetchQuestions, {
-    onLoad : true
+  const { data: questions, isLoading:questionStatus, refetch:refetchQuestion} = useQuery({
+    queryKey: "questions",
+    queryFn : fetchQuestions, 
+    onLoad : true,
   });
   if (questionStatus) {
     return (
