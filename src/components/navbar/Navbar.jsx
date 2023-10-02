@@ -3,7 +3,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import { useEffect, useState } from 'react';
 import { AiOutlineHome, AiOutlineLogout} from 'react-icons/ai'
 import { BsCalculator, BsCloudMoonFill, BsFillSunFill, BsPeopleFill } from 'react-icons/bs';
-import {  NavLink, useNavigate,  } from 'react-router-dom';
+import {  NavLink, useNavigate,   } from 'react-router-dom';
 import { BiMessageEdit } from 'react-icons/bi'
 import { GiMoonOrbit } from 'react-icons/gi'
 import { FiSettings } from 'react-icons/fi'
@@ -67,6 +67,7 @@ const Navbar = () => {
   const handleLinkClick = (link) => {
     setActiveLink(link);
   };
+  const [searchKey, setSearchKey] = useState('');
   const [content, setContent] = useState('');
   const [question, setQuestion] = useState('');
   const [open, setOpen] = useState(false);
@@ -150,32 +151,54 @@ const Navbar = () => {
     setTheme(theme === "dark"? localStorage.setItem('theme', "light") : localStorage.setItem('theme', "dark"))
     setTheme(theme === "dark"? "light" : "dark")
   }
+  const handleSearch = (e) => {
+    if (e.key === 'Enter' && searchKey.trim() !== '') {
+      // Navigate to /search with the searchKey as a query parameter
+      navigate(`/search?q=${encodeURIComponent(searchKey)}`);
+      setSearchKey("");
+    }
+  };
+
   return (
     <nav className="w-full min-h-16 z-[9999999] dark:bg-[#171517] bg-[white] fixed md:p-2">
       <div className='container mx-auto flex justify-between items-center'>
-      <div className='text-2xl md:text-3xl dark:text-[#f2e4fb] text-[#060109] font-extrabold'>Demo</div>
+        <div className='md:text-2xl dark:text-[#f2e4fb] text-[#060109] font-extrabold'>Demo</div>
             {/* Desktop Nav Menu */}
-            <ul className='items-center bg-[#4f1179] rounded-xl navMenu'>
-            {menuList.map((menuItem, index) => (
-              <NavLink
-                key={menuItem.to}
-                to={menuItem.to}
-                onClick={() => handleLinkClick(menuItem.to)}
-                className={`flex flex-col items-center text-emerald-900 ${
-                  activeLink === menuItem.to ? 'bg-[#8a1dd3]' : ''
-                } ${
-                  index === 0
-                    ? 'rounded-tl-xl rounded-bl-xl'
-                    : index === menuList.length - 1
-                    ? 'rounded-tr-xl rounded-br-xl'
-                    : ''
-                } px-3 py-1`}
-              >
-                {menuItem.icon}
-                <span className='text-white text-xs'>{menuItem.label}</span>
-              </NavLink>
-            ))}
-            </ul>
+            <div className='flex items-center gap-2'>
+              <ul className='items-center bg-[#4f1179] rounded-xl navMenu'>
+              {menuList.map((menuItem, index) => (
+                <NavLink
+                  key={menuItem.to}
+                  to={menuItem.to}
+                  onClick={() => handleLinkClick(menuItem.to)}
+                  className={`flex flex-col items-center text-emerald-900 ${
+                    activeLink === menuItem.to ? 'bg-[#8a1dd3]' : ''
+                  } ${
+                    index === 0
+                      ? 'rounded-tl-xl rounded-bl-xl'
+                      : index === menuList.length - 1
+                      ? 'rounded-tr-xl rounded-br-xl'
+                      : ''
+                  } px-3 py-1`}
+                >
+                  {menuItem.icon}
+                  <span className='text-white text-xs'>{menuItem.label}</span>
+                </NavLink>
+              ))}
+              </ul>
+              {/* Search bar */}
+              <div className='px-3 md:px-0'>
+                <input
+                  type="text"
+                  value={searchKey}
+                  onChange={(e) => setSearchKey(e.target.value)}
+                  onKeyPress={handleSearch}
+                  className='border-[1px] lg:w-full md:w-[80%] border-gray-100 rounded-sm px-2 py-1 md:px-3 md:py-2 text-sm'
+                  placeholder='Search'
+                />
+              </div>
+            </div>
+
             <div className='navMenu gap-1 items-center'>
               <button onClick={handleThemeSwitch} className=' '>
                 {

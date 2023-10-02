@@ -13,6 +13,13 @@ import { ThreeDots } from 'react-loader-spinner';
 import { fetchOrbitName } from '../../../api/orbit/orbit';
 
 function Feed({post, refetch}) {
+  // const queryClient = useQueryClient();
+
+  // // Function to trigger the refetch
+  // const handleRefetch = () => {
+  //   // Replace 'posts' with the actual query key you want to refetch
+  //   queryClient.invalidateQueries('posts');
+  // };
   const orbitId = post?.orbitId
   const loggedInUserId = getUserId()
   const [loading, setLoading] = useState(false); // Initialize with an empty string
@@ -132,7 +139,7 @@ function Feed({post, refetch}) {
   }, [post.userId]);
   return (
     <div>
-      <div  className="dark:bg-[#171517] bg-[white] shadow-md sm:rounded-sm my-2">
+      <div  className="dark:bg-[#171517] bg-[white] shadow-md border-[1px]">
           {/* Post Header */}
           
           {

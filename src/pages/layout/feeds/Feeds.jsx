@@ -12,14 +12,20 @@ import { Link, useNavigate } from 'react-router-dom';
 import SideBar from '../../common/SideBar';
 import { fetchQuestions } from '../../../api/question/question';
 import RightBar from '../../common/RightBar';
+import { getUserId } from '../../../api/api';
 
 const Feeds = () => {
+  const token = localStorage.getItem('token');
+  const userId = getUserId();
+
   const navigate = useNavigate()
   const { refetch:refetchQuestion} = useQuery('questions', fetchQuestions, {
-    onLoad: true, 
+    onLoad: true,
+    enabled: Boolean(token && userId), // Enable the query only if both token and userId are available
   });
   const { data: posts, isLoading, refetch, isError, error} = useQuery('posts', fetchPosts, {
-    onLoad : true
+    onLoad : true,
+    enabled: Boolean(token && userId), // Enable the query only if both token and userId are available
   }
   );
   const createQuestionMutation = useMutation((newQuestion) =>
@@ -56,6 +62,7 @@ const Feeds = () => {
       console.error(error);
     }
   };
+  console.log(isError, error?.message)
   if (isLoading) {
     return (
       <div className="w-full items-center justify-center flex">
@@ -72,7 +79,8 @@ const Feeds = () => {
       </div>
     )
   }
-  if(error?.message ){
+  if(!error?.message && !token ){
+    window.location.reload();
     return (
       <div className="w-full items-center justify-center flex">
         <Link to="/login" >Unauthorized Login</Link>

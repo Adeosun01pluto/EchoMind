@@ -18,6 +18,8 @@ import NotFound from './pages/layout/nofound/NotFound';
 import Level from './pages/layout/practice/Level';
 // import { getUserId } from './api/api';
 import RequireAuth from './pages/RequireAuth';
+import Chat from './pages/layout/chat/Chat';
+import Results from './pages/layout/search/Result';
 // import ChatArea from './pages/layout/Chat/ChatArea';
 // import { getUserId } from './api/api';
 
@@ -58,6 +60,8 @@ function App() {
           <Route path="/profile/:userId" element={<Profile /> } />
           <Route path="/orbits" element={<Orbits /> } />
           <Route path="/orbit/:orbitId" element={<SingleOrbit />} />
+          <Route path="/chat" element={<Chat />} />
+          <Route path="/:searchKey" element={<Results/>} />
         </Route>
         <Route path="/gp" element={<Gp />} />
         <Route path="/practice" element={<Practice />}>
