@@ -151,7 +151,7 @@ const Navbar = () => {
     setTheme(theme === "dark"? "light" : "dark")
   }
   return (
-    <nav className="w-full min-h-16 dark:bg-[#171517] bg-[white] fixed md:p-2">
+    <nav className="w-full min-h-16 z-[9999999] dark:bg-[#171517] bg-[white] fixed md:p-2">
       <div className='container mx-auto flex justify-between items-center'>
       <div className='text-2xl md:text-3xl dark:text-[#f2e4fb] text-[#060109] font-extrabold'>Demo</div>
             {/* Desktop Nav Menu */}

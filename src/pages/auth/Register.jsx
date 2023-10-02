@@ -5,6 +5,7 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../../constants/constant';
 import { ThreeDots } from 'react-loader-spinner';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 
 const Register = () => {
@@ -16,6 +17,11 @@ const Register = () => {
     password: '',
     confirmPassword: '',
   });
+  const [showPassword, setShowPassword] = useState(false);
+  
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
   const [error, setError] = useState(''); // Initialize error state
   const [suggestedUsername, setSuggestedUsername] = useState(''); // Initialize error state
   const handleChange = (e) => {
@@ -36,7 +42,8 @@ const Register = () => {
     e.preventDefault();
     // Generate the avatar using DiceBear
     const genderParam = formData.gender === 'female' ? 'female' : 'male';
-    const avatarData = `https://avatars.dicebear.com/api/${genderParam}/${formData.username}.svg`;
+    const trimmedUsername = formData.username.trim().toLowerCase();
+    const avatarData = `https://avatars.dicebear.com/api/${genderParam}/${trimmedUsername}.svg`;
     try {
       const response = await registerMutation.mutateAsync({
         ...formData,
@@ -63,6 +70,7 @@ const Register = () => {
             <label className="dark:text-white text-[#4f1179] text-md font-semibold">Full Name</label>
             <input
               type="text"
+              required
               name="fullname"
               value={formData.fullname}
               onChange={handleChange}
@@ -74,6 +82,7 @@ const Register = () => {
             <label className="dark:text-white text-[#4f1179] text-md font-semibold">Email</label>
             <input
               type="text"
+              required
               className="w-full dark:border-0 border-2 px-4 py-2 rounded-md text-md focus:text-md focus:outline-none dark:bg-[#000] dark:text-white bg-[white] focus:ring-2 focus:ring-[#4f1179]"
               name="email"
               value={formData.email}
@@ -85,6 +94,7 @@ const Register = () => {
             <label className="dark:text-white text-[#4f1179] text-md font-semibold">Username</label>
             <input
               type="text"
+              required
               className="w-full dark:border-0 border-2 px-4 py-2 rounded-md text-md focus:text-md focus:outline-none dark:bg-[#000] dark:text-white bg-[white] focus:ring-2 focus:ring-[#4f1179]"
               name="username"
               placeholder="Username"
@@ -106,26 +116,48 @@ const Register = () => {
             </select>
           </div>
           <div className="flex flex-col gap-1">
-            <label className="dark:text-white text-[#4f1179] text-md font-semibold">Password</label>
-            <input
-              type="password"
-              className="w-full dark:border-0 border-2 px-4 py-2 rounded-md text-md focus:text-md focus:outline-none dark:bg-[#000] dark:text-white bg-[white] focus:ring-2 focus:ring-[#4f1179]"
-              name="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleChange}
-            />
+            <label className="dark:text-white text-[#4f1179] text-md font-semibold">
+              {/* {showPassword ? 'Hide Password' : 'Show Password'} */}
+              Password
+            </label>
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                className="w-full dark:border-0 border-2 px-4 py-2 rounded-md text-md focus:text-md focus:outline-none dark:bg-[#000] dark:text-white bg-[white] focus:ring-2 focus:ring-[#4f1179]"
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+              />
+              <div
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                onClick={togglePasswordVisibility}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </div>
+            </div>
           </div>
           <div className="flex flex-col gap-1">
-            <label className="dark:text-white text-[#4f1179] text-md font-semibold">Confirm Password</label>
-            <input
-              type="password"
-              className="w-full dark:border-0 border-2 px-4 py-2 rounded-md text-md focus:text-md focus:outline-none dark:bg-[#000] dark:text-white bg-[white] focus:ring-2 focus:ring-[#4f1179]"
-              name="confirmPassword"
-              placeholder="Confirm Password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-            />
+            <label className="dark:text-white text-[#4f1179] text-md font-semibold">
+              {/* {showPassword ? 'Hide Password' : 'Show Password'} */}
+              Confirm Password
+            </label>
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                className="w-full dark:border-0 border-2 px-4 py-2 rounded-md text-md focus:text-md focus:outline-none dark:bg-[#000] dark:text-white bg-[white] focus:ring-2 focus:ring-[#4f1179]"
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+              />
+              <div
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                onClick={togglePasswordVisibility}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </div>
+            </div>
           </div>
           <div className="text-red-500 text-sm text-center">{error} </div>
           {!suggestedUsername? null :

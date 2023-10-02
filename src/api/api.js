@@ -38,7 +38,7 @@ export const getUserProfile = async (userId) => {
     }
 };
 
-export const follow = async (followerId, refetch) => {
+export const follow = async (followerId, refetchProfile) => {
   try {
       const response = await axios.get(`${BASE_URL}/auth/follow/${followerId}`,
       {
@@ -47,14 +47,14 @@ export const follow = async (followerId, refetch) => {
           },
         }
       );
-      refetch()
+      refetchProfile()
       return response.data;
     } catch (error) {
      console.log(error)
     }
 };
 
-export const unfollow = async (followerId, refetch) => {
+export const unfollow = async (followerId, refetchProfile) => {
   try {
       const response = await axios.get(`${BASE_URL}/auth/un_follow/${followerId}`,
       {
@@ -63,7 +63,7 @@ export const unfollow = async (followerId, refetch) => {
           },
         }
       );
-      refetch()
+      refetchProfile()
       return response.data;
     } catch (error) {
       console.log(error)

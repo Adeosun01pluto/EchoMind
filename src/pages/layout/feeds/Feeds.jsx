@@ -72,7 +72,7 @@ const Feeds = () => {
       </div>
     )
   }
-  if(error?.message){
+  if(error?.message ){
     return (
       <div className="w-full items-center justify-center flex">
         <Link to="/login" >Unauthorized Login</Link>
@@ -86,6 +86,7 @@ const Feeds = () => {
       </div>
     )
   }
+  console.log(isError, error)
   return (
     <div className="w-full dark:text-[#f2e4fb] text-[#060109] gap-2 md:gap-4  mx-auto p-2 md:p-4 flex flex-col md:flex-row">
       {/* <SideBar /> */}

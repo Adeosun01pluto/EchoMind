@@ -2,6 +2,14 @@ import { Link } from 'react-router-dom'
 import { BASE_URL } from '../../../constants/constant'
 
 function Following({following}) {
+    const description = following?.description;
+    const words = description.split(' ');
+  
+    const maxWords = 9;
+    const truncatedDescription = words.slice(0, maxWords).join(' ');
+  
+    const displayDescription = words.length > maxWords ? `${truncatedDescription} ...` : description;
+  
    return (
     <Link to={`/orbit/${following?._id}`} className=''>
         <div className='py-2 dark:bg-[#171517] shadow-lg bg-gray-50 px-3 my-1 rounded-md'>
@@ -14,7 +22,7 @@ function Following({following}) {
                     <span className="text-xs">{following?.followers?.length} followers</span>
                 </div>
                 <div className="flex gap-2 items-center">
-                    <span className="text-sm font-semibold">{following?.description}</span>
+                    <span className="text-sm font-semibold">{displayDescription}</span>
                 </div>
             </div>
         </div>

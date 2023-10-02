@@ -3,7 +3,7 @@ import { useState } from "react";
 import {  useQuery } from 'react-query';
 import axios from 'axios';
 import Orbit from "./Orbit";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ThreeDots } from "react-loader-spinner";
 import SideBar from "../../common/SideBar";
 import { BASE_URL } from "../../../constants/constant";
@@ -24,8 +24,8 @@ function getRandomHexColor() {
 
 function Orbits() {
   const isLargeScreen = useMediaQuery('(min-width: 800px)'); // Define your breakpoint here
-  const [open, setOpen] = useState(false);
-  const [name, setName] = useState(false);
+  const [open, setOpen] = useState("");
+  const [name, setName] = useState("");
   const [description, setDescription] = useState(false);
   const navigate = useNavigate()
   const handleClickOpen = () => {
@@ -48,7 +48,7 @@ function Orbits() {
       console.log(error.message);
     }
   };
-  const { data, isLoading, refetch} = useQuery('orbits', fetchOrbits);
+  const { data, isLoading, refetch, error , isError} = useQuery('orbits', fetchOrbits);
   const handleCreateOrbit = async (e) => {
     e.preventDefault()
     try {
@@ -88,6 +88,20 @@ function Orbits() {
           />
     </div>
   )
+  if(error?.message){
+    return (
+      <div className="w-full items-center justify-center flex">
+        <Link to="/login" >Unauthorized Login</Link>
+      </div>
+    )
+  }
+  if (isError) {
+    return (
+      <div className="w-full items-center justify-center flex">
+        An Error Occurred
+      </div>
+    )
+  }
   return (
     <div className="w-full dark:text-[#f2e4fb] text-[#060109] gap-2 md:gap-4  mx-auto p-2 md:p-4 flex flex-col md:flex-row">
       <div className="md:w-2/12 fixed hidden md:block"> {/* Sidebar */}

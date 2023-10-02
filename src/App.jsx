@@ -16,7 +16,7 @@ import Courses from './pages/layout/practice/Courses';
 import P_Screen from './pages/layout/practice/P_Screen';
 import NotFound from './pages/layout/nofound/NotFound';
 import Level from './pages/layout/practice/Level';
-import { getUserId } from './api/api';
+// import { getUserId } from './api/api';
 import RequireAuth from './pages/RequireAuth';
 // import ChatArea from './pages/layout/Chat/ChatArea';
 // import { getUserId } from './api/api';
@@ -41,9 +41,8 @@ import RequireAuth from './pages/RequireAuth';
 // accent : #cd98f1 
 
 function App() {
-  const token = localStorage.getItem('token');
-  const userId = getUserId()
-  console.log(token , userId)
+  // const token = localStorage.getItem('token');
+  // const userId = getUserId()
   return (
     <div className='w-full min-h-screen dark:text-[#f2e4fb] text-[#060109] dark:bg-[#060109] bg-[#f3f3f3] '>
       <Navbar/>

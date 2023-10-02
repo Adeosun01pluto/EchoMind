@@ -318,7 +318,7 @@ function SingleOrbit() {
             </div>
           ) : null }
       </div>
-      <div className="bg-emerald-700 spaceYouMayLike md:col-span-4 w-[100%] h-[100vh] p-1">
+      <div className="bg-[#4f1179] spaceYouMayLike md:col-span-4 w-[100%] min-h-[100vh] p-1">
         <div className="w-[100%] bg-white h-[80px]"></div>
         <div className="w-[100%] bg-white h-[600px] my-2"></div>
       </div>
