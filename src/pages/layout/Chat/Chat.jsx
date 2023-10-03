@@ -122,7 +122,7 @@ const Chat = () => {
     };
   
     if (currentChat !== null) fetchMessages();
-  }, [currentChat]);
+  }, [receiverId]);
 
   const combinedMessage = [ ...messages,...messageList]
   
