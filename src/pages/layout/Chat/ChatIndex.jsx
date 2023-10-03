@@ -9,7 +9,7 @@ import Conversation from './Conversation';
 // import ChatBox from './ChatBox';
 
 
-const Chat = () => {
+const ChatIndex = () => {
     const navigate = useNavigate()
     const socket = useRef();
     const [messageList, setMessageList] = useState([]);
@@ -212,4 +212,4 @@ const Chat = () => {
   );
 };
 
-export default Chat;
+export default ChatIndex;
