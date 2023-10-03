@@ -54,6 +54,7 @@ const Feeds = () => {
 
   const handleCreatePost = async (newPost) => {
     try {
+      console.log(newPost)
       // Use the createPostMutation to create a new post
       await createPostMutation.mutateAsync(newPost);
       // Refetch the list of posts after creating a new one
@@ -62,7 +63,6 @@ const Feeds = () => {
       console.error(error);
     }
   };
-  console.log(isError, error?.message)
   if (isLoading) {
     return (
       <div className="w-full items-center justify-center flex">
@@ -94,14 +94,13 @@ const Feeds = () => {
       </div>
     )
   }
-  console.log(isError, error)
   return (
     <div className="w-full dark:text-[#f2e4fb] text-[#060109] gap-2 md:gap-4  mx-auto p-2 md:p-4 flex flex-col md:flex-row">
       {/* <SideBar /> */}
       <div className="md:w-2/12 fixed hidden md:block"> {/* Sidebar */}
         <SideBar />
       </div>
-      <div className='main_bar md:w-6/12 w-full'>
+      <div className='main_bar md:w-5/12 w-full'>
         {/* CreatePostForm component for creating a new post */}
         <CreatePostForm onCreatePost={handleCreatePost} onCreateQuestion={handleCreateQuestion} refetch={refetch} />
         {posts?.map((post, idx) => (

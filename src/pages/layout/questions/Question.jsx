@@ -73,9 +73,11 @@ function Question({refetchQuestion, question}) {
   }, [orbitId]);
   console.log(orbitData)
   return (
-    <div className=" my-1 rounded-md dark:bg-[#171517] bg-[#f2e4fb] pt-2 md:pt-3">
-      {/*  */}
-      <div className="font-semibold px-2 hover:underline cursor-pointer sm:text-lg">{question?.question}</div>
+    // dark:bg-[#171517] bg-[#f2e4fb]
+    <div className="border-[1px] bg-white pt-2 md:pt-3">
+      {/* Content */}
+      {/* <div className="font-semibold px-2 hover:underline cursor-pointer sm:text-lg">{question?.question}</div> */}
+      <div className="px-2 hover:underline cursor-pointer" dangerouslySetInnerHTML={{ __html: question?.question }} />
       {/*  */}
       {statusAnswer? 
       <ThreeDots 

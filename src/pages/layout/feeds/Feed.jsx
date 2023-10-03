@@ -196,7 +196,14 @@ function Feed({post, refetch}) {
           }
           
           {/* Post Content */}
-          <div className="p-1 md:p-2 dark:text-[#f2e4fb] text-[#060109] text-sm font-semibold md:text-lg py-1 px-2">{post?.content}</div>
+          {/* <div className="p-1 md:p-2 dark:text-[#f2e4fb] text-[#060109] text-sm font-semibold md:text-lg py-1 px-2">{post?.content}</div> */}
+          <div>
+            <div className="p-1 md:p-2 dark:text-[#f2e4fb] text-[#060109] text-sm font-semibold py-1 px-2" dangerouslySetInnerHTML={{ __html: post?.content }} />
+            {post?.photos.map((photo, idx)=>(
+              <img src={`${BASE_URL}/images/${photo}`} alt="" key={idx}/>
+            ))}
+          </div>
+
           {/*  */}
           {/* Post Actions */}
           <div className="p-1 md:p-2 flex items-center gap-6">

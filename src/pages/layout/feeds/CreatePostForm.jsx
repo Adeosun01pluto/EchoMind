@@ -1,180 +1,98 @@
 // CreatePostForm.js
-import { useEffect, useState } from 'react';
-import TextareaAutosize from 'react-textarea-autosize';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import { Button, Tab, Tabs, useMediaQuery } from '@mui/material';
-import { getUserId, getUserProfile } from '../../../api/api';
-import { Link } from 'react-router-dom';
-import { BASE_URL } from '../../../constants/constant';
+import { useRef, useState } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import { AiFillPicture, AiOutlineSend } from 'react-icons/ai';
+import {  MdOutlineCancel } from 'react-icons/md';
 
-const CreatePostForm = ({ onCreatePost, refetch, onCreateQuestion}) => {
-  const [content, setContent] = useState('');
-  const [question, setQuestion] = useState('');
-  const [open, setOpen] = useState(false);
-  const [tabValue, setTabValue] = useState(0);
-  const [profilePic, setProfilePic] = useState(null); // Initialize with an empty string
-  const loggedInUserId = getUserId()
-  const handleClickOpen = () => {
-    setOpen(true);
+
+const CreatePostForm = ({ onCreatePost, refetch}) => {
+  const [value, setValue] = useState('');
+  const [photos, setPhotos] = useState(null);
+  const [showButton, setShowButton] = useState(false);
+  const [filenameArray, setFilenameArray] = useState(null);
+  const handlePhoto = (event) => {
+    const selectedPhotos = event.target.files;
+    setPhotos(selectedPhotos)
+    // Extract filenames from the selected photos and create a list
+    const filenamesList = Array.from(selectedPhotos).map((photo) => photo.name);
+    // Create a string containing the list of filenames
+    setFilenameArray(filenamesList)
   };
-
-  const handleClose = () => {
-    setOpen(false);
+  const handleDeletePhoto = (file) => {
+    console.log(photos)
+    // Remove the photo and filename where item.name === file
+    const updatedPhotos = Array.from(photos).filter((item) => item.name !== file);
+    setPhotos(updatedPhotos);
   };
-
   const handleCreatePost = (e) => {
     e.preventDefault();
-    // Create a new post object with the title and content
-    const newPost = { content };
-    // Call the onCreatePost function passed from the parent component
-    onCreatePost(newPost);
-    // Clear the form inputs
-    refetch()
-    setContent('');
-    setOpen(false);
-  };
-  const handleCreateQuestion = (e) => {
-    e.preventDefault();
-    // Create a new post object with the title and content
-    const newQuestion = { question };
-    // Call the onCreatePost function passed from the parent component
-    onCreateQuestion(newQuestion);
-    // Clear the form inputs
-    refetch()
-    setContent('');
-    setOpen(false);
-  };
-  const isLargeScreen = useMediaQuery('(min-width: 800px)'); // Define your breakpoint here
-
-  const getUserProfileHandler = async(loggedInUserId) =>{
-    try {
-      const res = await getUserProfile(loggedInUserId)
-      setProfilePic(res) 
-    } catch (error) {
-      console.log(error)
+    const formData = new FormData();
+    formData.append('content', value);
+    // Assuming 'photos' is an array of File objects
+    for (let i = 0; i < photos.length; i++) {
+      formData.append('images', photos[i]);
     }
-  }
-   // Fetch and set the username when the component mounts
-  useEffect(() => {
-    getUserProfileHandler(loggedInUserId)
-  }, [loggedInUserId]);
+    // Call the onCreatePost function passed from the parent component
+    onCreatePost(formData);
+    // Clear the form inputs
+    refetch()
+    setValue("")
+    setShowButton(false)
+  };
+  const handleEditorChange = (content) => {
+    setValue(content);
+    setShowButton(!!content); // Show the button if content is not empty
+  };
+  const modules = {
+    toolbar: [
+      [{ 'header': '1' }, { 'header': '2' }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+      ['link', 'image'],
+    ],
+  };
+  const formats = [
+    'header',
+    'bold', 'italic', 'underline', 'strike',
+    'list', 'bullet',
+    'link', 'image',
+  ];
+  const fileInputRef = useRef();
+
   return (
     <div>
-      <div>
-        <div onClick={handleClickOpen} className=" dark:border-0 border-2  mx-auto shadow-lg dark:bg-[#171517] bg-[#f3f3f3] rounded-sm p-2 mb-2">
-          <div className="flex gap-2">
-            <Link to={`/profile/${loggedInUserId}`}> 
-              <div className='w-9 h-9 rounded-full bg-black'>
-                    {profilePic?.profileImage ? 
-                    <img className="rounded-full w-full h-full object-cover" src={`${BASE_URL}/images/${profilePic?.profileImage}`} alt="" />
-                    :
-                    <img className="rounded-full w-full h-full object-cover" src={profilePic?.avatarData} alt />
-                    }
-              </div>
-            </Link>
-            <input type="text" className="rounded-md w-[100%] p-2 dark:bg-[#171517] bg-[#f3f3f3] focus:text-md text-md outline-none " placeholder="What do you wanna ask or share?"/>
-          </div>
-        </div>
-      </div>
-
-      <Dialog open={open} sx={{color:"#060109", minHeight:400}} onClose={handleClose} maxWidth={isLargeScreen ? 'sm' : 'lg'} fullWidth={true}>
-        <div className='w-full flex'>
-          <button onClick={handleClose} className='px-2 py-1 font-bold'>X</button>
-        </div>
-        <div>
-          <div className="flex justify-between border-b-2 border-[#8a1dd3]">
-            <Tabs value={tabValue} onChange={(e, newValue) => setTabValue(newValue)} sx={{
-              "& .MuiTabs-indicator": {
-                backgroundColor: "#4f1179 !important",
-              },
-            }}>
-              <Tab label="Create Post" sx={{
-                color: tabValue === 0 ? "#4f1179 !important" : "inherit",
-                "&.Mui-selected": {
-                  color: "#4f1179 !important",
-                },
-              }} />
-              <Tab label="Add Question" sx={{
-                color: tabValue === 0 ? "#4f1179 !important" : "inherit",
-                "&.Mui-selected": {
-                  color: "#4f1179 !important",
-                },
-              }} />
-            </Tabs>
-          </div>
-        </div>
-        <DialogContent sx={{minHeight:300}}>
-          {tabValue === 1 ? (
-            <div className='w-full h-full flex flex-col'>
-              <div className="mb-4 flex flex-col min-h-[300px]">
-                <label htmlFor="question" className="block text-gray-600 font-semibold mb-2">
-                  Question
-                </label>
-                <TextareaAutosize 
-                    required
-                    id="question"
-                    type="text"
-                    placeholder="Start your question with 'What' 'how' etc"
-                    value={question}
-                    onChange={(e) => setQuestion(e.target.value)}
-                    className="w-full p-2 flex-1 outline-none"
-                    cacheMeasurements={true}
-                    autoFocus
-                    style={{ resize: 'none' }} // Add this line to hide the resize handle
+      <div className='relative mb-2'>
+          <ReactQuill theme="snow" style={{border:"2px solid gray", background:"white", color:"black"}} placeholder='What do you wanna share?' value={value} onChange={handleEditorChange} modules={modules}
+          formats={formats} />
+          {showButton && (
+            <div className='flex gap-2 absolute right-0 bottom-[0px] '>
+              
+              <label>
+                <input
+                  type="file"
+                  className=""
+                  accept="image/*"
+                  multiple
+                  style={{display:"none"}}
+                  ref={fileInputRef} // Create a ref for the input element
+                  onChange={handlePhoto}
                 />
-
-              </div>
-              <Button type="submit" sx={{
-                background:"#4f1179",
-                  "&:hover": {
-                    backgroundColor: "#4f1179 !important",
-                    boxShadow: "none !important",
-                  },
-                  "&:active": {
-                    boxShadow: "none !important",
-                    backgroundColor: "#4f1179 !important",
-                  },
-                }}
-                variant="contained" onClick={handleCreateQuestion}>
-                Add Question
-              </Button>
-            </div>
-          ) : (
-            <div className='w-full h-full flex flex-col' >
-              <div className="mb-4 flex flex-col min-h-[300px]">
-                  <TextareaAutosize 
-                    required
-                    type="text"
-                    placeholder="Say Something"
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                    className="h-4 flex-grow p-2 rounded-md bg-white text-sm outline-none"
-                    cacheMeasurements={true}
-                    autoFocus
-                    style={{ resize: 'none' }} // Add this line to hide the resize handle
-                  />
-
-              </div>
-              <Button type="submit" sx={{
-                background:"#4f1179",
-                  "&:hover": {
-                    backgroundColor: "#4f1179 !important",
-                    boxShadow: "none !important",
-                  },
-                  "&:active": {
-                    boxShadow: "none !important",
-                    backgroundColor: "#4f1179 !important",
-                  },
-                }}
-               variant="contained" onClick={handleCreatePost}>
-                Create Post 
-              </Button>
+                <button onClick={() => fileInputRef.current.click()} className="font-bold"><AiFillPicture size={20} color='#4f1179' /> </button>
+              </label>
+              <button onClick={handleCreatePost} className='font-bold'><AiOutlineSend size={20} color='#4f1179' /></button>
             </div>
           )}
-        </DialogContent>
-      </Dialog>
-
+      </div>
+          <div className='flex gap-1 my-1 flex-wrap'>
+            {filenameArray?.map((file, idx)=>(
+              <div key={idx} className='text-[10px] text-white bg-[#4f1179] p-1 rounded-sm'>{file}
+                <button onClick={() => handleDeletePhoto(file)} className='ml-1 text-red-500'>
+                  <MdOutlineCancel />
+                </button>
+              </div>
+            ))}
+          </div>
     </div>
   );
 };
