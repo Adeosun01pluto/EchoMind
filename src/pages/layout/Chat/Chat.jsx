@@ -1,89 +1,133 @@
 import { Avatar } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { BASE_URL } from '../../../constants/constant';
+import { useEffect, useRef, useState } from 'react';
+import axios from 'axios';
 import io from 'socket.io-client';
 import { getUserId } from '../../../api/api';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { BASE_URL } from '../../../constants/constant';
+import Conversation from './Conversation';
+// import ChatBox from './ChatBox';
 
 
 const Chat = () => {
     const navigate = useNavigate()
-    const socket = io.connect(`${BASE_URL}`);
+    const socket = useRef();
     const [messageList, setMessageList] = useState([]);
-    const [selectedUser, setSelectedUser] = useState(null);
+    const [currentChat, setCurrentChat] = useState(null);
     const [message, setMessage] = useState([]); // Store chat messages here
     const senderId = getUserId()
-    // useEffect(() => {
-    //     socket = io(BASE_URL);
-    //   }, [BASE_URL]);
+    const [onlineUsers, setOnlineUsers] = useState([]);
+    const [chats, setChats] = useState([]);
     const [searchParams] = useSearchParams()
     const receiverId = searchParams.get("id")
-    // Sample users and messages (you can replace these with real data)
-    const users = [
-        {_id :"65190ce43c43d646eda35bd3",
-        username :"user1",
-        email :"user1@gmail.com",
-        fullname:"user one"
-        },
-        {_id :"65190fad1b2db1aa51cfed75",
-        username :"johndoe",
-        email:"johndoe@example.com",
-        fullname:"john doe"
-        },
-        {_id :"6519100b1b2db1aa51cfedd9",
-        username :"techguru",
-        email:"techguru123@gmail.com",
-        fullname:"david tech"
-        },
-    ];
-    
-    useEffect(() => {
-        socket.on('receive_message', (data) => {
-            console.log(data)
-        setMessageList([...messageList, data]);
+    // Get the chat in chat section
+  useEffect(() => {
+    const getChats = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/chat/get_chat`, {
+          headers: {
+            "Authorization": localStorage.getItem('token'),
+          },
         });
-    }, [messageList]);
+        setChats(response.data)
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getChats();
+  }, [senderId]);
+      // Connect to Socket.io
+    useEffect(() => {
+      socket.current = io(`ws://localhost:4001`);
+      socket.current.emit("new-user-add", senderId);
+      socket.current.on("get-users", (users) => {
+        setOnlineUsers(users);
+      });
+      return () => {
+        socket.current.on("disconnect", ()=>{
+          console.log("dis" , socket.id)
+        });
+      };
+    }, [senderId]);
+    
     const sendMessage = async () => {
         // if (message !== "") {
           let newMessageData = {
             sender:senderId,
-            room:12,
-            receiver:receiverId,
+            receiverId,
             text: message,
+            chatId:currentChat._id,
             time:
               new Date(Date.now()).getHours() +
               ":" +
               new Date(Date.now()).getMinutes(),
           };
           // Emit the message to the server
-          socket.emit("send_message", newMessageData);
+          socket.current.emit("send-message", newMessageData);
           // Update the messageList immediately with the new message
           setMessageList((list) => [...list, newMessageData]);
           // Clear the input field
           setMessage("");
-          // Join the chat room
-        // }
+          try {
+            await axios.post(`${BASE_URL}/message`, newMessageData , {
+              headers: {
+                "Authorization": localStorage.getItem('token'),
+              },
+            });
+          } catch (error) {
+            console.log(error)
+          }
     };
     useEffect(() => {
-        socket.on("receive_message", (data) => {
-            console.log("receive msg" , data)
-          // Set the sender value to the logged-in user's ID if undefined
-          setMessageList((list) => [...list, data]);
-        });
-        return () => {
-          socket.off("receive_message");
-        };
-    }, [socket, senderId]);
+      socket.current.on("receive-message", (data) => {
+        setMessageList((list) => [...list, data]);
+      }
+      );
+    }, []);
 
-    const handleUserClick = (user) => {
-        setSelectedUser(user);
-        navigate(`/chat?id=${encodeURIComponent(user._id)}`);
+    const handleUserClick = (chat) => {
+        setCurrentChat(chat);
+        console.log(chat.members)
+        const currentUser = chat.members.find((member) => member !== senderId);
+        navigate(`/chat?id=${encodeURIComponent(currentUser)}`);
         // Load chat messages for the selected user and set them using setMessages
         // You'll need to implement this part with your backend or data source
     };
+    const checkOnlineStatus = (chat) => {
+      const chatMember = chat.members.find((member) => member !== senderId);
+      const online = onlineUsers.find((user) => user.userId === chatMember);
+      return online ? true : false;
+    };
+    const [messages, setMessages] = useState([]);
+  // fetch messages               
+  useEffect(() => {
+    const fetchMessages = async () => {
+      try {
+        const response = await axios.get(
+          `${BASE_URL}/message/${currentChat._id}`,
+          {
+            headers: {
+              Authorization: localStorage.getItem('token'),
+            },
+          }
+        );
+        // Filter out messages that are already in the state to avoid duplicates
+        const newMessages = response.data.filter(
+          (message) => !messages.some((m) => m._id === message._id)
+        );
+        setMessages((prevMessages) => [...prevMessages, ...newMessages]);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
+    if (currentChat !== null) fetchMessages();
+  }, [currentChat]);
 
+  const combinedMessage = [ ...messages,...messageList]
+  
   return (
-    <div className="w-full h-screen flex">
+    <div className="w-full min-h-screen flex">
       {/* Sidebar */}
       <div className="w-1/4 bg-blue-500 p-4">
         <input
@@ -93,44 +137,53 @@ const Chat = () => {
         />
         <p className="p-2">Chats</p>
         <div>
-          {users.map((user) => (
-            <div
-              key={user._id}
-              onClick={() => handleUserClick(user)}
-              className={`p-2 flex items-center gap-2 cursor-pointer ${
-                selectedUser && selectedUser.id === user.id
-                  ? 'bg-gray-200'
-                  : ''
-              }`}
-            >
-              <Avatar />
-              <p>{user.fullname}</p>
-            </div>
+          {chats.map((chat, idx) => (
+             <div
+             key={idx}
+             onClick={() => handleUserClick(chat)}
+             className={`p-2 flex items-center gap-2 cursor-pointer ${
+               currentChat && currentChat.id === chat.id
+                 ? 'bg-gray-200'
+                 : ''
+             }`}
+             >
+              <Conversation  online={checkOnlineStatus(chat)} currentUser={senderId} data={chat} />
+             </div>
           ))}
         </div>
       </div>
 
       {/* Main */}
       <div className="flex-grow bg-green-500 p-4">
-        {selectedUser && (
+        {/* <ChatBox /> */}
+        {currentChat && (
           <div className="w-full">
             {/* Chat Header */}
             <div className="w-full flex items-center gap-2 bg-orange-400 h-12">
               <Avatar />
               <div className="flex flex-col">
-                <span>{selectedUser.fullname}</span>
-                <span className='text-gray-400 text-sm'>@{selectedUser.username}</span>
+                <span>{currentChat.fullname}</span>
+                <span className='text-gray-400 text-sm'>@{currentChat.username}</span>
               </div>
             </div>
 
             {/* Chat Messages */}
             <div className="mt-4">
-              {messageList.map((message) => (
-                <div key={message.id} className="flex items-start mb-4">
+              {combinedMessage.map((message, idx) => (
+                <div
+                  key={idx}
+                  className={`flex items-start gap-2 mb-4 ${
+                    message.sender === senderId ? 'justify-end' : 'justify-start'
+                  }`}
+                >
                   <Avatar />
-                  <div className="bg-white rounded-lg p-2">
+                  <div
+                    className={`bg-white flex flex-col rounded-lg p-2 ${
+                      message.sender === senderId ? 'bg-blue-200' : 'bg-gray-200'
+                    }`}
+                  >
                     <p>{message.text}</p>
-                    <span>{message.time}</span>
+                    <span className='self-end'>{message.time}</span>
                   </div>
                 </div>
               ))}
