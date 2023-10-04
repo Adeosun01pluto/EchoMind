@@ -163,7 +163,7 @@ const Navbar = () => {
 
   return (
     <nav className="w-full min-h-16 z-[9999999] dark:bg-[#171517] bg-[white] fixed md:p-2">
-      <div className='w-[100%] gap-1 md:gap-0 mx-auto flex justify-between items-center'>
+      <div className='w-[95%] gap-1 md:gap-0 mx-auto flex justify-between items-center'>
             <div className='text-lg md:text-2xl md:w-1/12 dark:text-[#f2e4fb] text-[#060109] font-extrabold'>Demo</div>
             {/* Desktop Nav Menu */}
             <div className='items-center justify-center md:w-7/12 hidden md:flex gap-2'>

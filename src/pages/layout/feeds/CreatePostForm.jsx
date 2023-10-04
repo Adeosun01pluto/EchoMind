@@ -22,9 +22,11 @@ const CreatePostForm = ({ onCreatePost, refetch}) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append('content', value);
-    // Assuming 'photos' is an array of File objects
-    for (let i = 0; i < photos.length; i++) {
-      formData.append('images', photos[i]);
+    if (photos?.length > 0) {
+      // Append images to formData only when there are images in the photos array
+      for (let i = 0; i < photos?.length; i++) {
+        formData.append('images', photos[i]);
+      }
     }
     // Call the onCreatePost function passed from the parent component
     onCreatePost(formData);
