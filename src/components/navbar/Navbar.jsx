@@ -5,6 +5,7 @@ import { AiOutlineHome, AiOutlineLogout} from 'react-icons/ai'
 import { BsCalculator, BsCloudMoonFill, BsFillSunFill, BsPeopleFill } from 'react-icons/bs';
 import {  NavLink, useNavigate,   } from 'react-router-dom';
 import { BiMessageEdit } from 'react-icons/bi'
+import { MdOutlineAdd} from 'react-icons/md'
 import { GiMoonOrbit } from 'react-icons/gi'
 import { FiSettings } from 'react-icons/fi'
 import "../../App.css"
@@ -156,16 +157,17 @@ const Navbar = () => {
       // Navigate to /search with the searchKey as a query parameter
       navigate(`/search?q=${encodeURIComponent(searchKey)}`);
       setSearchKey("");
+      e.target.blur(); // Remove focus from the input element
     }
   };
 
   return (
     <nav className="w-full min-h-16 z-[9999999] dark:bg-[#171517] bg-[white] fixed md:p-2">
-      <div className='container mx-auto flex justify-between items-center'>
-        <div className='md:text-2xl dark:text-[#f2e4fb] text-[#060109] font-extrabold'>Demo</div>
+      <div className='w-[100%] gap-1 md:gap-0 mx-auto flex justify-between items-center'>
+            <div className='text-lg md:text-2xl md:w-1/12 dark:text-[#f2e4fb] text-[#060109] font-extrabold'>Demo</div>
             {/* Desktop Nav Menu */}
-            <div className='flex items-center gap-2'>
-              <ul className='items-center bg-[#4f1179] rounded-xl navMenu'>
+            <div className='items-center justify-center md:w-7/12 hidden md:flex gap-2'>
+              <ul className='items-center bg-[#4f1179] flex rounded-xl'>
               {menuList.map((menuItem, index) => (
                 <NavLink
                   key={menuItem.to}
@@ -193,13 +195,24 @@ const Navbar = () => {
                   value={searchKey}
                   onChange={(e) => setSearchKey(e.target.value)}
                   onKeyPress={handleSearch}
-                  className='border-[1px] lg:w-full md:w-[80%] border-gray-100 rounded-sm px-2 py-1 md:px-3 md:py-2 text-sm'
+                  className='border-[1px] lg:w-full md:w-[100%] border-gray-100 rounded-sm px-2 py-1 md:px-3 md:py-2 text-sm'
                   placeholder='Search'
                 />
               </div>
             </div>
+            {/* Search bar */}
+            <div className=' flex w-6/12 md:hidden'>
+                <input
+                  type="text"
+                  value={searchKey}
+                  onChange={(e) => setSearchKey(e.target.value)}
+                  onKeyPress={handleSearch}
+                  className='border-[1px] w-[100%] border-gray-100 rounded-sm px-2 py-1 md:px-3 md:py-2 text-sm'
+                  placeholder='Search'
+                />
+            </div>
 
-            <div className='navMenu gap-1 items-center'>
+            <div className='md:w-3/12 hidden md:block gap-1 items-center'>
               <button onClick={handleThemeSwitch} className=' '>
                 {
                   theme === "dark" ?
@@ -224,18 +237,12 @@ const Navbar = () => {
             </div>
 
             {/* Mobile Nav menu */}
-            <div className='items-center gap-3 mobileNavMenu'>
-              <button onClick={handleThemeSwitch} className=' '>
-                {
-                  theme === "dark" ?
-                  <BsFillSunFill size={20} color="gold" />
-                  :
-                  <BsCloudMoonFill size={20} />
-                }
-              </button>
-              <button onClick={handleClickOpen} className='bg-[#4f1179] px-2 py-1 text-sm text-white rounded-full'>+</button>
+            <div className='md:w-2/12 md:hidden z-[999] flex items-center gap-1'>
+              <Tooltip title="Add Question">
+                <IconButton onClick={handleClickOpen} className='text-[#4f1179] text-2xl rounded-full'><MdOutlineAdd /></IconButton>
+              </Tooltip>
               <div className='gap-1 mobileNavMenu flex items-center'>
-                <Tooltip title="Account settings">
+                <Tooltip title="">
                   <IconButton
                     onClick={handleClick}
                     size="small"
@@ -299,11 +306,18 @@ const Navbar = () => {
                   </ListItemIcon>
                   Practice
                 </MenuItem>
-                <MenuItem onClick={()=>navigate('/gp')}>
+                <MenuItem onClick={handleThemeSwitch}>
                   <ListItemIcon>
-                    <RiCalculatorFill size={20} />
+                    <button className=' '>
+                      {
+                        theme === "dark" ?
+                        <BsFillSunFill size={18} color="gold" />
+                        :
+                        <BsCloudMoonFill size={18} />
+                      }
+                    </button>
                   </ListItemIcon>
-                  Calculator
+                  { theme === "light" ? "Dark Mode" : "Light Mode"}
                 </MenuItem>
                 <MenuItem onClick={handleCloseAccountSetting}>
                   <ListItemIcon>
@@ -322,14 +336,24 @@ const Navbar = () => {
       </div>
 
       {/*  */}
-      <ul className='w-[100%] mobileNavMenu items-center justify-between'>
+      <ul className='w-[100%] md:hidden flex items-center justify-between'>
+        <Tooltip title="Home">
               <NavLink to="/" className='p-1 border-gray-200 flex items-center justify-center flex-1'><AiOutlineHome size={26} color="#4f1179"/></NavLink>
+        </Tooltip>
+        <Tooltip title="Orbits">
               <NavLink to="/orbits" className='p-1 border-gray-200 flex items-center justify-center flex-1'><GiMoonOrbit size={26} color="#4f1179"/></NavLink>
+        </Tooltip>
+        <Tooltip title="Followings">
               <NavLink to="/followings" className='p-1 border-gray-200 flex items-center justify-center flex-1'><BsPeopleFill size={26} color="#4f1179"/></NavLink>
+        </Tooltip>
+        <Tooltip title="Questions">
               <NavLink to="/questions" className='p-1 border-gray-200 flex items-center justify-center flex-1'><BiMessageEdit size={26} color="#4f1179"/></NavLink>
+        </Tooltip>
+        {/* <Tooltip title="Calculate Gp">
               <NavLink to="/gp" className='p-1 border-gray-200 flex items-center justify-center flex-1'>
                 <BsCalculator color='#4f1179' size={22} />
               </NavLink>
+        </Tooltip> */}
       </ul>
 
       {/* Dialog */}

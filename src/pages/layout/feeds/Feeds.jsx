@@ -100,7 +100,7 @@ const Feeds = () => {
       <div className="md:w-2/12 fixed hidden md:block"> {/* Sidebar */}
         <SideBar />
       </div>
-      <div className='main_bar md:w-5/12 w-full'>
+      <div className='main_bar md:w-6/12 w-full'>
         {/* CreatePostForm component for creating a new post */}
         <CreatePostForm onCreatePost={handleCreatePost} onCreateQuestion={handleCreateQuestion} refetch={refetch} />
         {posts?.map((post, idx) => (

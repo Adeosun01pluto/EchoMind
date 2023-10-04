@@ -3,7 +3,6 @@ import { useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { AiFillPicture, AiOutlineSend } from 'react-icons/ai';
-import {  MdOutlineCancel } from 'react-icons/md';
 
 
 const CreatePostForm = ({ onCreatePost, refetch}) => {
@@ -18,12 +17,6 @@ const CreatePostForm = ({ onCreatePost, refetch}) => {
     const filenamesList = Array.from(selectedPhotos).map((photo) => photo.name);
     // Create a string containing the list of filenames
     setFilenameArray(filenamesList)
-  };
-  const handleDeletePhoto = (file) => {
-    console.log(photos)
-    // Remove the photo and filename where item.name === file
-    const updatedPhotos = Array.from(photos).filter((item) => item.name !== file);
-    setPhotos(updatedPhotos);
   };
   const handleCreatePost = (e) => {
     e.preventDefault();
@@ -86,11 +79,7 @@ const CreatePostForm = ({ onCreatePost, refetch}) => {
       </div>
           <div className='flex gap-1 my-1 flex-wrap'>
             {filenameArray?.map((file, idx)=>(
-              <div key={idx} className='text-[10px] text-white bg-[#4f1179] p-1 rounded-sm'>{file}
-                <button onClick={() => handleDeletePhoto(file)} className='ml-1 text-red-500'>
-                  <MdOutlineCancel />
-                </button>
-              </div>
+              <div key={idx} className='text-[10px] text-white bg-[#4f1179] p-1 rounded-sm'>{file}</div>
             ))}
           </div>
     </div>
