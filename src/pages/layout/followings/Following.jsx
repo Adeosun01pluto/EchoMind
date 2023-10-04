@@ -12,7 +12,7 @@ function Following({following}) {
   
    return (
     <Link to={`/orbit/${following?._id}`} className=''>
-        <div className='py-2 dark:bg-[#171517] shadow-lg bg-gray-50 px-3 border-[1px]'>
+        <div className='py-2 dark:bg-[#171517] bg-[white] px-3 dark:border-none border-[1px]'>
             <div className="w-[100%] flex items-center gap-3 p-1 ">
                 {/* <Avatar/> */}
                     <img className="rounded-lg w-12 h-12 object-cover" src={following?.coverPhoto ? `${BASE_URL}/images/${following?.coverPhoto}` : `/${following?.tempCoverImage}.avif`} alt="" />

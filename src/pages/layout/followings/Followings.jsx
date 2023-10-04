@@ -69,7 +69,7 @@ function Followings() {
         <SideBar />
       </div>
 
-      <div className="main_bar md:w-6/12 w-full">
+      <div className="main_bar md:w-6/12 w-full dark:bg-[#060109] bg-white">
         {data?.map((following, idx)=> (
           <Following key={idx} following={following} />
         ))}

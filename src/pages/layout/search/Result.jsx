@@ -94,20 +94,19 @@ const Results = () => {
             visible={true}
             />
         </div>
-}
-
+  }
   return (
     <div className='w-full dark:text-[#f2e4fb]  min-h-screen text-[#060109] gap-2 md:gap-4  mx-auto p-2 md:p-4 flex flex-col md:flex-row'>
         {/* Side bar */}
-        <div className="md:w-3/12 bg-blue-500 hidden md:block">
-            <div className='w-[90%]'>
-                <div className='mx-auto w-[60%]'>
+        <div className="md:w-3/12 h-full hidden md:block">
+            <div className='flex flex-col w-[90%] items-center'>
+                <div className='w-[60%] self-end'>
                     <ul className='flex flex-col gap-2 py-4'>
                         {filters.map((filter, idx)=>(
                             <div key={idx}>
-                                <p className='border-b-[1px] py-1 '>By {filter.title}</p>
+                                <p className='font-semibold py-3 '>By {filter.title}</p>
                                 {filter.types.map((type, idx)=>(
-                                    <div key={idx} onClick={() => handleSearchTypes(filter.title.toLowerCase(), type.value)} >{type.label}</div>
+                                    <div className='cursor-pointer my-1 rounded-sm text-sm bg-slate-400 px-2 py-1' key={idx} onClick={() => handleSearchTypes(filter.title.toLowerCase(), type.value)} >{type.label}</div>
                                 ))}
                             </div>
                         ))}
@@ -117,21 +116,25 @@ const Results = () => {
         </div>
 
         {/* Main */}
-        <div className="md:w-6/12 w-full bg-gray-600">
-            {
-                searchResults?.map((result, idx)=>(
-                    <div key={idx}>
-                        {/* Check if result has a 'username' property */}
-                        {result.username && <User user={result} />}
+        <div className="md:w-5/12 w-full dark:bg-[#060109] bg-white">
+          {
+            searchResults?.length > 0 ? (
+              searchResults.map((result, idx) => (
+                <div key={idx}>
+                  {/* Check if result has a 'username' property */}
+                  {result.username && <User user={result} />}
 
-                        {/* Check if result has a 'content' property */}
-                        {result?.content && <Feed refetch={refetch} post={result} />}
+                  {/* Check if result has a 'content' property */}
+                  {result?.content && <Feed refetch={refetch} post={result} />}
 
-                        {/* Check if result has a 'name' property */}
-                        {result?.name && <Following following={result} />}
-                    </div>
-                ))
-            }
+                  {/* Check if result has a 'name' property */}
+                  {result?.name && <Following following={result} />}
+                </div>
+              ))
+            ) : (
+              <p>No results found</p>
+            )
+          }
         </div>
 
     </div>

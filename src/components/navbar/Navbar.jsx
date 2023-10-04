@@ -162,11 +162,11 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="w-full min-h-16 z-[9999999] dark:bg-[#171517] bg-[white] fixed md:p-2">
+    <nav className="w-full min-h-16 z-[9] dark:bg-[#171517] bg-[white] fixed md:p-2">
       <div className='w-[95%] gap-1 md:gap-0 mx-auto flex justify-between items-center'>
             <div className='text-lg md:text-2xl md:w-1/12 dark:text-[#f2e4fb] text-[#060109] font-extrabold'>Demo</div>
             {/* Desktop Nav Menu */}
-            <div className='items-center justify-center md:w-7/12 hidden md:flex gap-2'>
+            <div className='items-center justify-center md:w-7/12  hidden md:flex gap-2'>
               <ul className='items-center bg-[#4f1179] flex rounded-xl'>
               {menuList.map((menuItem, index) => (
                 <NavLink
@@ -195,7 +195,7 @@ const Navbar = () => {
                   value={searchKey}
                   onChange={(e) => setSearchKey(e.target.value)}
                   onKeyPress={handleSearch}
-                  className='border-[1px] lg:w-full md:w-[100%] border-gray-100 rounded-sm px-2 py-1 md:px-3 md:py-2 text-sm'
+                  className='border-[1px] lg:w-full md:w-[100%] border-gray-100 rounded-sm px-2 py-1 md:px-3 text-black md:py-2 text-sm'
                   placeholder='Search'
                 />
               </div>
@@ -207,20 +207,20 @@ const Navbar = () => {
                   value={searchKey}
                   onChange={(e) => setSearchKey(e.target.value)}
                   onKeyPress={handleSearch}
-                  className='border-[1px] w-[100%] border-gray-100 rounded-sm px-2 py-1 md:px-3 md:py-2 text-sm'
+                  className='border-[1px] w-[100%] border-gray-100 rounded-sm px-2 py-1 md:px-3 text-black md:py-2 text-sm'
                   placeholder='Search'
                 />
             </div>
 
-            <div className='md:w-3/12 hidden md:block gap-1 items-center'>
-              <button onClick={handleThemeSwitch} className=' '>
+            <div className=' hidden md:block gap-2 items-center'>
+              {/* <button onClick={handleThemeSwitch} className=' '>
                 {
                   theme === "dark" ?
                   <BsFillSunFill size={20} color="gold" />
                   :
                   <BsCloudMoonFill size={20} />
                 }
-              </button>
+              </button> */}
               <button onClick={handleClickOpen} className=' bg-[#4f1179] px-2 py-1 text-sm text-white rounded-full'>Add Question</button>
               <Tooltip title="Account settings">
                 <IconButton

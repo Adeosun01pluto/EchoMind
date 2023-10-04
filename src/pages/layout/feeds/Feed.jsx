@@ -139,7 +139,7 @@ function Feed({post, refetch}) {
   }, [post.userId]);
   return (
     <div>
-      <div  className="dark:bg-[#171517] bg-[white] shadow-md border-[1px]">
+      <div  className="dark:bg-[#171517] bg-[white] border-[1px] dark:border-none ">
           {/* Post Header */}
           
           {
@@ -199,7 +199,7 @@ function Feed({post, refetch}) {
           {/* <div className="p-1 md:p-2 dark:text-[#f2e4fb] text-[#060109] text-sm font-semibold md:text-lg py-1 px-2">{post?.content}</div> */}
           <div>
             <div className="p-1 md:p-2 dark:text-[#f2e4fb] text-[#060109] text-sm font-semibold py-1 px-2" dangerouslySetInnerHTML={{ __html: post?.content }} />
-            {post?.photos.map((photo, idx)=>(
+            {post?.photos?.map((photo, idx)=>(
               <img src={`${BASE_URL}/images/${photo}`} alt="" key={idx}/>
             ))}
           </div>

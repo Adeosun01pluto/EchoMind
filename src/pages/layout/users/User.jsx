@@ -12,7 +12,7 @@ function User({user}) {
   
    return (
     <Link to={`/profile/${user?._id}`} className=''>
-        <div className='py-2 dark:bg-[#171517] shadow-lg bg-gray-50 px-3 border-[1px]'>
+        <div className='py-2 dark:bg-[#171517] px-3 border-[1px] dark:border-none '>
                 <div className="w-[100%] flex items-center gap-3 p-1 ">
                 {/* <Avatar/> */}
                 {user?.profileImage ? 

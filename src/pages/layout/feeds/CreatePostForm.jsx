@@ -51,7 +51,7 @@ const CreatePostForm = ({ onCreatePost, refetch}) => {
     'header',
     'bold', 'italic', 'underline', 'strike',
     'list', 'bullet',
-    'link', 'image',
+    'link'
   ];
   const fileInputRef = useRef();
 
@@ -61,10 +61,9 @@ const CreatePostForm = ({ onCreatePost, refetch}) => {
           <ReactQuill theme="snow" style={{border:"2px solid gray", background:"white", color:"black"}} placeholder='What do you wanna share?' value={value} onChange={handleEditorChange} modules={modules}
           formats={formats} />
           {showButton && (
-            <div className='flex gap-2 absolute right-0 bottom-[0px] '>
+            <div className='flex gap-2 p-1 absolute right-0 bottom-[0px] '>
               
-              <label>
-                <input
+              <input
                   type="file"
                   className=""
                   accept="image/*"
@@ -72,9 +71,8 @@ const CreatePostForm = ({ onCreatePost, refetch}) => {
                   style={{display:"none"}}
                   ref={fileInputRef} // Create a ref for the input element
                   onChange={handlePhoto}
-                />
-                <button onClick={() => fileInputRef.current.click()} className="font-bold"><AiFillPicture size={20} color='#4f1179' /> </button>
-              </label>
+              />
+              <button onClick={() => fileInputRef.current.click()} className="font-bold"><AiFillPicture size={20} color='#4f1179' /> </button>
               <button onClick={handleCreatePost} className='font-bold'><AiOutlineSend size={20} color='#4f1179' /></button>
             </div>
           )}
